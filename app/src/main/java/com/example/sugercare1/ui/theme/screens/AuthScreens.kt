@@ -2,6 +2,7 @@ package com.sugarcare.app.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -10,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -21,9 +23,10 @@ import com.example.sugercare1.Authentication.AuthManager
 import com.example.sugercare1.Authentication.AuthResponse
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+
+import com.sugarcare.app.R
+import com.sugarcare.app.ui.theme.TealLight
 
 
 // ─────────────────────────────────────────────────────────────
@@ -42,6 +45,8 @@ fun SignInScreen(
     var rememberMe by remember { mutableStateOf(false) }
 
     //    ─── For Authentication & coroutine scope ──────────
+    // !!! -> view model will be made instead <- !!!!
+
     val context = LocalContext.current
     val authManager = remember { AuthManager(context) }
     val coroutineScope = rememberCoroutineScope()
@@ -95,6 +100,8 @@ fun SignInScreen(
                     colors = CheckboxDefaults.colors(checkedColor = TealPrimary)
                 )
                 Text(text = "Remember Me", color = TextMedium)
+                Spacer(modifier = Modifier.width(40.dp))
+                Text(text = "Forgot Password?", color = TextMedium, modifier = Modifier.clickable {/*ToDO*/})
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -116,11 +123,61 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
+            // ─── or divider ───────────
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            )
+            {
+
+                HorizontalDivider(
+                    modifier = Modifier.weight(1f),
+                    thickness = 2.dp,
+                    color = TealLight)
+
+                Text(
+                    text = "or",
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    fontSize = 17.sp,
+                    color = TextLight
+
+                )
+                HorizontalDivider(
+                    modifier = Modifier.weight(1f),
+                    thickness = 2.dp,
+                    color = TealLight
+                )
+            }
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                SocialButton(label = "G", color = OrangeDrop, onClick = {
+                    coroutineScope.launch {
+                        authManager.signInWithGoogle()
+                            .collect{ response ->
+                                if (response is AuthResponse.Success) {
+                                    onSignInSuccess()
+                                }
+                            }
+                    }})
+
+                // !!! -> onClick will be added later <- !!!!
+//                SocialButton(label = "f", color = TealPrimary)
+//                SocialButton(label = "𝕏", color = TealDark)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = buildAnnotatedString {
-                    append("Already have an account? ")
+                    append("No account?  ")
                     withStyle(SpanStyle(color = TealPrimary, fontWeight = FontWeight.SemiBold)) {
-                        append("Sign In")
+                        append("Create one")
                     }
                 },
                 modifier = Modifier
@@ -129,17 +186,7 @@ fun SignInScreen(
                 fontSize = 14.sp
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
 
-            Text(
-                text = "Sign In",
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .clickable { onSignInSuccess() },
-                color = TealPrimary,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold
-            )
         }
     }
 }
@@ -198,7 +245,17 @@ fun SignUpScreen(
                 value = password,
                 onValueChange = { password = it },
                 label = "Password",
-                isPassword = !showPass
+                isPassword = !showPass,
+                trailingIcon = {
+                    IconButton(onClick = { showPass = !showPass }) {
+                        Icon(
+                            imageVector = if (showPass) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = null,
+                            tint = TealPrimary
+                        )
+                    }
+                }
+
             )
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -206,7 +263,16 @@ fun SignUpScreen(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
                 label = "Confirm Password",
-                isPassword = !showPass
+                isPassword = !showPass,
+                trailingIcon = {
+                    IconButton(onClick = { showPass = !showPass }) {
+                        Icon(
+                            imageVector = if (showPass) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = null,
+                            tint = TealPrimary
+                        )
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -253,6 +319,21 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            Text(
+                text = buildAnnotatedString {
+                    append("Already have an account? ")
+                    withStyle(SpanStyle(color = TealPrimary, fontWeight = FontWeight.SemiBold)) {
+                        append("Sign In")
+                    }
+                },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .clickable { onNavigateToSignIn() },
+                fontSize = 14.sp
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
             // ── Social sign-up row ────────────────────────────
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -268,12 +349,14 @@ fun SignUpScreen(
                         }
                 }})
 
+                    // !!! -> onClick will be added later <- !!!!
 //                SocialButton(label = "f", color = TealPrimary)
 //                SocialButton(label = "𝕏", color = TealDark)
             }
         }
     }
 }
+
 
 @Composable
 private fun SocialButton(label: String, color: androidx.compose.ui.graphics.Color,onClick: () -> Unit) {
@@ -293,7 +376,8 @@ private fun SocialButton(label: String, color: androidx.compose.ui.graphics.Colo
     }
 }
 
-// to be removed
+
+// ---- to be removed
 
 @Preview
 @Composable

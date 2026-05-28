@@ -18,11 +18,14 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.SugarCareBackground
+import com.sugarcare.app.ui.screens.SignInScreen
 import com.sugarcare.app.ui.theme.*
 
 /**
@@ -189,9 +192,9 @@ fun HomeScreen(navController: NavHostController) {
             ) {
                 listOf(
                     Triple("Home",    Icons.Filled.Home,    Screen.Home.route),
-                    Triple("Logs",    Icons.AutoMirrored.Filled.Assignment, Screen.Home.route), // Corrected route
-                    Triple("Meals",   Icons.Filled.Restaurant, Screen.Home.route), // Corrected route
-                    Triple("Profile", Icons.Filled.Person,  Screen.Home.route) // Corrected route
+                    Triple("Logs",    Icons.AutoMirrored.Filled.Assignment, Screen.Logs.route), // Corrected route
+                    Triple("Meals",   Icons.Filled.Restaurant, Screen.MealPlan.route), // Corrected route
+                    Triple("Profile", Icons.Filled.Person,  Screen.Profile.route) // Corrected route
                 ).forEach { (label, icon, route) ->
                     NavigationBarItem(
                         selected = route == Screen.Home.route,
@@ -264,5 +267,13 @@ private fun MedToggleRow(label: String, checked: Boolean, onToggle: (Boolean) ->
             modifier        = Modifier.scale(0.7f),
             colors          = SwitchDefaults.colors(checkedThumbColor = TealPrimary, checkedTrackColor = TealLight)
         )
+    }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreview() {
+    SugarCareTheme {
+        HomeScreen(navController = rememberNavController())
     }
 }

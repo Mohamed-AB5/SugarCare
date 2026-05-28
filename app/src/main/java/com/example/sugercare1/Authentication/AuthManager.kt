@@ -19,7 +19,7 @@ import java.security.MessageDigest
 import java.util.UUID
 
 class AuthManager(val context: Context) {
-    private val auth = Firebase.auth
+    private val auth by lazy { Firebase.auth }
 
     // —————— Account Creation ————————————————
 
