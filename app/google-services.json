@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "175442306636",
+    "project_id": "sugarcare-d30af",
+    "storage_bucket": "sugarcare-d30af.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175442306636:android:f8f757bd3b4506f9b1f6e9",
+        "android_client_info": {
+          "package_name": "com.sugarcare.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuBNk6oyoWGe4CB3WREndJAkviuxAGreU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
