@@ -10,9 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.sugercare1.ui.theme.screens.HomeScreen
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.components.SugarCareCard
@@ -20,7 +23,18 @@ import com.sugarcare.app.ui.theme.*
 
 data class Medication(val name: String, var taken: Boolean = true)
 
+@Preview(showBackground = true)
+@Composable
+fun MedicationsScreenPreview() {
+    SugarCareTheme {
+        MedicationsScreen(navController = rememberNavController())
+    }
+}
 
+/**
+ * Medications Screen – displays a list of medications with toggle buttons
+ * to mark them as taken, and a button to add new ones.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedicationsScreen(navController: NavHostController) {
@@ -36,7 +50,7 @@ fun MedicationsScreen(navController: NavHostController) {
 
     SugarCareBackground {
         Column(modifier = Modifier.fillMaxSize()) {
-
+            // ── Header ────────────────────────────────────────
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -62,7 +76,7 @@ fun MedicationsScreen(navController: NavHostController) {
 
             Spacer(Modifier.height(8.dp))
 
-
+            // ── Medications Card ──────────────────────────────
             SugarCareCard(modifier = Modifier.padding(horizontal = 24.dp)) {
                 Text(
                     "Medications",
@@ -90,7 +104,7 @@ fun MedicationsScreen(navController: NavHostController) {
 
                 Spacer(Modifier.height(16.dp))
 
-
+                // Add medication button
                 Button(
                     onClick  = {
                         medications = medications + Medication("New Medication", false)
@@ -109,7 +123,7 @@ fun MedicationsScreen(navController: NavHostController) {
 
             Spacer(Modifier.weight(1f))
 
-
+            // ── Bottom Nav ────────────────────────────────────
             NavigationBar(containerColor = Color.White, tonalElevation = 8.dp) {
                 listOf(
                     Triple("Home",    Icons.Filled.Home,       Screen.Home.route),
@@ -172,7 +186,7 @@ private fun MedicationRow(
 
         Spacer(Modifier.width(8.dp))
 
-
+        // Toggle button
         Surface(
             modifier = Modifier.size(40.dp),
             shape    = RoundedCornerShape(50),

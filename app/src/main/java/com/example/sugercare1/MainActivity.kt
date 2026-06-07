@@ -1,4 +1,4 @@
-package com.example.sugercare1
+package com.sugarcare.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

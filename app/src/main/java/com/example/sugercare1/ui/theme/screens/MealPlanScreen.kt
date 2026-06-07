@@ -16,9 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.components.SugarCareCard
 import com.sugarcare.app.ui.theme.*
@@ -29,6 +32,7 @@ data class MealItem(val type: String, val name: String)
  * Meal Plan Screen – shows personalized meal suggestions for
  * Breakfast, Lunch, and Dinner, with an "Add Reading" CTA.
  */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MealPlanScreen(navController: NavHostController) {
@@ -169,5 +173,13 @@ private fun MealCard(modifier: Modifier, type: String, name: String) {
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MealPlanScreenPreview() {
+    SugarCareTheme {
+        MealPlanScreen(navController = rememberNavController())
     }
 }
