@@ -1,4 +1,4 @@
-package com.example.sugercare1.authentication
+package com.example.sugercare.Authentication
 
 interface AuthResponse {
     data object Success : AuthResponse

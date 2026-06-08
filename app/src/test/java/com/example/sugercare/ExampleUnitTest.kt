@@ -1,4 +1,4 @@
-package com.example.sugercare1
+package com.example.sugercare
 
 import org.junit.Test
 

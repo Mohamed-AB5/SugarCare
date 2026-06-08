@@ -7,8 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.sugarcare.app.ui.theme.SugarCareTheme
 import com.sugarcare.app.navigation.SugarCareNavHost
+import com.sugarcare.app.ui.theme.SugarCareTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

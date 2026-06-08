@@ -1,4 +1,4 @@
-package com.example.sugercare1.viewModels
+package com.example.sugercare.viewModels
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth

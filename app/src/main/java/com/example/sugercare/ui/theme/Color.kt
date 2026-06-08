@@ -1,4 +1,4 @@
-package com.example.sugercare1.ui.theme
+package com.example.sugercare.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

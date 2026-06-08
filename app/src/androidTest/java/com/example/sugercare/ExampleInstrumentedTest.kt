@@ -1,4 +1,4 @@
-package com.example.sugercare1
+package com.example.sugercare
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

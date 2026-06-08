@@ -1,4 +1,4 @@
-package com.example.sugercare1.ui.theme.screens
+package com.example.sugercare.ui.theme.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -25,8 +24,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.SugarCareBackground
-import com.sugarcare.app.ui.screens.SignInScreen
 import com.sugarcare.app.ui.theme.*
+import kotlin.collections.forEach
+import kotlin.text.isNotEmpty
 
 /**
  * Home Screen – main dashboard with Glucose Logs, Meal Plan,
@@ -35,41 +35,48 @@ import com.sugarcare.app.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    var insulinEnabled  by remember { mutableStateOf(true) }
+    var insulinEnabled   by remember { mutableStateOf(true) }
     var metforminEnabled by remember { mutableStateOf(true) }
-    var notifEnabled    by remember { mutableStateOf(false) }
+    var notifEnabled     by remember { mutableStateOf(false) }
 
     SugarCareBackground {
         Column(modifier = Modifier.fillMaxSize()) {
-            // ── App Bar ───────────────────────────────────────
+
             TopAppBar(
                 title = {
-                    Text(
-                        "Sugar Care",
-                        fontWeight = FontWeight.Bold,
-                        color      = TealDark
-                    )
+                    Text("Sugar Care", fontWeight = FontWeight.Bold, color = TealDark)
                 },
+
                 navigationIcon = {
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(TealLight),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(Icons.Filled.Person, null, tint = TealPrimary)
+                    IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
+                        Box(
+                            modifier = Modifier
+                                .size(38.dp)
+                                .clip(CircleShape)
+                                .background(TealLight),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Filled.Person, contentDescription = "Profile", tint = TealPrimary)
+                        }
                     }
                 },
+
                 actions = {
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Filled.Notifications, null, tint = OrangeDrop)
+                    IconButton(onClick = { navController.navigate(Screen.Notifications.route) }) {
+                        BadgedBox(
+                            badge = {
+                                Badge(containerColor = OrangeDrop) {
+                                    Text("3", fontSize = 9.sp)
+                                }
+                            }
+                        ) {
+                            Icon(Icons.Filled.Notifications, contentDescription = "Notifications", tint = OrangeDrop)
+                        }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = BackgroundLight
-                )
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundLight)
             )
+
 
             // ── Dashboard grid ────────────────────────────────
             Column(
@@ -81,17 +88,17 @@ fun HomeScreen(navController: NavHostController) {
             ) {
                 // Row 1: Glucose Logs | Meal Plan
                 Row(
-                    modifier              = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     DashboardCard(
-                        modifier       = Modifier.weight(1f),
-                        title          = "Glucose Logs",
-                        subtitle       = "Last: 120 mg/dL",
-                        icon           = Icons.Filled.Favorite,
-                        iconTint       = OrangeDrop,
-                        buttonText     = "Log New Reading",
-                        onButtonClick  = { /* navigate to logs */ }
+                        modifier      = Modifier.weight(1f),
+                        title         = "Glucose Logs",
+                        subtitle      = "Last: 120 mg/dL",
+                        icon          = Icons.Filled.Favorite,
+                        iconTint      = OrangeDrop,
+                        buttonText    = "Log New Reading",
+                        onButtonClick = { navController.navigate(Screen.Logs.route) }
                     )
                     DashboardCard(
                         modifier      = Modifier.weight(1f),
@@ -100,13 +107,13 @@ fun HomeScreen(navController: NavHostController) {
                         icon          = Icons.Filled.Restaurant,
                         iconTint      = GreenAccent,
                         buttonText    = "Meal Suggestions",
-                        onButtonClick = { navController.navigate(Screen.Home.route) } // Corrected destination
+                        onButtonClick = { navController.navigate(Screen.MealPlan.route) }
                     )
                 }
 
                 // Row 2: Weekly Analytics | Medication Plan
                 Row(
-                    modifier              = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     // Weekly analytics mini card
@@ -120,35 +127,19 @@ fun HomeScreen(navController: NavHostController) {
                             modifier = Modifier.padding(12.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                "Weekly Analytics",
-                                fontWeight = FontWeight.Bold,
-                                fontSize   = 14.sp,
-                                color      = TextDark
-                            )
+                            Text("Weekly Analytics", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = TextDark)
                             Spacer(Modifier.height(8.dp))
-                            Icon(
-                                Icons.Filled.Vaccines,
-                                null,
-                                tint     = TealPrimary,
-                                modifier = Modifier.size(40.dp)
-                            )
+                            Icon(Icons.Filled.Vaccines, null, tint = TealPrimary, modifier = Modifier.size(40.dp))
                             Spacer(Modifier.height(8.dp))
-                            Text(
-                                "Average: 12.20",
-                                fontSize = 12.sp,
-                                color    = TextMedium
-                            )
+                            Text("Average: 12.20", fontSize = 12.sp, color = TextMedium)
                             Spacer(Modifier.height(8.dp))
                             Button(
-                                onClick  = { navController.navigate(Screen.Home.route) }, // Corrected destination
+                                onClick  = { navController.navigate(Screen.WeeklyAnalytics.route) },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape    = RoundedCornerShape(20.dp),
                                 colors   = ButtonDefaults.buttonColors(containerColor = GreenAccent),
                                 contentPadding = PaddingValues(4.dp)
-                            ) {
-                                Text("Analyze Trends", fontSize = 11.sp)
-                            }
+                            ) { Text("Analyze Trends", fontSize = 11.sp) }
                         }
                     }
 
@@ -160,49 +151,42 @@ fun HomeScreen(navController: NavHostController) {
                         elevation = CardDefaults.cardElevation(4.dp)
                     ) {
                         Column(modifier = Modifier.padding(12.dp)) {
-                            Text(
-                                "Medication Plan",
-                                fontWeight = FontWeight.Bold,
-                                fontSize   = 14.sp,
-                                color      = TextDark
-                            )
+                            Text("Medication Plan", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = TextDark)
                             Spacer(Modifier.height(8.dp))
-                            MedToggleRow("Insulin",   insulinEnabled)  { insulinEnabled  = it }
-                            MedToggleRow("Metformin", metforminEnabled) { metforminEnabled = it }
-                            MedToggleRow("Activate\nNotifications", notifEnabled) { notifEnabled = it }
+                            MedToggleRow("Insulin",       insulinEnabled)   { insulinEnabled   = it }
+                            MedToggleRow("Metformin",     metforminEnabled) { metforminEnabled = it }
+                            MedToggleRow("Notifications", notifEnabled)     { notifEnabled     = it }
                             Spacer(Modifier.height(8.dp))
                             Button(
-                                onClick  = { navController.navigate(Screen.Home.route) }, // Corrected destination
+                                onClick  = { navController.navigate(Screen.Medications.route) },
                                 modifier = Modifier.fillMaxWidth(),
                                 shape    = RoundedCornerShape(20.dp),
                                 colors   = ButtonDefaults.buttonColors(containerColor = GreenAccent),
                                 contentPadding = PaddingValues(4.dp)
-                            ) {
-                                Text("Set Notifications", fontSize = 11.sp)
-                            }
+                            ) { Text("Set Notifications", fontSize = 11.sp) }
                         }
                     }
                 }
             }
 
-            // ── Bottom Nav ────────────────────────────────────
-            NavigationBar(
-                containerColor = Color.White,
-                tonalElevation = 8.dp
-            ) {
+            NavigationBar(containerColor = Color.White, tonalElevation = 8.dp) {
                 listOf(
-                    Triple("Home",    Icons.Filled.Home,    Screen.Home.route),
-                    Triple("Logs",    Icons.AutoMirrored.Filled.Assignment, Screen.Logs.route), // Corrected route
-                    Triple("Meals",   Icons.Filled.Restaurant, Screen.MealPlan.route), // Corrected route
-                    Triple("Profile", Icons.Filled.Person,  Screen.Profile.route) // Corrected route
+                    Triple("Home", Icons.Filled.Home, Screen.Home.route),
+                    Triple("Logs", Icons.AutoMirrored.Filled.Assignment, Screen.Logs.route),
+                    Triple("Meals", Icons.Filled.Restaurant, Screen.MealPlan.route),
+                    Triple("Profile", Icons.Filled.Person, Screen.Profile.route)
                 ).forEach { (label, icon, route) ->
                     NavigationBarItem(
                         selected = route == Screen.Home.route,
-                        onClick  = { navController.navigate(route) },
-                        icon     = { Icon(icon, null) },
-                        label    = { Text(label, fontSize = 11.sp) },
-                        colors   = NavigationBarItemDefaults.colors(
+                        onClick  = {
+                            if (route != Screen.Home.route)
+                                navController.navigate(route) { launchSingleTop = true }
+                        },
+                        icon  = { Icon(icon, contentDescription = label) },
+                        label = { Text(label, fontSize = 11.sp) },
+                        colors = NavigationBarItemDefaults.colors(
                             selectedIconColor   = TealPrimary,
+                            unselectedIconColor = TextMedium,
                             indicatorColor      = TealLight
                         )
                     )
@@ -229,7 +213,7 @@ private fun DashboardCard(
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(
-            modifier            = Modifier.padding(12.dp),
+            modifier = Modifier.padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = TextDark)
@@ -241,14 +225,12 @@ private fun DashboardCard(
             Icon(icon, null, tint = iconTint, modifier = Modifier.size(44.dp))
             Spacer(Modifier.height(8.dp))
             Button(
-                onClick  = onButtonClick,
-                modifier = Modifier.fillMaxWidth(),
-                shape    = RoundedCornerShape(20.dp),
-                colors   = ButtonDefaults.buttonColors(containerColor = GreenAccent),
+                onClick        = onButtonClick,
+                modifier       = Modifier.fillMaxWidth(),
+                shape          = RoundedCornerShape(20.dp),
+                colors         = ButtonDefaults.buttonColors(containerColor = GreenAccent),
                 contentPadding = PaddingValues(4.dp)
-            ) {
-                Text(buttonText, fontSize = 11.sp)
-            }
+            ) { Text(buttonText, fontSize = 11.sp) }
         }
     }
 }
@@ -256,7 +238,7 @@ private fun DashboardCard(
 @Composable
 private fun MedToggleRow(label: String, checked: Boolean, onToggle: (Boolean) -> Unit) {
     Row(
-        modifier              = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment     = Alignment.CenterVertically
     ) {
@@ -264,8 +246,6 @@ private fun MedToggleRow(label: String, checked: Boolean, onToggle: (Boolean) ->
         Switch(
             checked         = checked,
             onCheckedChange = onToggle,
-            modifier        = Modifier.scale(0.7f),
-            colors          = SwitchDefaults.colors(checkedThumbColor = TealPrimary, checkedTrackColor = TealLight)
         )
     }
 }

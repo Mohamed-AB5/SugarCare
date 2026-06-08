@@ -18,15 +18,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.sugercare1.authentication.AuthManager
-import com.example.sugercare1.authentication.AuthResponse
-import com.example.sugercare1.viewModels.AuthViewModel
+import com.example.sugercare.viewModels.AuthViewModel
+import com.example.sugercare.Authentication.AuthManager
+import com.example.sugercare.Authentication.AuthResponse
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
 import kotlinx.coroutines.launch
-
-import com.sugarcare.app.R
 import com.sugarcare.app.ui.theme.TealLight
+import kotlin.text.isNotBlank
+
+
 
 
 // ─────────────────────────────────────────────────────────────
@@ -38,7 +39,8 @@ import com.sugarcare.app.ui.theme.TealLight
 fun SignInScreen(
     onSignInSuccess: () -> Unit,
     onNavigateToSignUp: () -> Unit,
-    authViewModel : AuthViewModel
+    onForgotPassword: () -> Unit,
+    authViewModel: AuthViewModel
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -102,7 +104,15 @@ fun SignInScreen(
                 )
                 Text(text = "Remember Me", color = TextMedium)
                 Spacer(modifier = Modifier.width(40.dp))
-                Text(text = "Forgot Password?", color = TextMedium, modifier = Modifier.clickable {/*ToDO*/})
+                // Forgot password link
+                Text(
+                    "Forgot password?",
+                    modifier = Modifier
+                        .clickable { onForgotPassword() },
+                    color = TealPrimary,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -111,8 +121,8 @@ fun SignInScreen(
                 text = "Sign in",
                 onClick = {
                     coroutineScope.launch {
-                        authManager.loginWithEmail(email,password)
-                            .collect{ response ->
+                        authManager.loginWithEmail(email, password)
+                            .collect { response ->
                                 if (response is AuthResponse.Success) {
                                     onSignInSuccess()
                                 }
@@ -126,7 +136,9 @@ fun SignInScreen(
 
             // ─── or divider ───────────
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             )
@@ -135,7 +147,8 @@ fun SignInScreen(
                 HorizontalDivider(
                     modifier = Modifier.weight(1f),
                     thickness = 2.dp,
-                    color = TealLight)
+                    color = TealLight
+                )
 
                 Text(
                     text = "or",
@@ -160,12 +173,13 @@ fun SignInScreen(
                 SocialButton(label = "G", color = OrangeDrop, onClick = {
                     coroutineScope.launch {
                         authManager.signInWithGoogle()
-                            .collect{ response ->
+                            .collect { response ->
                                 if (response is AuthResponse.Success) {
                                     onSignInSuccess()
                                 }
                             }
-                    }})
+                    }
+                })
 
                 // !!! -> onClick will be added later <- !!!!
 //                SocialButton(label = "f", color = TealPrimary)
@@ -198,7 +212,8 @@ fun SignInScreen(
 @Composable
 fun SignUpScreen(
     onSignUpSuccess: () -> Unit,
-    onNavigateToSignIn: () -> Unit
+    onNavigateToSignIn: () -> Unit,
+    authViewModel: AuthViewModel
 ) {
     var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -308,8 +323,8 @@ fun SignUpScreen(
                 text = "Sign Up",
                 onClick = {
                     coroutineScope.launch {
-                        authManager.createAccountWithEmail(email,password)
-                            .collect{ response ->
+                        authManager.createAccountWithEmail(email, password)
+                            .collect { response ->
                                 if (response is AuthResponse.Success) {
                                     onSignUpSuccess()
                                 }
@@ -342,15 +357,16 @@ fun SignUpScreen(
             ) {
                 SocialButton(label = "G", color = OrangeDrop, onClick = {
                     coroutineScope.launch {
-                    authManager.signInWithGoogle()
-                        .collect{ response ->
-                            if (response is AuthResponse.Success) {
-                                onSignUpSuccess()
+                        authManager.signInWithGoogle()
+                            .collect { response ->
+                                if (response is AuthResponse.Success) {
+                                    onSignUpSuccess()
+                                }
                             }
-                        }
-                }})
+                    }
+                })
 
-                    // !!! -> onClick will be added later <- !!!!
+                // !!! -> onClick will be added later <- !!!!
 //                SocialButton(label = "f", color = TealPrimary)
 //                SocialButton(label = "𝕏", color = TealDark)
             }
@@ -360,11 +376,17 @@ fun SignUpScreen(
 
 
 @Composable
-private fun SocialButton(label: String, color: androidx.compose.ui.graphics.Color,onClick: () -> Unit) {
+private fun SocialButton(
+    label: String,
+    color: androidx.compose.ui.graphics.Color,
+    onClick: () -> Unit
+) {
     Surface(
         shape = androidx.compose.foundation.shape.CircleShape,
         color = color.copy(alpha = 0.12f),
-        modifier = Modifier.size(52.dp).clickable{ onClick() }
+        modifier = Modifier
+            .size(52.dp)
+            .clickable { onClick() }
     ) {
         Box(contentAlignment = Alignment.Center) {
             Text(
@@ -386,7 +408,8 @@ fun SignUpScreenPreview() {
     SugarCareTheme {
         SignUpScreen(
             onSignUpSuccess = {},
-            onNavigateToSignIn = {}
+            onNavigateToSignIn = {},
+            authViewModel = AuthViewModel()
         )
     }
 }
@@ -397,7 +420,9 @@ fun SignInScreenPreview() {
     SugarCareTheme {
         SignInScreen(
             onSignInSuccess = {},
-            onNavigateToSignUp = {}
+            onNavigateToSignUp = {},
+            authViewModel = AuthViewModel(),
+            onForgotPassword = {}
         )
     }
 }

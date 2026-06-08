@@ -67,7 +67,6 @@ fun SecondaryButton(
 ) {
     Button(
         onClick  = onClick,
-        enabled  = enabled,
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp),

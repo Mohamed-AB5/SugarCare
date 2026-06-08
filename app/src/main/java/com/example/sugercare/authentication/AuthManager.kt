@@ -1,4 +1,4 @@
-package com.example.sugercare1.authentication
+package com.example.sugercare.Authentication
 
 import android.content.Context
 import androidx.credentials.CredentialManager
@@ -75,6 +75,7 @@ class AuthManager(val context: Context) {
                     .setNonce(createNonce())
                     .build()
 
+                // ---- Verify Google Credential with Firebase
                 val request = GetCredentialRequest.Builder()
                     .addCredentialOption(googleIdOption)
                     .build()
