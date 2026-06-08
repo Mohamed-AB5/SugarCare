@@ -26,6 +26,9 @@ android {
 }
 
 dependencies {
+    // View model
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
@@ -35,6 +38,7 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
     implementation(libs.play.services.auth)
+    implementation(libs.androidx.compose.foundation.layout)
 
 
     val composeBom = platform("androidx.compose:compose-bom:2024.12.01")

@@ -1,11 +1,13 @@
 package com.sugarcare.app.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sugercare1.ui.theme.screens.HomeScreen
+import com.example.sugercare1.viewModels.AuthViewModel
 import com.sugarcare.app.ui.screens.*
 
 sealed class Screen(val route: String) {
@@ -25,14 +27,23 @@ sealed class Screen(val route: String) {
 fun SugarCareNavHost(
     navController: NavHostController = rememberNavController()
 ) {
+
+    val authViewModel: AuthViewModel = viewModel()
+
     NavHost(
         navController  = navController,
         startDestination = Screen.Welcome.route
     ) {
         composable(Screen.Welcome.route) {
             WelcomeScreen(
-                onSignIn = { navController.navigate(Screen.SignIn.route) },
-                onSignUp = { navController.navigate(Screen.SignUp.route) }
+                onSignIn = { 
+                    authViewModel.resetAuthState()
+                    navController.navigate(Screen.SignIn.route) 
+                },
+                onSignUp = { 
+                    authViewModel.resetAuthState()
+                    navController.navigate(Screen.SignUp.route) 
+                }
             )
         }
         composable(Screen.SignIn.route) {
@@ -40,7 +51,8 @@ fun SugarCareNavHost(
                 onSignInSuccess = { navController.navigate(Screen.Home.route) {
                     popUpTo(Screen.Welcome.route) { inclusive = true }
                 }},
-                onNavigateToSignUp = { navController.navigate(Screen.SignUp.route) }
+                onNavigateToSignUp = { navController.navigate(Screen.SignUp.route) },
+                authViewModel = authViewModel
             )
         }
         composable(Screen.SignUp.route) {
@@ -48,7 +60,8 @@ fun SugarCareNavHost(
                 onSignUpSuccess = { navController.navigate(Screen.HealthInfo.route) {
                     popUpTo(Screen.Welcome.route) { inclusive = true }
                 }},
-                onNavigateToSignIn = { navController.navigate(Screen.SignIn.route) }
+                onNavigateToSignIn = { navController.navigate(Screen.SignIn.route) },
+                authViewModel = authViewModel
             )
         }
         composable(Screen.HealthInfo.route) {

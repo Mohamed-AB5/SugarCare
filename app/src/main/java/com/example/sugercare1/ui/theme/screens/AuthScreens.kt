@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -19,8 +18,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.sugercare1.Authentication.AuthManager
-import com.example.sugercare1.Authentication.AuthResponse
+import com.example.sugercare1.authentication.AuthManager
+import com.example.sugercare1.authentication.AuthResponse
+import com.example.sugercare1.viewModels.AuthViewModel
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
 import kotlinx.coroutines.launch
@@ -37,7 +37,8 @@ import com.sugarcare.app.ui.theme.TealLight
 @Composable
 fun SignInScreen(
     onSignInSuccess: () -> Unit,
-    onNavigateToSignUp: () -> Unit
+    onNavigateToSignUp: () -> Unit,
+    authViewModel : AuthViewModel
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -400,6 +401,3 @@ fun SignInScreenPreview() {
         )
     }
 }
-
-
-

@@ -1,6 +1,4 @@
-package com.example.sugercare1.Authentication
-
-import com.google.android.gms.auth.api.Auth
+package com.example.sugercare1.authentication
 
 interface AuthResponse {
     data object Success : AuthResponse
