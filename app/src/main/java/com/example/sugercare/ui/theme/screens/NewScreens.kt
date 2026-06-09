@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Assignment
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -21,14 +22,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.sugarcare.app.navigation.Screen
+import com.sugarcare.app.ui.theme.SugarCareTheme
 import kotlinx.coroutines.delay
 import kotlin.collections.all
 import kotlin.collections.forEach
@@ -54,7 +58,7 @@ private data class NavItem(
 
 private val bottomNavItems = listOf(
     NavItem("Home", Icons.Filled.Home, Screen.Home.route),
-    NavItem("Logs", Icons.Filled.FavoriteBorder, Screen.Logs.route),
+    NavItem("Logs", Icons.AutoMirrored.Filled.Assignment, Screen.Logs.route),
     NavItem("Meals", Icons.Filled.Restaurant, Screen.MealPlan.route),
     NavItem("Profile", Icons.Filled.Person, Screen.Profile.route)
 )
@@ -583,3 +587,9 @@ private fun profileFieldColors() = OutlinedTextFieldDefaults.colors(
     focusedLabelColor  = TealPrimary,
     cursorColor        = TealPrimary
 )
+
+@Preview
+@Composable
+fun ProfilePreview(){
+    SugarCareTheme {CompleteProfileScreen(navController = NavHostController(LocalContext.current) ) }
+}

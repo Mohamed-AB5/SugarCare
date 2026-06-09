@@ -1,5 +1,7 @@
 package com.sugarcare.app.ui.screens
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -21,13 +24,12 @@ import androidx.compose.ui.unit.sp
 import com.example.sugercare.viewModels.AuthViewModel
 import com.example.sugercare.Authentication.AuthManager
 import com.example.sugercare.Authentication.AuthResponse
+import com.example.sugercare.viewModels.AuthState
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
 import kotlinx.coroutines.launch
 import com.sugarcare.app.ui.theme.TealLight
 import kotlin.text.isNotBlank
-
-
 
 
 // ─────────────────────────────────────────────────────────────
@@ -42,17 +44,31 @@ fun SignInScreen(
     onForgotPassword: () -> Unit,
     authViewModel: AuthViewModel
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var showPass by remember { mutableStateOf(false) }
-    var rememberMe by remember { mutableStateOf(false) }
-
     //    ─── For Authentication & coroutine scope ──────────
     // !!! -> view model will be made instead <- !!!!
 
     val context = LocalContext.current
     val authManager = remember { AuthManager(context) }
     val coroutineScope = rememberCoroutineScope()
+
+    // ─── Auth View Model ──────────
+
+    val email = authViewModel.email.collectAsState()
+    val password = authViewModel.password.collectAsState()
+    val authState = authViewModel.authState.collectAsState()
+    var showPass = authViewModel.showPass.collectAsState()
+    var rememberMe = authViewModel.rememberMe.collectAsState()
+
+    LaunchedEffect(authState.value) {
+        when (authState.value) {
+            is AuthState.Loading -> {}
+            is AuthState.Authenticated -> onSignInSuccess()
+            is AuthState.Error -> {}
+            is AuthState.UnAuthenticated -> {}
+        }
+    }
+
+
 
     SugarCareBackground {
         Column(
@@ -71,22 +87,22 @@ fun SignInScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             SugarCareTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = email.value,
+                onValueChange = { authViewModel.updateEmail(it) },
                 label = "Email"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             SugarCareTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = password.value,
+                onValueChange = { authViewModel.updatePassword(it) },
                 label = "Password",
-                isPassword = !showPass,
+                isPassword = !showPass.value,
                 trailingIcon = {
-                    IconButton(onClick = { showPass = !showPass }) {
+                    IconButton(onClick = { authViewModel.toggleShowPass()  }) {
                         Icon(
-                            imageVector = if (showPass) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            imageVector = if (showPass.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                             contentDescription = null,
                             tint = TealPrimary
                         )
@@ -98,13 +114,13 @@ fun SignInScreen(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
-                    checked = rememberMe,
-                    onCheckedChange = { rememberMe = it },
+                    checked = rememberMe.value,
+                    onCheckedChange = { authViewModel.toggleRememberMe() },
                     colors = CheckboxDefaults.colors(checkedColor = TealPrimary)
                 )
                 Text(text = "Remember Me", color = TextMedium)
                 Spacer(modifier = Modifier.width(40.dp))
-                // Forgot password link
+                // ────── Forgot password link ───────────────────
                 Text(
                     "Forgot password?",
                     modifier = Modifier
@@ -117,21 +133,41 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // ─── Loading or Error feedback ────────────────────────────
+
+            when (authState.value) {
+                is AuthState.Loading -> {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
+                is AuthState.Error -> {
+                    Text(
+                        text = (authState.value as AuthState.Error).message,
+                        color = Color.Red,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+                is AuthState.UnAuthenticated -> {}
+                is AuthState.Authenticated -> {}
+            }
+
             PrimaryButton(
                 text = "Sign in",
                 onClick = {
-                    coroutineScope.launch {
-                        authManager.loginWithEmail(email, password)
-                            .collect { response ->
-                                if (response is AuthResponse.Success) {
-                                    onSignInSuccess()
-                                }
-                            }
-                    }
-                },
-                enabled = email.isNotBlank() && password.isNotBlank()
-            )
+//                    coroutineScope.launch {
+//                        authManager.loginWithEmail(email, password)
+//                            .collect { response ->
+//                                if (response is AuthResponse.Success) {
+//                                    onSignInSuccess()
+//                                }
+//                            }
+//                    }
 
+                    authViewModel.signIn(email.value, password.value)
+                },
+                enabled = email.value.isNotBlank() && password.value.isNotBlank()
+            )
             Spacer(modifier = Modifier.height(20.dp))
 
             // ─── or divider ───────────
@@ -166,19 +202,14 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(5.dp))
 
+
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 SocialButton(label = "G", color = OrangeDrop, onClick = {
-                    coroutineScope.launch {
-                        authManager.signInWithGoogle()
-                            .collect { response ->
-                                if (response is AuthResponse.Success) {
-                                    onSignInSuccess()
-                                }
-                            }
-                    }
+                    authViewModel.signInWithGoogle(context)
                 })
 
                 // !!! -> onClick will be added later <- !!!!
@@ -378,7 +409,7 @@ fun SignUpScreen(
 @Composable
 private fun SocialButton(
     label: String,
-    color: androidx.compose.ui.graphics.Color,
+    color: Color, // androidx.compose.ui.graphics removed -> for cleaner route
     onClick: () -> Unit
 ) {
     Surface(

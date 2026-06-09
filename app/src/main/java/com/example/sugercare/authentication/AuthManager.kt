@@ -36,6 +36,7 @@ class AuthManager(val context: Context) {
     }
 
     // —————— Account Login ————————————————
+    // -------------------------------------------> replaced with view model
 
     fun loginWithEmail(email: String, password: String): Flow<AuthResponse> = callbackFlow {
         auth.signInWithEmailAndPassword(email, password)
