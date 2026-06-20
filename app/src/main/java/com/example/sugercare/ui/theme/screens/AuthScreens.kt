@@ -44,20 +44,14 @@ fun SignInScreen(
     onForgotPassword: () -> Unit,
     authViewModel: AuthViewModel
 ) {
-    //    ─── For Authentication & coroutine scope ──────────
-    // !!! -> view model will be made instead <- !!!!
-
     val context = LocalContext.current
-    val authManager = remember { AuthManager(context) }
-    val coroutineScope = rememberCoroutineScope()
-
-    // ─── Auth View Model ──────────
+    //    ─── For Authentication & Auth View Model ──────────
 
     val email = authViewModel.email.collectAsState()
     val password = authViewModel.password.collectAsState()
     val authState = authViewModel.authState.collectAsState()
-    var showPass = authViewModel.showPass.collectAsState()
-    var rememberMe = authViewModel.rememberMe.collectAsState()
+    val showPass = authViewModel.showPass.collectAsState()
+    val rememberMe = authViewModel.rememberMe.collectAsState()
 
     LaunchedEffect(authState.value) {
         when (authState.value) {
@@ -67,7 +61,6 @@ fun SignInScreen(
             is AuthState.UnAuthenticated -> {}
         }
     }
-
 
 
     SugarCareBackground {
@@ -116,9 +109,9 @@ fun SignInScreen(
                 Checkbox(
                     checked = rememberMe.value,
                     onCheckedChange = { authViewModel.toggleRememberMe() },
-                    colors = CheckboxDefaults.colors(checkedColor = TealPrimary)
+                    colors = CheckboxDefaults.colors(checkedColor = TealPrimary),
                 )
-                Text(text = "Remember Me", color = TextMedium)
+                Text(text = "Remember Me", color = TextMedium, fontSize = 12.sp)
                 Spacer(modifier = Modifier.width(40.dp))
                 // ────── Forgot password link ───────────────────
                 Text(
@@ -126,12 +119,12 @@ fun SignInScreen(
                     modifier = Modifier
                         .clickable { onForgotPassword() },
                     color = TealPrimary,
-                    fontSize = 13.sp,
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // ─── Loading or Error feedback ────────────────────────────
 
@@ -144,6 +137,7 @@ fun SignInScreen(
                 is AuthState.Error -> {
                     Text(
                         text = (authState.value as AuthState.Error).message,
+                        fontSize = 12.sp,
                         color = Color.Red,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
@@ -152,18 +146,13 @@ fun SignInScreen(
                 is AuthState.Authenticated -> {}
             }
 
+            Spacer(modifier = Modifier.height(24.dp))
+
+
+
             PrimaryButton(
                 text = "Sign in",
                 onClick = {
-//                    coroutineScope.launch {
-//                        authManager.loginWithEmail(email, password)
-//                            .collect { response ->
-//                                if (response is AuthResponse.Success) {
-//                                    onSignInSuccess()
-//                                }
-//                            }
-//                    }
-
                     authViewModel.signIn(email.value, password.value)
                 },
                 enabled = email.value.isNotBlank() && password.value.isNotBlank()
