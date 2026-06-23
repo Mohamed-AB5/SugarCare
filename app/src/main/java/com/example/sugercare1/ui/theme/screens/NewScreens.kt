@@ -1,6 +1,7 @@
 package com.example.sugercare1
 
-import androidx.compose.foundation.BorderStroke
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -20,22 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.sugercare1.navigation.Screen
 import kotlinx.coroutines.delay
-import kotlin.collections.all
-import kotlin.collections.forEach
-import kotlin.text.isDigit
-import kotlin.text.isEmpty
-import kotlin.text.isNotBlank
-import kotlin.text.isNotEmpty
+
+
 
 private val TealPrimary     = Color(0xFF2E9B9B)
 private val TealLight       = Color(0xFFB2DFDB)
@@ -48,15 +41,15 @@ private val TextMedium      = Color(0xFF607070)
 
 private data class NavItem(
     val label: String,
-    val icon: ImageVector,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
     val route: String
 )
 
 private val bottomNavItems = listOf(
-    NavItem("Home", Icons.Filled.Home, Screen.Home.route),
-    NavItem("Logs", Icons.Filled.FavoriteBorder, Screen.Logs.route),
-    NavItem("Meals", Icons.Filled.Restaurant, Screen.MealPlan.route),
-    NavItem("Profile", Icons.Filled.Person, Screen.Profile.route)
+    NavItem("Home",    Icons.Filled.Home,        Screen.Home.route),
+    NavItem("Logs",    Icons.Filled.FavoriteBorder, Screen.Logs.route),
+    NavItem("Meals",   Icons.Filled.Restaurant,  Screen.MealPlan.route),
+    NavItem("Profile", Icons.Filled.Person,      Screen.Profile.route)
 )
 
 @Composable
@@ -83,6 +76,7 @@ private fun SugarCareBottomNav(navController: NavHostController, currentRoute: S
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -139,7 +133,6 @@ fun NotificationsScreen(navController: NavHostController) {
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -202,7 +195,7 @@ fun ForgotPasswordScreen(navController: NavHostController) {
                 shape           = RoundedCornerShape(16.dp),
                 singleLine      = true,
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
+                    keyboardType = androidx.compose.ui.text.input.KeyboardType.Email
                 ),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = TealPrimary,
@@ -257,8 +250,7 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
 
     LaunchedEffect(resent) {
         timer = 60
-        while (timer > 0) {
-            delay(1000); timer-- }
+        while (timer > 0) { delay(1000); timer-- }
     }
 
     val allFilled = code.all { it.isNotEmpty() }
@@ -329,21 +321,21 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        BasicTextField(
-                            value = code[i],
+                        androidx.compose.foundation.text.BasicTextField(
+                            value         = code[i],
                             onValueChange = { v ->
                                 if (v.length <= 1 && (v.isEmpty() || v[0].isDigit()))
                                     code[i] = v
                             },
-                            singleLine = true,
+                            singleLine      = true,
                             keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Number
+                                keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
                             ),
-                            textStyle = TextStyle(
-                                textAlign = TextAlign.Center,
-                                fontSize = 22.sp,
+                            textStyle = androidx.compose.ui.text.TextStyle(
+                                textAlign  = TextAlign.Center,
+                                fontSize   = 22.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = TealDark
+                                color      = TealDark
                             )
                         )
                     }
@@ -381,6 +373,7 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -433,7 +426,6 @@ fun CompleteProfileScreen(navController: NavHostController) {
                 .padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Box(contentAlignment = Alignment.BottomEnd) {
                 Box(
                     modifier = Modifier
@@ -461,7 +453,6 @@ fun CompleteProfileScreen(navController: NavHostController) {
             Text("Tap camera to change photo", fontSize = 12.sp, color = TextMedium)
             Spacer(Modifier.height(28.dp))
 
-
             Text(
                 "Personal Details",
                 fontSize   = 14.sp,
@@ -477,7 +468,7 @@ fun CompleteProfileScreen(navController: NavHostController) {
 
             ProfileField(value = phone, onValueChange = { phone = it },
                 label = "Phone Number",             icon = Icons.Filled.Phone,
-                keyboardType = KeyboardType.Phone)
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Phone)
             Spacer(Modifier.height(12.dp))
 
             ProfileField(value = dob, onValueChange = { dob = it },
@@ -500,11 +491,28 @@ fun CompleteProfileScreen(navController: NavHostController) {
                     shape        = RoundedCornerShape(14.dp),
                     colors       = profileFieldColors()
                 )
-                ExposedDropdownMenu(expanded = showGender, onDismissRequest = { showGender = false }) {
+                ExposedDropdownMenu(
+                    expanded         = showGender,
+                    onDismissRequest = { showGender = false },
+                    modifier         = Modifier.background(Color.White)
+                ) {
                     listOf("Male", "Female", "Prefer not to say").forEach { opt ->
                         DropdownMenuItem(
-                            text    = { Text(opt) },
-                            onClick = { gender = opt; showGender = false }
+                            text = {
+                                Text(
+                                    opt,
+                                    color      = TextDark,
+                                    fontSize   = 15.sp,
+                                    fontWeight = if (opt == gender) FontWeight.SemiBold else FontWeight.Normal
+                                )
+                            },
+                            onClick = { gender = opt; showGender = false },
+                            modifier = Modifier.background(
+                                if (opt == gender) TealLight.copy(alpha = 0.35f) else Color.White
+                            ),
+                            colors = MenuDefaults.itemColors(
+                                textColor = TextDark
+                            )
                         )
                     }
                 }
@@ -531,7 +539,7 @@ fun CompleteProfileScreen(navController: NavHostController) {
                 },
                 modifier = Modifier.fillMaxWidth().height(54.dp),
                 shape    = RoundedCornerShape(27.dp),
-                border   = BorderStroke(1.5.dp, TealPrimary)
+                border   = androidx.compose.foundation.BorderStroke(1.5.dp, TealPrimary)
             ) {
                 Icon(Icons.Filled.SwitchAccount, null, tint = TealPrimary)
                 Spacer(Modifier.width(8.dp))
@@ -544,7 +552,7 @@ fun CompleteProfileScreen(navController: NavHostController) {
                 onClick  = { showLogout = true },
                 modifier = Modifier.fillMaxWidth().height(54.dp),
                 shape    = RoundedCornerShape(27.dp),
-                border   = BorderStroke(1.5.dp, Color(0xFFE53935))
+                border   = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFE53935))
             ) {
                 Icon(Icons.Filled.Logout, null, tint = Color(0xFFE53935))
                 Spacer(Modifier.width(8.dp))
@@ -555,14 +563,15 @@ fun CompleteProfileScreen(navController: NavHostController) {
         }
     }
 }
+
 @Composable
 private fun ProfileField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    icon: ImageVector,
-    keyboardType: KeyboardType =
-        KeyboardType.Text
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    keyboardType: androidx.compose.ui.text.input.KeyboardType =
+        androidx.compose.ui.text.input.KeyboardType.Text
 ) {
     OutlinedTextField(
         value           = value,
@@ -582,4 +591,4 @@ private fun profileFieldColors() = OutlinedTextFieldDefaults.colors(
     focusedBorderColor = TealPrimary,
     focusedLabelColor  = TealPrimary,
     cursorColor        = TealPrimary
-)
+(
