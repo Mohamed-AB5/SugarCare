@@ -90,6 +90,8 @@ fun SugarCareNavHost(
         composable(Screen.WeeklyAnalytics.route) {
             WeeklyAnalyticsScreen(navController = navController)
         }
+
+        
         composable(Screen.Profile.route) {
             CompleteProfileScreen(navController = navController)
         }
