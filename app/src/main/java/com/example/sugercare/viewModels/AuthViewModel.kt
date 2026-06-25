@@ -92,13 +92,6 @@ class AuthViewModel(context: Context) : ViewModel() {
 
     // —————— Check current login status  ————————————————
     fun checkAuthStatus() {
-        Log.d("AUTH", "currentUser = ${auth.currentUser}")
-//        _authState.value =
-//            if (auth.currentUser == null) {
-//                AuthState.UnAuthenticated
-//            } else {
-//                AuthState.Authenticated
-//            }
         viewModelScope.launch {
             val isRemembered = prefsRepo.rememberMeFlow.first()
             _rememberMe.value = isRemembered
@@ -113,7 +106,6 @@ class AuthViewModel(context: Context) : ViewModel() {
             }
         }
 
-        Log.d("AUTH", "authState = ${_authState.value}")
     }
 
     // —————— Reset Auth State ———————————————

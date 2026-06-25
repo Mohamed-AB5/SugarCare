@@ -49,16 +49,6 @@ fun SugarCareNavHost(
     Log.d("AUTH", "authState = ${authState.value}")
 
     LaunchedEffect(authState.value, ) {
-//        when {
-//            authState.value is AuthState.Authenticated && rememberMe.value -> {
-//                navController.navigate(Screen.Home.route) {
-//                    popUpTo(Screen.Welcome.route) { inclusive = true }
-//                }
-//            }
-//            authState.value is AuthState.Authenticated && !rememberMe.value -> {
-//                authViewModel.logout()
-//            }
-//        }
         if (authState.value is AuthState.Authenticated && rememberMe.value) {
             navController.navigate(Screen.Home.route) {
                 popUpTo(Screen.Welcome.route) { inclusive = true }
