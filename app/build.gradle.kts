@@ -25,7 +25,10 @@ android {
 }
 
 dependencies {
-    // View model
+    // Data Store
+    implementation("androidx.datastore:datastore-preferences:1.2.1")
+
+    // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
 
     // Coroutines
@@ -37,6 +40,8 @@ dependencies {
     implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
     implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("co.yml:ycharts:2.1.0")
+    implementation("com.google.firebase:firebase-firestore-ktx")
 
 
     val composeBom = platform("androidx.compose:compose-bom:2024.12.01")

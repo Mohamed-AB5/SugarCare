@@ -1,7 +1,11 @@
 package com.sugarcare.app.navigation
+
+import android.annotation.SuppressLint
+import android.util.Log
 import com.example.sugercare.ui.theme.screens.HomeScreen
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,6 +14,7 @@ import com.example.sugercare.CompleteProfileScreen
 import com.example.sugercare.ForgotPasswordCodeScreen
 import com.example.sugercare.ForgotPasswordScreen
 import com.example.sugercare.NotificationsScreen
+import com.example.sugercare.viewModels.AuthState
 import com.example.sugercare.viewModels.AuthViewModel
 import com.sugarcare.app.ui.screens.*
 
@@ -29,14 +34,46 @@ sealed class Screen(val route: String) {
     object ForgotPasswordCode : Screen("forgot_password_code")
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun SugarCareNavHost(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    authViewModel: AuthViewModel
 ) {
-    val authViewModel: AuthViewModel = viewModel()
+//  ———— TO check if user is logged in or not ————————————————
+
+    val authState = authViewModel.authState.collectAsState()
+    val rememberMe = authViewModel.rememberMe.collectAsState()
+
+    Log.d("AUTH", "rememberMe = ${rememberMe.value}")
+    Log.d("AUTH", "authState = ${authState.value}")
+
+    LaunchedEffect(authState.value, ) {
+//        when {
+//            authState.value is AuthState.Authenticated && rememberMe.value -> {
+//                navController.navigate(Screen.Home.route) {
+//                    popUpTo(Screen.Welcome.route) { inclusive = true }
+//                }
+//            }
+//            authState.value is AuthState.Authenticated && !rememberMe.value -> {
+//                authViewModel.logout()
+//            }
+//        }
+        if (authState.value is AuthState.Authenticated && rememberMe.value) {
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.Welcome.route) { inclusive = true }
+            }
+        }
+
+    }
+
+
+//    TODO -> We need to add splash screen instead
+    val startDest = Screen.Welcome.route
+
     NavHost(
         navController = navController,
-        startDestination = Screen.Welcome.route
+        startDestination = startDest
     ) {
         composable(Screen.Welcome.route) {
             WelcomeScreen(
@@ -102,7 +139,7 @@ fun SugarCareNavHost(
             WeeklyAnalyticsScreen(navController = navController)
         }
         composable(Screen.Profile.route) {
-            CompleteProfileScreen(navController = navController)
+            CompleteProfileScreen(navController = navController, authViewModel = authViewModel)
         }
         composable(Screen.Notifications.route) {
             NotificationsScreen(navController = navController)

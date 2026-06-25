@@ -1,12 +1,13 @@
 package com.example.sugercare.viewModels
 
 import android.content.Context
+import android.util.Log
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.sugercare.Authentication.AuthResponse
+import com.example.sugercare.authentication.AuthDataStore
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
@@ -18,16 +19,20 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import java.util.UUID
 
-class AuthViewModel() : ViewModel() {
+class AuthViewModel(context: Context) : ViewModel() {
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val _authState = MutableStateFlow<AuthState>(AuthState.UnAuthenticated)
+    private val prefsRepo = AuthDataStore(context)
 
     init {
         checkAuthStatus()
+        loadRememberedDetails()
     }
 
     val authState: StateFlow<AuthState> = _authState.asStateFlow()
@@ -59,15 +64,56 @@ class AuthViewModel() : ViewModel() {
         _rememberMe.value = !_rememberMe.value
     }
 
+    // —————— For Remember Me  ————————————————
+    private fun loadRememberedDetails() {
+        viewModelScope.launch {
+            prefsRepo.emailFlow.collectLatest { savedEmail ->
+                _email.value = savedEmail
+            }
+        }
+        viewModelScope.launch {
+            prefsRepo.rememberMeFlow.collectLatest { isRemembered ->
+                _rememberMe.value = isRemembered
+            }
+        }
+    }
+
+    fun saveRememberMeDetails(email: String) {
+        viewModelScope.launch {
+            prefsRepo.saveDetails(email, rememberMe = true)
+        }
+    }
+
+    fun clearRememberMeDetails() {
+        viewModelScope.launch {
+            prefsRepo.clearDetails()
+        }
+    }
 
     // —————— Check current login status  ————————————————
     fun checkAuthStatus() {
-        _authState.value =
-            if (auth.currentUser == null) {
-                AuthState.UnAuthenticated
+        Log.d("AUTH", "currentUser = ${auth.currentUser}")
+//        _authState.value =
+//            if (auth.currentUser == null) {
+//                AuthState.UnAuthenticated
+//            } else {
+//                AuthState.Authenticated
+//            }
+        viewModelScope.launch {
+            val isRemembered = prefsRepo.rememberMeFlow.first()
+            _rememberMe.value = isRemembered
+
+            if (auth.currentUser != null && !isRemembered) {
+                auth.signOut()
+                _authState.value = AuthState.UnAuthenticated
+            } else if (auth.currentUser != null) {
+                _authState.value = AuthState.Authenticated
             } else {
-                AuthState.Authenticated
+                _authState.value = AuthState.UnAuthenticated
             }
+        }
+
+        Log.d("AUTH", "authState = ${_authState.value}")
     }
 
     // —————— Reset Auth State ———————————————
@@ -127,6 +173,9 @@ class AuthViewModel() : ViewModel() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    viewModelScope.launch {
+                        prefsRepo.saveDetails(email, _rememberMe.value)
+                    }
                     _authState.value = AuthState.Authenticated
                 } else {
                     _authState.value = AuthState.Error(
@@ -156,6 +205,7 @@ class AuthViewModel() : ViewModel() {
     fun signInWithGoogle(context: Context) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
+            _rememberMe.value = true
 
             try {
                 // ---- Google id Option
@@ -184,6 +234,7 @@ class AuthViewModel() : ViewModel() {
                 ) {
                     val googleIdTokenCredential =
                         GoogleIdTokenCredential.createFrom(credential.data)
+
                     val firebaseCredential =
                         GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
 
@@ -191,6 +242,7 @@ class AuthViewModel() : ViewModel() {
                     auth.signInWithCredential(firebaseCredential)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
+                                viewModelScope.launch { prefsRepo.saveDetails(email.value, true) }
                                 _authState.value = AuthState.Authenticated
                             } else {
                                 _authState.value = AuthState.Error(

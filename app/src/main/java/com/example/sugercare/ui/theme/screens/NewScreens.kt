@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.sugercare.viewModels.AuthViewModel
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.theme.SugarCareTheme
 import kotlinx.coroutines.delay
@@ -388,13 +389,18 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CompleteProfileScreen(navController: NavHostController) {
+fun CompleteProfileScreen(navController: NavHostController, authViewModel: AuthViewModel) {
+
+/*   TODO
+* Replace delegation with viewModel
+* */
     var fullName   by remember { mutableStateOf("") }
     var phone      by remember { mutableStateOf("") }
     var dob        by remember { mutableStateOf("") }
     var gender     by remember { mutableStateOf("") }
     var showLogout by remember { mutableStateOf(false) }
     var showGender by remember { mutableStateOf(false) }
+
 
     if (showLogout) {
         AlertDialog(
@@ -404,6 +410,7 @@ fun CompleteProfileScreen(navController: NavHostController) {
             text  = { Text("Are you sure you want to log out of your account?") },
             confirmButton = {
                 TextButton(onClick = {
+                    authViewModel.logout()
                     showLogout = false
                     navController.navigate(Screen.SignIn.route) { popUpTo(0) { inclusive = true } }
                 }) { Text("Log Out", color = Color.Red, fontWeight = FontWeight.SemiBold) }
@@ -591,5 +598,8 @@ private fun profileFieldColors() = OutlinedTextFieldDefaults.colors(
 @Preview
 @Composable
 fun ProfilePreview(){
-    SugarCareTheme {CompleteProfileScreen(navController = NavHostController(LocalContext.current) ) }
+    SugarCareTheme {CompleteProfileScreen(navController = NavHostController(LocalContext.current)
+        , authViewModel = AuthViewModel(context = LocalContext.current)
+    )
+    }
 }

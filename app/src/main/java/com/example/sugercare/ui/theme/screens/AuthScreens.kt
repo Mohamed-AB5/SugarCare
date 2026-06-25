@@ -1,7 +1,6 @@
 package com.sugarcare.app.ui.screens
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -44,14 +43,22 @@ fun SignInScreen(
     onForgotPassword: () -> Unit,
     authViewModel: AuthViewModel
 ) {
-    val context = LocalContext.current
+    val context     = LocalContext.current
     //    ─── For Authentication & Auth View Model ──────────
 
-    val email = authViewModel.email.collectAsState()
-    val password = authViewModel.password.collectAsState()
-    val authState = authViewModel.authState.collectAsState()
-    val showPass = authViewModel.showPass.collectAsState()
-    val rememberMe = authViewModel.rememberMe.collectAsState()
+    val email       = authViewModel.email.collectAsState()
+    val password    = authViewModel.password.collectAsState()
+    val authState   = authViewModel.authState.collectAsState()
+    val showPass    = authViewModel.showPass.collectAsState()
+    val rememberMe  = authViewModel.rememberMe.collectAsState()
+
+/*TODO
+* Activate
+* -Loading
+* -Error
+* -UnAuthenticated
+* Status'
+* */
 
     LaunchedEffect(authState.value) {
         when (authState.value) {
@@ -154,6 +161,9 @@ fun SignInScreen(
                 text = "Sign in",
                 onClick = {
                     authViewModel.signIn(email.value, password.value)
+
+                    if(rememberMe.value)  authViewModel.saveRememberMeDetails(email.value)
+                    else authViewModel.clearRememberMeDetails()
                 },
                 enabled = email.value.isNotBlank() && password.value.isNotBlank()
             )
@@ -199,6 +209,8 @@ fun SignInScreen(
             ) {
                 SocialButton(label = "G", color = OrangeDrop, onClick = {
                     authViewModel.signInWithGoogle(context)
+                    if(authState.value is AuthState.Authenticated)  authViewModel.saveRememberMeDetails(email.value)
+                    else authViewModel.clearRememberMeDetails()
                 })
 
                 // !!! -> onClick will be added later <- !!!!
@@ -429,7 +441,7 @@ fun SignUpScreenPreview() {
         SignUpScreen(
             onSignUpSuccess = {},
             onNavigateToSignIn = {},
-            authViewModel = AuthViewModel()
+            authViewModel = AuthViewModel(context = LocalContext.current)
         )
     }
 }
@@ -441,7 +453,7 @@ fun SignInScreenPreview() {
         SignInScreen(
             onSignInSuccess = {},
             onNavigateToSignUp = {},
-            authViewModel = AuthViewModel(),
+            authViewModel = AuthViewModel(context = LocalContext.current),
             onForgotPassword = {}
         )
     }
