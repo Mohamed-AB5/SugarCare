@@ -1,10 +1,12 @@
 package com.example.sugercare.viewModels
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sugercare.authentication.AuthDataStore
@@ -25,10 +27,10 @@ import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import java.util.UUID
 
-class AuthViewModel(context: Context) : ViewModel() {
+class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val _authState = MutableStateFlow<AuthState>(AuthState.UnAuthenticated)
-    private val prefsRepo = AuthDataStore(context)
+    private val prefsRepo = AuthDataStore(application)
 
     init {
         checkAuthStatus()
@@ -164,9 +166,12 @@ class AuthViewModel(context: Context) : ViewModel() {
         _authState.value = AuthState.Loading
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
+
                 if (task.isSuccessful) {
                     viewModelScope.launch {
                         prefsRepo.saveDetails(email, _rememberMe.value)
+                        if (rememberMe.value) saveRememberMeDetails(email)
+                        else clearRememberMeDetails()
                     }
                     _authState.value = AuthState.Authenticated
                 } else {
@@ -197,7 +202,7 @@ class AuthViewModel(context: Context) : ViewModel() {
     fun signInWithGoogle(context: Context) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
-            _rememberMe.value = true
+//            _rememberMe.value = true
 
             try {
                 // ---- Google id Option
@@ -234,13 +239,16 @@ class AuthViewModel(context: Context) : ViewModel() {
                     auth.signInWithCredential(firebaseCredential)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                viewModelScope.launch { prefsRepo.saveDetails(email.value, true) }
+                                viewModelScope.launch {
+                                    prefsRepo.setRememberMe(true)
+                                }
                                 _authState.value = AuthState.Authenticated
                             } else {
                                 _authState.value = AuthState.Error(
                                     task.exception?.message ?: "Firebase Error"
                                 )
                             }
+
 
                         }
                 } else {
@@ -256,10 +264,14 @@ class AuthViewModel(context: Context) : ViewModel() {
 
     fun logout() {
         auth.signOut()
+        _password.value = ""
         _authState.value = AuthState.UnAuthenticated
+
+        viewModelScope.launch {
+            clearRememberMeDetails()
+        }
     }
 }
-
 
 /**
  * TODO: modify it with [AuthResponse] interface later

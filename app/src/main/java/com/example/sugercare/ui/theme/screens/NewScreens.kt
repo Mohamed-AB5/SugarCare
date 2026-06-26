@@ -1,5 +1,6 @@
 package com.example.sugercare
 
+import android.app.Application
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -599,7 +600,7 @@ private fun profileFieldColors() = OutlinedTextFieldDefaults.colors(
 @Composable
 fun ProfilePreview(){
     SugarCareTheme {CompleteProfileScreen(navController = NavHostController(LocalContext.current)
-        , authViewModel = AuthViewModel(context = LocalContext.current)
+        , authViewModel = AuthViewModel(application = Application())
     )
     }
 }

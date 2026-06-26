@@ -9,15 +9,22 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4027dcf1-e93a-42bd-80e5-6a54a10c35fb" name="Changes" comment="implementing &quot;Remember Me&quot; functionality&#10;&#10;- Added `AuthDataStore` using DataStore to persist user email and &quot;Remember Me&quot; preference.&#10;- Updated `AuthViewModel` to handle loading, saving, and clearing login details.&#10;- Integrated `AuthDataStore` logic into `signIn` and `signInWithGoogle` methods.&#10;- Modified `checkAuthStatus` to enforce sign-out if the &quot;Remember Me&quot; preference is disabled.&#10;- Updated `SugarCareNavHost` and `MainActivity` to inject `AuthViewModel` with the required context.&#10;- Added a logout action to the `CompleteProfileScreen` via `AuthViewModel`.">
+    <list default="true" id="4027dcf1-e93a-42bd-80e5-6a54a10c35fb" name="Changes" comment="--">
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/navigation/SugerCareHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/navigation/SugerCareHost.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/authentication/AuthDataStore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/authentication/AuthDataStore.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/authentication/AuthManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/authentication/AuthManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/authentication/AuthResponse.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/authentication/AuthResponse.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/AuthScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/AuthScreens.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/NewScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/NewScreens.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/viewModels/AuthViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/viewModels/AuthViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +35,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[PhysicalDevice::serial=6LPFQCHQG6UG7XWO]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=C:\Users\moham\.android\avd\Medium_Phone.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -66,24 +73,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Android App.app.executor": "Run",
-    "Gradle.Download Sources.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "Authentication-branch",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "settings.editor.selected.configurable": "com.android.studio.ml.templates"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Authentication-branch&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.android.studio.ml.templates&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="SugerCare1.app" />
@@ -174,12 +181,33 @@
       <option name="project" value="LOCAL" />
       <updated>1782411749872</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="--">
+      <option name="closed" value="true" />
+      <created>1782412426656</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1782412426656</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Resolved unrelated history merge conflicts" />
     <MESSAGE value="implementing &quot;Remember Me&quot; functionality&#10;&#10;- Added `AuthDataStore` using DataStore to persist user email and &quot;Remember Me&quot; preference.&#10;- Updated `AuthViewModel` to handle loading, saving, and clearing login details.&#10;- Integrated `AuthDataStore` logic into `signIn` and `signInWithGoogle` methods.&#10;- Modified `checkAuthStatus` to enforce sign-out if the &quot;Remember Me&quot; preference is disabled.&#10;- Updated `SugarCareNavHost` and `MainActivity` to inject `AuthViewModel` with the required context.&#10;- Added a logout action to the `CompleteProfileScreen` via `AuthViewModel`." />
-    <option name="LAST_COMMIT_MESSAGE" value="implementing &quot;Remember Me&quot; functionality&#10;&#10;- Added `AuthDataStore` using DataStore to persist user email and &quot;Remember Me&quot; preference.&#10;- Updated `AuthViewModel` to handle loading, saving, and clearing login details.&#10;- Integrated `AuthDataStore` logic into `signIn` and `signInWithGoogle` methods.&#10;- Modified `checkAuthStatus` to enforce sign-out if the &quot;Remember Me&quot; preference is disabled.&#10;- Updated `SugarCareNavHost` and `MainActivity` to inject `AuthViewModel` with the required context.&#10;- Added a logout action to the `CompleteProfileScreen` via `AuthViewModel`." />
+    <MESSAGE value="--" />
+    <option name="LAST_COMMIT_MESSAGE" value="--" />
+    <option name="LAST_CHUNK_COMMIT_MESSAGE" value="--" />
   </component>
 </project>

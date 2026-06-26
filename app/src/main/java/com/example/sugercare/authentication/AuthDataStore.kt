@@ -25,9 +25,18 @@ class AuthDataStore(private val context: Context) {
             prefs[KEY_REMEMBER_ME] = rememberMe
         }
     }
-        suspend fun clearDetails() {
-            context.dataStore.edit { it.clear() }
+
+    suspend fun setRememberMe(remember: Boolean) {
+        context.dataStore.edit {prefs ->
+            prefs[KEY_REMEMBER_ME] = remember
         }
+
+    }
+
+
+    suspend fun clearDetails() {
+        context.dataStore.edit { it.clear() }
+    }
 }
 
 

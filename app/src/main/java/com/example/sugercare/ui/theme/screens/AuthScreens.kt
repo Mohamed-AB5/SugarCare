@@ -1,6 +1,7 @@
 package com.sugarcare.app.ui.screens
 
-import android.content.Context
+import android.app.Application
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -20,9 +21,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.sugercare.authentication.AuthManager
+import com.example.sugercare.authentication.AuthResponse
 import com.example.sugercare.viewModels.AuthViewModel
-import com.example.sugercare.Authentication.AuthManager
-import com.example.sugercare.Authentication.AuthResponse
 import com.example.sugercare.viewModels.AuthState
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
@@ -43,23 +44,24 @@ fun SignInScreen(
     onForgotPassword: () -> Unit,
     authViewModel: AuthViewModel
 ) {
-    val context     = LocalContext.current
+    val context = LocalContext.current
     //    ─── For Authentication & Auth View Model ──────────
 
-    val email       = authViewModel.email.collectAsState()
-    val password    = authViewModel.password.collectAsState()
-    val authState   = authViewModel.authState.collectAsState()
-    val showPass    = authViewModel.showPass.collectAsState()
-    val rememberMe  = authViewModel.rememberMe.collectAsState()
+    val email = authViewModel.email.collectAsState()
+    val password = authViewModel.password.collectAsState()
+    val authState = authViewModel.authState.collectAsState()
+    val showPass = authViewModel.showPass.collectAsState()
+    val rememberMe = authViewModel.rememberMe.collectAsState()
 
-/*TODO
-* Activate
-* -Loading
-* -Error
-* -UnAuthenticated
-* Status'
-* */
-
+    /*TODO
+    * Activate
+    * -Loading
+    * -Error
+    * -UnAuthenticated
+    * Status'
+    * */
+    Log.d("TextState1", "Current email Value: '$email'")
+    Log.d("TextState", "Current TextField Value: '$password'")
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.Loading -> {}
@@ -100,7 +102,7 @@ fun SignInScreen(
                 label = "Password",
                 isPassword = !showPass.value,
                 trailingIcon = {
-                    IconButton(onClick = { authViewModel.toggleShowPass()  }) {
+                    IconButton(onClick = { authViewModel.toggleShowPass() }) {
                         Icon(
                             imageVector = if (showPass.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                             contentDescription = null,
@@ -141,6 +143,7 @@ fun SignInScreen(
                         CircularProgressIndicator()
                     }
                 }
+
                 is AuthState.Error -> {
                     Text(
                         text = (authState.value as AuthState.Error).message,
@@ -149,6 +152,7 @@ fun SignInScreen(
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
+
                 is AuthState.UnAuthenticated -> {}
                 is AuthState.Authenticated -> {}
             }
@@ -161,9 +165,6 @@ fun SignInScreen(
                 text = "Sign in",
                 onClick = {
                     authViewModel.signIn(email.value, password.value)
-
-                    if(rememberMe.value)  authViewModel.saveRememberMeDetails(email.value)
-                    else authViewModel.clearRememberMeDetails()
                 },
                 enabled = email.value.isNotBlank() && password.value.isNotBlank()
             )
@@ -209,8 +210,6 @@ fun SignInScreen(
             ) {
                 SocialButton(label = "G", color = OrangeDrop, onClick = {
                     authViewModel.signInWithGoogle(context)
-                    if(authState.value is AuthState.Authenticated)  authViewModel.saveRememberMeDetails(email.value)
-                    else authViewModel.clearRememberMeDetails()
                 })
 
                 // !!! -> onClick will be added later <- !!!!
@@ -441,7 +440,7 @@ fun SignUpScreenPreview() {
         SignUpScreen(
             onSignUpSuccess = {},
             onNavigateToSignIn = {},
-            authViewModel = AuthViewModel(context = LocalContext.current)
+            authViewModel = AuthViewModel(application = Application())
         )
     }
 }
@@ -453,7 +452,7 @@ fun SignInScreenPreview() {
         SignInScreen(
             onSignInSuccess = {},
             onNavigateToSignUp = {},
-            authViewModel = AuthViewModel(context = LocalContext.current),
+            authViewModel = AuthViewModel(application = Application()),
             onForgotPassword = {}
         )
     }

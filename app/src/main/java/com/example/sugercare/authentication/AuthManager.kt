@@ -1,4 +1,4 @@
-package com.example.sugercare.Authentication
+package com.example.sugercare.authentication
 
 import android.content.Context
 import androidx.credentials.CredentialManager

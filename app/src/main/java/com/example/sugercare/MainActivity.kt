@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sugercare.viewModels.AuthViewModel
 import com.sugarcare.app.navigation.SugarCareNavHost
 import com.sugarcare.app.ui.theme.SugarCareTheme
@@ -19,7 +20,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             SugarCareTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    SugarCareNavHost(authViewModel=AuthViewModel(context = this))
+                    val authViewModel: AuthViewModel = viewModel()
+                    SugarCareNavHost(authViewModel=authViewModel)
                 }
             }
         }
