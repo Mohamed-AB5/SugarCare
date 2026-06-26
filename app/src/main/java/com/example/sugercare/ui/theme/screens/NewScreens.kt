@@ -1,7 +1,9 @@
-package com.example.sugercare
+package com.example.sugercare1
 
 import android.app.Application
 import androidx.compose.foundation.BorderStroke
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,7 +11,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -26,7 +27,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -335,21 +335,21 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        BasicTextField(
-                            value = code[i],
+                        androidx.compose.foundation.text.BasicTextField(
+                            value         = code[i],
                             onValueChange = { v ->
                                 if (v.length <= 1 && (v.isEmpty() || v[0].isDigit()))
                                     code[i] = v
                             },
-                            singleLine = true,
+                            singleLine      = true,
                             keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Number
+                                keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
                             ),
-                            textStyle = TextStyle(
-                                textAlign = TextAlign.Center,
-                                fontSize = 22.sp,
+                            textStyle = androidx.compose.ui.text.TextStyle(
+                                textAlign  = TextAlign.Center,
+                                fontSize   = 22.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = TealDark
+                                color      = TealDark
                             )
                         )
                     }
@@ -387,6 +387,7 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -445,7 +446,6 @@ fun CompleteProfileScreen(navController: NavHostController, authViewModel: AuthV
                 .padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Box(contentAlignment = Alignment.BottomEnd) {
                 Box(
                     modifier = Modifier
@@ -473,7 +473,6 @@ fun CompleteProfileScreen(navController: NavHostController, authViewModel: AuthV
             Text("Tap camera to change photo", fontSize = 12.sp, color = TextMedium)
             Spacer(Modifier.height(28.dp))
 
-
             Text(
                 "Personal Details",
                 fontSize   = 14.sp,
@@ -489,7 +488,7 @@ fun CompleteProfileScreen(navController: NavHostController, authViewModel: AuthV
 
             ProfileField(value = phone, onValueChange = { phone = it },
                 label = "Phone Number",             icon = Icons.Filled.Phone,
-                keyboardType = KeyboardType.Phone)
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Phone)
             Spacer(Modifier.height(12.dp))
 
             ProfileField(value = dob, onValueChange = { dob = it },
@@ -512,11 +511,28 @@ fun CompleteProfileScreen(navController: NavHostController, authViewModel: AuthV
                     shape        = RoundedCornerShape(14.dp),
                     colors       = profileFieldColors()
                 )
-                ExposedDropdownMenu(expanded = showGender, onDismissRequest = { showGender = false }) {
+                ExposedDropdownMenu(
+                    expanded         = showGender,
+                    onDismissRequest = { showGender = false },
+                    modifier         = Modifier.background(Color.White)
+                ) {
                     listOf("Male", "Female", "Prefer not to say").forEach { opt ->
                         DropdownMenuItem(
-                            text    = { Text(opt) },
-                            onClick = { gender = opt; showGender = false }
+                            text = {
+                                Text(
+                                    opt,
+                                    color      = TextDark,
+                                    fontSize   = 15.sp,
+                                    fontWeight = if (opt == gender) FontWeight.SemiBold else FontWeight.Normal
+                                )
+                            },
+                            onClick = { gender = opt; showGender = false },
+                            modifier = Modifier.background(
+                                if (opt == gender) TealLight.copy(alpha = 0.35f) else Color.White
+                            ),
+                            colors = MenuDefaults.itemColors(
+                                textColor = TextDark
+                            )
                         )
                     }
                 }
@@ -543,7 +559,7 @@ fun CompleteProfileScreen(navController: NavHostController, authViewModel: AuthV
                 },
                 modifier = Modifier.fillMaxWidth().height(54.dp),
                 shape    = RoundedCornerShape(27.dp),
-                border   = BorderStroke(1.5.dp, TealPrimary)
+                border   = androidx.compose.foundation.BorderStroke(1.5.dp, TealPrimary)
             ) {
                 Icon(Icons.Filled.SwitchAccount, null, tint = TealPrimary)
                 Spacer(Modifier.width(8.dp))
@@ -556,7 +572,7 @@ fun CompleteProfileScreen(navController: NavHostController, authViewModel: AuthV
                 onClick  = { showLogout = true },
                 modifier = Modifier.fillMaxWidth().height(54.dp),
                 shape    = RoundedCornerShape(27.dp),
-                border   = BorderStroke(1.5.dp, Color(0xFFE53935))
+                border   = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFE53935))
             ) {
                 Icon(Icons.Filled.Logout, null, tint = Color(0xFFE53935))
                 Spacer(Modifier.width(8.dp))
@@ -567,14 +583,15 @@ fun CompleteProfileScreen(navController: NavHostController, authViewModel: AuthV
         }
     }
 }
+
 @Composable
 private fun ProfileField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    icon: ImageVector,
-    keyboardType: KeyboardType =
-        KeyboardType.Text
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    keyboardType: androidx.compose.ui.text.input.KeyboardType =
+        androidx.compose.ui.text.input.KeyboardType.Text
 ) {
     OutlinedTextField(
         value           = value,
@@ -595,12 +612,3 @@ private fun profileFieldColors() = OutlinedTextFieldDefaults.colors(
     focusedLabelColor  = TealPrimary,
     cursorColor        = TealPrimary
 )
-
-@Preview
-@Composable
-fun ProfilePreview(){
-    SugarCareTheme {CompleteProfileScreen(navController = NavHostController(LocalContext.current)
-        , authViewModel = AuthViewModel(application = Application())
-    )
-    }
-}
