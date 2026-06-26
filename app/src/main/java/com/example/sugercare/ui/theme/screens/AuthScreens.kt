@@ -361,7 +361,12 @@ fun SignUpScreen(
                                 }
                             }
                     }
-                }
+                },
+                enabled = email.isNotBlank()
+                        && password.isNotBlank()
+                        && confirmPassword.isNotBlank()
+                        && acceptedPolicy
+                        && fullName.isNotBlank()
             )
 
             Spacer(modifier = Modifier.height(16.dp))

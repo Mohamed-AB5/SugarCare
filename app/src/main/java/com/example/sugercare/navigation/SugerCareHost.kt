@@ -10,10 +10,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.sugercare.CompleteProfileScreen
-import com.example.sugercare.ForgotPasswordCodeScreen
-import com.example.sugercare.ForgotPasswordScreen
-import com.example.sugercare.NotificationsScreen
+import com.example.sugercare1.CompleteProfileScreen
+import com.example.sugercare1.ForgotPasswordCodeScreen
+import com.example.sugercare1.ForgotPasswordScreen
+import com.example.sugercare1.NotificationsScreen
 import com.example.sugercare.viewModels.AuthState
 import com.example.sugercare.viewModels.AuthViewModel
 import com.sugarcare.app.ui.screens.*
