@@ -436,29 +436,4 @@ private fun SocialButton(
 }
 
 
-// ---- to be removed
 
-@Preview
-@Composable
-fun SignUpScreenPreview() {
-    SugarCareTheme {
-        SignUpScreen(
-            onSignUpSuccess = {},
-            onNavigateToSignIn = {},
-            authViewModel = AuthViewModel(application = Application())
-        )
-    }
-}
-
-@Preview
-@Composable
-fun SignInScreenPreview() {
-    SugarCareTheme {
-        SignInScreen(
-            onSignInSuccess = {},
-            onNavigateToSignUp = {},
-            authViewModel = AuthViewModel(application = Application()),
-            onForgotPassword = {}
-        )
-    }
-}
