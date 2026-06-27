@@ -202,7 +202,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     fun signInWithGoogle(context: Context) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
-//            _rememberMe.value = true
 
             try {
                 // ---- Google id Option

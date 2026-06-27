@@ -408,6 +408,7 @@ fun CompleteProfileScreen(navController: NavHostController, authViewModel: AuthV
     if (showLogout) {
         AlertDialog(
             onDismissRequest = { showLogout = false },
+            containerColor = BackgroundLight,
             icon  = { Icon(Icons.Filled.Logout, null, tint = Color.Red) },
             title = { Text("Log Out", fontWeight = FontWeight.Bold) },
             text  = { Text("Are you sure you want to log out of your account?") },
@@ -419,7 +420,7 @@ fun CompleteProfileScreen(navController: NavHostController, authViewModel: AuthV
                 }) { Text("Log Out", color = Color.Red, fontWeight = FontWeight.SemiBold) }
             },
             dismissButton = {
-                TextButton(onClick = { showLogout = false }) { Text("Cancel") }
+                TextButton(onClick = { showLogout = false }) { Text("Cancel",color = TextMedium) }
             }
         )
     }

@@ -114,26 +114,26 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
+            Text(
+                "Forgot password?",
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .clickable { onForgotPassword() },
+                color = TealPrimary,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Spacer(Modifier.height(12.dp))
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(
                     checked = rememberMe.value,
                     onCheckedChange = { authViewModel.toggleRememberMe() },
-                    colors = CheckboxDefaults.colors(checkedColor = TealPrimary),
+                    colors = CheckboxDefaults.colors(checkedColor = TealPrimary)
                 )
-                Text(text = "Remember Me", color = TextMedium, fontSize = 12.sp)
-                Spacer(modifier = Modifier.width(40.dp))
-                // ────── Forgot password link ───────────────────
-                Text(
-                    "Forgot password?",
-                    modifier = Modifier
-                        .clickable { onForgotPassword() },
-                    color = TealPrimary,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Text("Remember Me", color = TextMedium)
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
 
             // ─── Loading or Error feedback ────────────────────────────
 
@@ -143,7 +143,6 @@ fun SignInScreen(
                         CircularProgressIndicator()
                     }
                 }
-
                 is AuthState.Error -> {
                     Text(
                         text = (authState.value as AuthState.Error).message,
@@ -152,7 +151,6 @@ fun SignInScreen(
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
-
                 is AuthState.UnAuthenticated -> {}
                 is AuthState.Authenticated -> {}
             }
