@@ -24,7 +24,7 @@ import co.yml.charts.ui.linechart.model.LineStyle
 @Composable
 fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     var glucoseInput by remember { mutableStateOf("") }
-    var mealrelation by remember { mutableStateOf("") }
+    var mealRelation by remember { mutableStateOf("") }
     var note by remember { mutableStateOf("") }
     var hourInput by remember { mutableStateOf("") }
     var minuteInput by remember { mutableStateOf("") }
@@ -36,7 +36,10 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
         topBar = { TopAppBar(title = { Text("Glucose Tracker") }) }
     ) { paddingValues ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(paddingValues).padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedTextField(
@@ -57,8 +60,8 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
             Spacer(modifier = Modifier.height(6.dp))
 
             OutlinedTextField(
-                value = mealrelation,
-                onValueChange = { mealrelation = it },
+                value = mealRelation,
+                onValueChange = { mealRelation = it },
                 label = { Text("before/after the meal") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -91,7 +94,9 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                     ),
-                    modifier = Modifier.height(56.dp).padding(top = 8.dp)
+                    modifier = Modifier
+                        .height(56.dp)
+                        .padding(top = 8.dp)
                 ) {
                     Text(amPmSelection, style = MaterialTheme.typography.bodyLarge)
                 }
@@ -104,20 +109,21 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
                     if (level > 0) {
 
                         val detailsBuilder = mutableListOf<String>()
-                        if (mealrelation.isNotEmpty()) detailsBuilder.add(mealrelation)
+                        if (mealRelation.isNotEmpty()) detailsBuilder.add(mealRelation)
                         if (note.isNotEmpty()) detailsBuilder.add("Note: $note")
-                        val formattedTime = if (hourInput.isNotEmpty() && minuteInput.isNotEmpty()) {
-                            "$hourInput:$minuteInput $amPmSelection"
-                        } else {
-                            ""
-                        }
+                        val formattedTime =
+                            if (hourInput.isNotEmpty() && minuteInput.isNotEmpty()) {
+                                "$hourInput:$minuteInput $amPmSelection"
+                            } else {
+                                ""
+                            }
 
                         val fullDetails = detailsBuilder.joinToString(" | ")
 
                         viewModel.addReading(level, fullDetails)
 
                         glucoseInput = ""
-                        mealrelation = ""
+                        mealRelation = ""
                         note = ""
                         hourInput = ""
                         minuteInput = ""
@@ -132,13 +138,27 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
                 val points = readings.mapIndexed { index, sugarReading ->
                     Point(index.toFloat(), sugarReading.glucoseLevel.toFloat())
                 }
-                val xAxisData = AxisData.Builder().axisStepSize(40.dp).steps(points.size - 1).labelData { i -> (i + 1).toString() }.build()
-                val yAxisData = AxisData.Builder().steps(5).labelData { i -> (i * 50).toString() }.build()
+                val xAxisData = AxisData.Builder().axisStepSize(40.dp).steps(points.size - 1)
+                    .labelData { i -> (i + 1).toString() }.build()
+                val yAxisData =
+                    AxisData.Builder().steps(5).labelData { i -> (i * 50).toString() }.build()
                 val lineChartData = LineChartData(
-                    linePlotData = LinePlotData(lines = listOf(co.yml.charts.ui.linechart.model.Line(dataPoints = points, lineStyle = LineStyle(color = Color.Blue)))),
+                    linePlotData = LinePlotData(
+                        lines = listOf(
+                            co.yml.charts.ui.linechart.model.Line(
+                                dataPoints = points,
+                                lineStyle = LineStyle(color = Color.Blue)
+                            )
+                        )
+                    ),
                     xAxisData = xAxisData, yAxisData = yAxisData
                 )
-                LineChart(modifier = Modifier.height(200.dp).fillMaxWidth(), lineChartData = lineChartData)
+                LineChart(
+                    modifier = Modifier
+                        .height(200.dp)
+                        .fillMaxWidth(),
+                    lineChartData = lineChartData
+                )
             } else {
                 Text("Enter at least 2 readings to view the graph", color = Color.Gray)
             }
@@ -147,8 +167,15 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(readings) { reading ->
-                    Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
-                        Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Card(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
                             Column {
                                 Text("Reading: ${reading.glucoseLevel} mg/dL")
                                 if (reading.note.isNotEmpty()) {
@@ -156,7 +183,11 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
                                 }
                             }
                             IconButton(onClick = { viewModel.deleteReading(reading.id) }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.Red)
+                                Icon(
+                                    Icons.Default.Delete,
+                                    contentDescription = "Delete",
+                                    tint = Color.Red
+                                )
                             }
                         }
                     }
@@ -165,18 +196,6 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*

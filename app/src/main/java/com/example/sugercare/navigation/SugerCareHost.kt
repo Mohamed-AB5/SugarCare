@@ -11,13 +11,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sugercare.app.SugarTrackerScreen
-import com.example.sugercare1.CompleteProfileScreen
+import com.example.sugercare1.ProfileScreen
 import com.example.sugercare1.ForgotPasswordCodeScreen
 import com.example.sugercare1.ForgotPasswordScreen
 import com.example.sugercare1.NotificationsScreen
 import com.example.sugercare.viewModels.AuthState
 //import com.example.sugercare.crud.SugarTrackerScreen
 import com.example.sugercare.viewModels.AuthViewModel
+import com.example.sugercare.viewModels.ProfileViewModel
 import com.sugarcare.app.ui.screens.*
 
 sealed class Screen(val route: String) {
@@ -40,7 +41,8 @@ sealed class Screen(val route: String) {
 @Composable
 fun SugarCareNavHost(
     navController: NavHostController = rememberNavController(),
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    profileViewModel: ProfileViewModel
 ) {
 //  ———— TO check if user is logged in or not ————————————————
 
@@ -116,7 +118,7 @@ fun SugarCareNavHost(
         }
 
         composable(Screen.Home.route) {
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController,profileViewModel = profileViewModel)
         }
         composable(Screen.Logs.route) {
 //            LogsScreen(navController = navController)
@@ -132,7 +134,11 @@ fun SugarCareNavHost(
             WeeklyAnalyticsScreen(navController = navController)
         }
         composable(Screen.Profile.route) {
-            CompleteProfileScreen(navController = navController, authViewModel = authViewModel)
+            ProfileScreen(navController = navController,
+                authViewModel = authViewModel,
+                profileViewModel=profileViewModel,
+                onSaveSuccess = {}
+            )
         }
         composable(Screen.Notifications.route) {
             NotificationsScreen(navController = navController)

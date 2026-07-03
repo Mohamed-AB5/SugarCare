@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">SugerCare1</string>
     <string name="web_client_id">175442306636-4trqvuqv22ir79ifmm6u1gold4nfs86e.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">2129492267617467</string>
+    <string name="facebook_client_token">1f1a7db01568a84bedb17aa445d5b8d8</string>
 </resources>

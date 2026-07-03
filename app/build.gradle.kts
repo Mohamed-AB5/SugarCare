@@ -25,6 +25,13 @@ android {
 }
 
 dependencies {
+    // To Access FireBase Storage & coil -> retrieve image from storage
+    implementation("com.google.firebase:firebase-storage")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
+    // Facebook
+    implementation("com.facebook.android:facebook-login:latest.release")
+
     // Data Store
     implementation("androidx.datastore:datastore-preferences:1.2.1")
 

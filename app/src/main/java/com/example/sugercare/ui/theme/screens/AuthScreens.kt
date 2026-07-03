@@ -1,7 +1,9 @@
 package com.sugarcare.app.ui.screens
 
-import android.app.Application
+import android.app.Activity
 import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -12,22 +14,20 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.sugercare.authentication.AuthManager
-import com.example.sugercare.authentication.AuthResponse
 import com.example.sugercare.viewModels.AuthViewModel
 import com.example.sugercare.viewModels.AuthState
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
-import kotlinx.coroutines.launch
 import com.sugarcare.app.ui.theme.TealLight
 import kotlin.text.isNotBlank
 
@@ -46,11 +46,11 @@ fun SignInScreen(
 ) {
     val context = LocalContext.current
     //    ─── For Authentication & Auth View Model ──────────
-
+    val activity = LocalContext.current as ComponentActivity
     val email = authViewModel.email.collectAsState()
     val password = authViewModel.password.collectAsState()
+    val visibleFields = authViewModel.visiblePasswordFields.collectAsState()
     val authState = authViewModel.authState.collectAsState()
-    val showPass = authViewModel.showPass.collectAsState()
     val rememberMe = authViewModel.rememberMe.collectAsState()
 
     /*TODO
@@ -100,11 +100,11 @@ fun SignInScreen(
                 value = password.value,
                 onValueChange = { authViewModel.updatePassword(it) },
                 label = "Password",
-                isPassword = !showPass.value,
+                isPassword = "password" !in visibleFields.value,
                 trailingIcon = {
-                    IconButton(onClick = { authViewModel.toggleShowPass() }) {
+                    IconButton(onClick = { authViewModel.togglePasswordVisibility("password") }) {
                         Icon(
-                            imageVector = if (showPass.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            imageVector = if ("password" in visibleFields.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                             contentDescription = null,
                             tint = TealPrimary
                         )
@@ -143,6 +143,7 @@ fun SignInScreen(
                         CircularProgressIndicator()
                     }
                 }
+
                 is AuthState.Error -> {
                     Text(
                         text = (authState.value as AuthState.Error).message,
@@ -151,6 +152,7 @@ fun SignInScreen(
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
+
                 is AuthState.UnAuthenticated -> {}
                 is AuthState.Authenticated -> {}
             }
@@ -206,12 +208,24 @@ fun SignInScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                SocialButton(label = "G", color = OrangeDrop, onClick = {
-                    authViewModel.signInWithGoogle(context)
-                })
+                SocialButton(
+                    label = "G",
+                    color = OrangeDrop,
+                    brush = Brush.verticalGradient(
+                        listOf(Color(0xFFEED4C8), OrangeDrop2)
+                    ),
+                    onClick = {
+                        authViewModel.signInWithGoogle(context)
+                    })
+                SocialButton(
+                    label = "f",
+                    color = TealPrimary,
+                    brush = Brush.verticalGradient(listOf(Color(0xFFC6F1F1), TealPrimary2)),
+                    onClick = {
+                        authViewModel.signInWithFacebook(activity)
+                    })
 
                 // !!! -> onClick will be added later <- !!!!
-//                SocialButton(label = "f", color = TealPrimary)
 //                SocialButton(label = "𝕏", color = TealDark)
             }
 
@@ -244,18 +258,27 @@ fun SignUpScreen(
     onNavigateToSignIn: () -> Unit,
     authViewModel: AuthViewModel
 ) {
-    var fullName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var acceptedPolicy by remember { mutableStateOf(false) }
-    var showPass by remember { mutableStateOf(false) }
-
-//    ─── For Authentication & coroutine scope ──────────
     val context = LocalContext.current
-    val authManager = remember { AuthManager(context) }
-    val coroutineScope = rememberCoroutineScope()
 
+//    ─── For Authentication & View Model ──────────
+    val activity = LocalContext.current as ComponentActivity
+    val email = authViewModel.email.collectAsState()
+    val password = authViewModel.password.collectAsState()
+    val authState = authViewModel.authState.collectAsState()
+    val visibleFields = authViewModel.visiblePasswordFields.collectAsState()
+    val fullName = authViewModel.fullName.collectAsState()
+    val confirmPassword = authViewModel.confirmPassword.collectAsState()
+    var acceptedPolicy by remember { mutableStateOf(false) }
+
+
+    LaunchedEffect(authState.value) {
+        when (authState.value) {
+            is AuthState.Loading -> {}
+            is AuthState.Authenticated -> onSignUpSuccess()
+            is AuthState.Error -> {}
+            is AuthState.UnAuthenticated -> {}
+        }
+    }
     SugarCareBackground {
         Column(
             modifier = Modifier
@@ -273,28 +296,28 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             SugarCareTextField(
-                value = fullName,
-                onValueChange = { fullName = it },
+                value = fullName.value,
+                onValueChange = { authViewModel.updateFullName(it) },
                 label = "Full Name"
             )
             Spacer(modifier = Modifier.height(12.dp))
 
             SugarCareTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = email.value,
+                onValueChange = { authViewModel.updateEmail(it) },
                 label = "Email"
             )
             Spacer(modifier = Modifier.height(12.dp))
 
             SugarCareTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = password.value,
+                onValueChange = { authViewModel.updatePassword(it) },
                 label = "Password",
-                isPassword = !showPass,
+                isPassword = "password" !in visibleFields.value,
                 trailingIcon = {
-                    IconButton(onClick = { showPass = !showPass }) {
+                    IconButton(onClick = { authViewModel.togglePasswordVisibility("password") }) {
                         Icon(
-                            imageVector = if (showPass) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            imageVector = if ("password" in visibleFields.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                             contentDescription = null,
                             tint = TealPrimary
                         )
@@ -305,14 +328,14 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             SugarCareTextField(
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
+                value = confirmPassword.value,
+                onValueChange = { authViewModel.updateConfirmPassword(it) },
                 label = "Confirm Password",
-                isPassword = !showPass,
+                isPassword = "confirmPassword" !in visibleFields.value,
                 trailingIcon = {
-                    IconButton(onClick = { showPass = !showPass }) {
+                    IconButton(onClick = { authViewModel.togglePasswordVisibility("confirmPassword") }) {
                         Icon(
-                            imageVector = if (showPass) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            imageVector = if ("confirmPassword" in visibleFields.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                             contentDescription = null,
                             tint = TealPrimary
                         )
@@ -348,23 +371,39 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
+            when (authState.value) {
+                is AuthState.Loading -> {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is AuthState.Error -> {
+                    Text(
+                        text = (authState.value as AuthState.Error).message,
+                        fontSize = 12.sp,
+                        color = Color.Red,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+
+                is AuthState.UnAuthenticated -> {}
+                is AuthState.Authenticated -> {}
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+
             SecondaryButton(
                 text = "Sign Up",
                 onClick = {
-                    coroutineScope.launch {
-                        authManager.createAccountWithEmail(email, password)
-                            .collect { response ->
-                                if (response is AuthResponse.Success) {
-                                    onSignUpSuccess()
-                                }
-                            }
-                    }
+                    authViewModel.signUp(email.value, password.value)
                 },
-                enabled = email.isNotBlank()
-                        && password.isNotBlank()
-                        && confirmPassword.isNotBlank()
+                enabled = email.value.isNotBlank()
+                        && password.value.isNotBlank()
+                        && confirmPassword.value.isNotBlank()
                         && acceptedPolicy
-                        && fullName.isNotBlank()
+                        && fullName.value.isNotBlank()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -389,19 +428,24 @@ fun SignUpScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                SocialButton(label = "G", color = OrangeDrop, onClick = {
-                    coroutineScope.launch {
-                        authManager.signInWithGoogle()
-                            .collect { response ->
-                                if (response is AuthResponse.Success) {
-                                    onSignUpSuccess()
-                                }
-                            }
-                    }
-                })
+                SocialButton(
+                    label = "G",
+                    color = OrangeDrop,
+                    brush = Brush.verticalGradient(
+                        listOf(Color(0xFFEED4C8), OrangeDrop2)
+                    ),
+                    onClick = {
+                        authViewModel.signInWithGoogle(context)
+                    })
+                SocialButton(
+                    label = "f",
+                    color = TealPrimary,
+                    brush = Brush.verticalGradient(listOf(Color(0xFFC6F1F1), TealPrimary2)),
+                    onClick = {
+                        authViewModel.signInWithFacebook(activity)
+                    })
 
                 // !!! -> onClick will be added later <- !!!!
-//                SocialButton(label = "f", color = TealPrimary)
 //                SocialButton(label = "𝕏", color = TealDark)
             }
         }
@@ -413,16 +457,22 @@ fun SignUpScreen(
 private fun SocialButton(
     label: String,
     color: Color, // androidx.compose.ui.graphics removed -> for cleaner route
+    brush: Brush,
     onClick: () -> Unit
 ) {
     Surface(
         shape = androidx.compose.foundation.shape.CircleShape,
+        shadowElevation = 6.dp,
         color = color.copy(alpha = 0.12f),
-        modifier = Modifier
-            .size(52.dp)
-            .clickable { onClick() }
     ) {
-        Box(contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .size(52.dp)
+                .clip(androidx.compose.foundation.shape.CircleShape)
+                .background(brush = brush)
+                .clickable { onClick() },
+            contentAlignment = Alignment.Center
+        ) {
             Text(
                 text = label,
                 color = color,

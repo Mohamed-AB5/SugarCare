@@ -1,5 +1,6 @@
 package com.sugarcare.app.ui.screens
 
+import android.graphics.Color
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -8,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sugarcare.app.ui.components.*
@@ -46,7 +48,7 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
 
                 // ── Diabetic Type dropdown ─────────────────────
                 Text(
-                    text       = "diabetic type",
+                    text       = "Diabetic type",
                     fontWeight = FontWeight.SemiBold,
                     fontSize   = 16.sp,
                     color      = TextDark
@@ -58,7 +60,7 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
                     onExpandedChange = { expanded = !expanded }
                 ) {
                     OutlinedTextField(
-                        value         = selectedType.ifEmpty { "type1, type2" },
+                        value         = selectedType.ifEmpty { "Type1, Type2" },
                         onValueChange = {},
                         readOnly      = true,
                         modifier      = Modifier
@@ -77,11 +79,12 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
                     )
                     ExposedDropdownMenu(
                         expanded         = expanded,
-                        onDismissRequest = { expanded = false }
+                        onDismissRequest = { expanded = false },
+                        containerColor = White
                     ) {
                         diabeticTypes.forEach { type ->
                             DropdownMenuItem(
-                                text    = { Text(type) },
+                                text    = { Text(type, color = TextDark) },
                                 onClick = {
                                     selectedType = type
                                     expanded     = false
@@ -131,5 +134,15 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
                 enabled = selectedType.isNotEmpty() && age.isNotEmpty() && hba1c.isNotEmpty()
             )
         }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+
+fun hhpreview(){
+    SugarCareTheme{
+        HealthInfoScreen (onSaved = {})
     }
 }

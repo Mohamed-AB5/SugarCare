@@ -1,17 +1,24 @@
 package com.example.sugercare.viewModels
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.util.Log
+import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sugercare.authentication.AuthDataStore
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -31,6 +38,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val _authState = MutableStateFlow<AuthState>(AuthState.UnAuthenticated)
     private val prefsRepo = AuthDataStore(application)
+    private var facebookCallbackManager = CallbackManager.Factory.create()
 
     init {
         checkAuthStatus()
@@ -44,27 +52,40 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password.asStateFlow()
 
-    private val _showPass = MutableStateFlow(false)
-    val showPass: StateFlow<Boolean> = _showPass.asStateFlow()
+    private val _fullName = MutableStateFlow("")
+    val fullName: StateFlow<String> = _fullName.asStateFlow()
+
+    private val _confirmPassword = MutableStateFlow("")
+    val confirmPassword: StateFlow<String> = _confirmPassword.asStateFlow()
+
+    private val _visiblePasswordFields = MutableStateFlow<Set<String>>(emptySet())
+    val visiblePasswordFields: StateFlow<Set<String>> = _visiblePasswordFields.asStateFlow()
 
     private val _rememberMe = MutableStateFlow(false)
     val rememberMe: StateFlow<Boolean> = _rememberMe.asStateFlow()
 
+
+
     fun updateEmail(newEmail: String) {
         _email.value = newEmail
+    }
+
+    fun updateFullName(newFullName: String) {
+        _fullName.value = newFullName
     }
 
     fun updatePassword(newPassword: String) {
         _password.value = newPassword
     }
 
-    fun toggleShowPass() {
-        _showPass.value = !_showPass.value
+    fun updateConfirmPassword(newPassword: String) {
+        _confirmPassword.value = newPassword
     }
 
     fun toggleRememberMe() {
         _rememberMe.value = !_rememberMe.value
     }
+
 
     // —————— For Remember Me  ————————————————
     private fun loadRememberedDetails() {
@@ -90,6 +111,15 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             prefsRepo.clearDetails()
         }
+    }
+
+
+    fun togglePasswordVisibility(fieldKey: String) {
+        _visiblePasswordFields.value =
+            if (fieldKey in _visiblePasswordFields.value)
+                _visiblePasswordFields.value - fieldKey
+            else
+                _visiblePasswordFields.value + fieldKey
     }
 
     // —————— Check current login status  ————————————————
@@ -119,21 +149,45 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     fun signUp(email: String, password: String) {
 
-        if (email.isEmpty() || password.isEmpty()) {
-            _authState.value = AuthState.Error("Email or password cannot be empty")
-            return
-        }
-
-        _authState.value = AuthState.Loading
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    _authState.value = AuthState.Authenticated
-                } else {
-                    _authState.value =
-                        AuthState.Error(task.exception?.message ?: "Authentication failed")
-                }
+        when {
+            email.isEmpty() -> {
+                _authState.value =
+                    AuthState.Error("Email is required")
             }
+
+            !isValidEmail(email) -> {
+                _authState.value =
+                    AuthState.Error("Invalid email format")
+            }
+
+            password.isEmpty() -> {
+                _authState.value =
+                    AuthState.Error("Password is required")
+            }
+
+            password != _confirmPassword.value -> {
+                _authState.value =
+                    AuthState.Error("Two Passwords are mismatched")
+            }
+
+            password.length < 8 -> {
+                _authState.value =
+                    AuthState.Error("Password must be 8 characters at least")
+            }
+
+            else -> {
+                _authState.value = AuthState.Loading
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            _authState.value = AuthState.Authenticated
+                        } else {
+                            _authState.value =
+                                AuthState.Error(task.exception?.message ?: "Authentication failed")
+                        }
+                    }
+            }
+        }
     }
 
     fun signIn(email: String, password: String) {
@@ -260,6 +314,55 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
+    // —————— Facebook Sign In ———————————————
+
+    fun signInWithFacebook(activity: ComponentActivity) {
+        viewModelScope.launch {
+            _authState.value = AuthState.Loading
+
+            LoginManager.getInstance().logInWithReadPermissions(
+                activity,
+                facebookCallbackManager,
+                listOf("public_profile",)
+            )
+
+            LoginManager.getInstance().registerCallback(
+                facebookCallbackManager,
+                object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(result: LoginResult) {
+                        val token = result.accessToken.token
+                        val credential = FacebookAuthProvider.getCredential(token)
+
+                        auth.signInWithCredential(credential)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    viewModelScope.launch {
+                                        prefsRepo.setRememberMe(true)
+                                    }
+                                    _authState.value = AuthState.Authenticated
+                                } else {
+                                    _authState.value = AuthState.Error(
+                                        task.exception?.message ?: "Facebook Auth Failed"
+                                    )
+                                }
+                            }
+                    }
+
+                    override fun onCancel() {
+                        _authState.value = AuthState.Error("Facebook login cancelled")
+                    }
+
+                    override fun onError(error: FacebookException) {
+                        _authState.value = AuthState.Error(error.message ?: "Facebook Auth Failed")
+                    }
+                }
+            )
+        }
+    }
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        facebookCallbackManager.onActivityResult(requestCode, resultCode, data)
+    }
 
     fun logout() {
         auth.signOut()
@@ -272,9 +375,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 }
 
-/**
- * TODO: modify it with [AuthResponse] interface later
- */
 sealed class AuthState {
     object Authenticated : AuthState()
     object UnAuthenticated : AuthState()
