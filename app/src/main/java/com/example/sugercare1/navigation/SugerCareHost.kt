@@ -1,3 +1,4 @@
+
 package com.example.sugercare1.navigation
 
 import androidx.compose.runtime.Composable
@@ -5,10 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.sugercare1.CompleteProfileScreen
-import com.example.sugercare1.ForgotPasswordCodeScreen
-import com.example.sugercare1.ForgotPasswordScreen
-import com.example.sugercare1.NotificationsScreen
+import com.example.sugercare1.ui.theme.screens.SignInScreen
 import com.sugarcare.app.ui.screens.*
 
 sealed class Screen(val route: String) {
@@ -35,6 +33,7 @@ fun SugarCareNavHost(
         navController    = navController,
         startDestination = Screen.Welcome.route
     ) {
+
         composable(Screen.Welcome.route) {
             WelcomeScreen(
                 onSignIn = { navController.navigate(Screen.SignIn.route) },
@@ -42,9 +41,10 @@ fun SugarCareNavHost(
             )
         }
 
+        // SignInScreen من الملف الخاص بيه (فيه Forgot Password)
         composable(Screen.SignIn.route) {
-            com.example.sugercare1.ui.theme.screens.SignInScreen(
-                onSignInSuccess = {
+            SignInScreen(
+                onSignInSuccess    = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Welcome.route) { inclusive = true }
                     }
@@ -78,29 +78,35 @@ fun SugarCareNavHost(
         composable(Screen.Home.route) {
             HomeScreen(navController = navController)
         }
+
         composable(Screen.Logs.route) {
             LogsScreen(navController = navController)
         }
+
         composable(Screen.MealPlan.route) {
             MealPlanScreen(navController = navController)
         }
+
         composable(Screen.Medications.route) {
             MedicationsScreen(navController = navController)
         }
+
         composable(Screen.WeeklyAnalytics.route) {
             WeeklyAnalyticsScreen(navController = navController)
         }
 
-        
         composable(Screen.Profile.route) {
             CompleteProfileScreen(navController = navController)
         }
+
         composable(Screen.Notifications.route) {
             NotificationsScreen(navController = navController)
         }
+
         composable(Screen.ForgotPassword.route) {
             ForgotPasswordScreen(navController = navController)
         }
+
         composable(Screen.ForgotPasswordCode.route) {
             ForgotPasswordCodeScreen(navController = navController)
         }
