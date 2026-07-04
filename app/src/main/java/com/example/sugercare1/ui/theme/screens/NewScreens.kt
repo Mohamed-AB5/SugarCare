@@ -1,7 +1,5 @@
-package com.example.sugercare1
+package com.example.sugarcare.ui.theme.screens
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,10 +7,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,53 +20,41 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.sugercare1.navigation.Screen
+import com.sugarcare.app.navigation.Screen
+import com.sugarcare.app.ui.theme.*
 import kotlinx.coroutines.delay
 
-
-
-private val TealPrimary     = Color(0xFF2E9B9B)
-private val TealLight       = Color(0xFFB2DFDB)
-private val TealDark        = Color(0xFF00695C)
-private val GreenAccent     = Color(0xFF5BAD6F)
-private val BackgroundLight = Color(0xFFF0F9F9)
-private val TextDark        = Color(0xFF1A2E2E)
-private val TextMedium      = Color(0xFF607070)
-
-
-private data class NavItem(
-    val label: String,
-    val icon: androidx.compose.ui.graphics.vector.ImageVector,
-    val route: String
-)
-
-private val bottomNavItems = listOf(
-    NavItem("Home",    Icons.Filled.Home,        Screen.Home.route),
-    NavItem("Logs",    Icons.Filled.FavoriteBorder, Screen.Logs.route),
-    NavItem("Meals",   Icons.Filled.Restaurant,  Screen.MealPlan.route),
-    NavItem("Profile", Icons.Filled.Person,      Screen.Profile.route)
-)
-
 @Composable
-private fun SugarCareBottomNav(navController: NavHostController, currentRoute: String) {
-    NavigationBar(containerColor = Color.White, tonalElevation = 8.dp) {
-        bottomNavItems.forEach { item ->
+fun SugarCareBottomNav(navController: NavHostController, currentRoute: String) {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 8.dp
+    ) {
+        listOf(
+            Triple("Home",    Icons.Filled.Home,           Screen.Home.route),
+            Triple("Logs",    Icons.Filled.FavoriteBorder, Screen.Logs.route),
+            Triple("Meals",   Icons.Filled.Restaurant,     Screen.MealPlan.route),
+            Triple("Profile", Icons.Filled.Person,         Screen.Profile.route)
+        ).forEach { (label, icon, route) ->
             NavigationBarItem(
-                selected = currentRoute == item.route,
+                selected = currentRoute == route,
                 onClick  = {
-                    if (currentRoute != item.route)
-                        navController.navigate(item.route) {
+                    if (currentRoute != route)
+                        navController.navigate(route) {
                             launchSingleTop = true
                             restoreState    = true
                         }
                 },
-                icon  = { Icon(item.icon, contentDescription = item.label) },
-                label = { Text(item.label, fontSize = 11.sp) },
+                icon   = { Icon(icon, contentDescription = label) },
+                label  = { Text(label, fontSize = 11.sp) },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor   = TealPrimary,
                     unselectedIconColor = TextMedium,
@@ -77,6 +65,7 @@ private fun SugarCareBottomNav(navController: NavHostController, currentRoute: S
     }
 }
 
+// NOTIFICATIONS SCREEN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,16 +73,28 @@ fun NotificationsScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Notifications", fontWeight = FontWeight.Bold, color = TealDark) },
+                title = {
+                    Text(
+                        "Notifications",
+                        fontWeight = FontWeight.Bold,
+                        color      = MaterialTheme.colorScheme.onBackground
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = TealDark)
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundLight)
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
             )
         },
-        containerColor = BackgroundLight
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Box(
             modifier         = Modifier.fillMaxSize().padding(padding),
@@ -119,11 +120,11 @@ fun NotificationsScreen(navController: NavHostController) {
                     "No notifications yet",
                     fontWeight = FontWeight.Bold,
                     fontSize   = 20.sp,
-                    color      = TextDark
+                    color      = MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    "You're all caught up!\nWe'll let you know when something\nnew arrives.",
+                    "You're all caught up!\nWe'll notify you when something new arrives.",
                     fontSize   = 14.sp,
                     color      = TextMedium,
                     textAlign  = TextAlign.Center,
@@ -133,6 +134,9 @@ fun NotificationsScreen(navController: NavHostController) {
         }
     }
 }
+
+
+//   FORGOT PASSWORD
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -146,13 +150,19 @@ fun ForgotPasswordScreen(navController: NavHostController) {
                 title = { },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = TealDark)
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundLight)
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
             )
         },
-        containerColor = BackgroundLight
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -171,64 +181,61 @@ fun ForgotPasswordScreen(navController: NavHostController) {
             ) {
                 Icon(Icons.Filled.Lock, null, tint = TealPrimary, modifier = Modifier.size(44.dp))
             }
-
             Spacer(Modifier.height(28.dp))
-
-            Text("Confirm it's you", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = TextDark)
+            Text(
+                "Confirm it's you",
+                fontSize   = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color      = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(Modifier.height(8.dp))
             Text(
-                "Enter your registered email address and\nwe'll send you a verification code.",
+                "Enter your registered email and\nwe'll send a verification code.",
                 fontSize   = 14.sp,
                 color      = TextMedium,
                 textAlign  = TextAlign.Center,
                 lineHeight = 22.sp
             )
-
             Spacer(Modifier.height(36.dp))
-
             OutlinedTextField(
                 value           = email,
                 onValueChange   = { email = it },
                 label           = { Text("Email address") },
                 leadingIcon     = { Icon(Icons.Filled.Email, null, tint = TealPrimary) },
                 modifier        = Modifier.fillMaxWidth(),
-                shape           = RoundedCornerShape(16.dp),
+                shape           = RoundedCornerShape(28.dp),
                 singleLine      = true,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = androidx.compose.ui.text.input.KeyboardType.Email
-                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = TealPrimary,
-                    focusedLabelColor  = TealPrimary,
-                    cursorColor        = TealPrimary
+                    focusedBorderColor      = TealPrimary,
+                    focusedLabelColor       = TealPrimary,
+                    cursorColor             = TealPrimary,
+                    focusedContainerColor   = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface
                 )
             )
-
             Spacer(Modifier.height(28.dp))
-
             Button(
-                onClick  = {
+                onClick = {
                     isLoading = true
                     navController.navigate(Screen.ForgotPasswordCode.route)
                 },
-                modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape    = RoundedCornerShape(27.dp),
-                enabled  = email.isNotBlank() && !isLoading,
-                colors   = ButtonDefaults.buttonColors(containerColor = TealPrimary)
+                modifier  = Modifier.fillMaxWidth().height(56.dp),
+                shape     = RoundedCornerShape(28.dp),
+                enabled   = email.isNotBlank() && !isLoading,
+                colors    = ButtonDefaults.buttonColors(containerColor = TealPrimary),
+                elevation = ButtonDefaults.buttonElevation(0.dp)
             ) {
-                if (isLoading) {
+                if (isLoading)
                     CircularProgressIndicator(
                         color       = Color.White,
                         modifier    = Modifier.size(22.dp),
                         strokeWidth = 2.dp
                     )
-                } else {
+                else
                     Text("Send Code", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                }
             }
-
             Spacer(Modifier.height(20.dp))
-
             Text(
                 "← Back to Sign In",
                 color      = TealPrimary,
@@ -240,6 +247,8 @@ fun ForgotPasswordScreen(navController: NavHostController) {
     }
 }
 
+// OTP
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForgotPasswordCodeScreen(navController: NavHostController) {
@@ -250,7 +259,7 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
 
     LaunchedEffect(resent) {
         timer = 60
-        while (timer > 0) { delay(1000); timer-- }
+        while (timer > 0) { delay(1000L); timer-- }
     }
 
     val allFilled = code.all { it.isNotEmpty() }
@@ -261,13 +270,19 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
                 title = { },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = TealDark)
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundLight)
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
             )
         },
-        containerColor = BackgroundLight
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -284,12 +299,20 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
                     .background(TealLight),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Filled.MarkEmailRead, null, tint = TealPrimary, modifier = Modifier.size(44.dp))
+                Icon(
+                    Icons.Filled.MarkEmailRead,
+                    null,
+                    tint     = TealPrimary,
+                    modifier = Modifier.size(44.dp)
+                )
             }
-
             Spacer(Modifier.height(28.dp))
-
-            Text("Check your email", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = TextDark)
+            Text(
+                "Check your email",
+                fontSize   = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color      = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(Modifier.height(8.dp))
             Text(
                 "We've sent a 6-digit verification code\nto your email address.",
@@ -298,52 +321,48 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
                 textAlign  = TextAlign.Center,
                 lineHeight = 22.sp
             )
-
             Spacer(Modifier.height(36.dp))
-
-            // OTP boxes
             Row(
                 modifier              = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 repeat(codeLength) { i ->
-                    val isFilled = code[i].isNotEmpty()
+                    val filled = code[i].isNotEmpty()
                     Box(
                         modifier = Modifier
                             .weight(1f)
                             .height(56.dp)
                             .clip(RoundedCornerShape(12.dp))
-                            .background(if (isFilled) TealLight.copy(alpha = 0.4f) else Color.White)
+                            .background(
+                                if (filled) TealLight.copy(alpha = 0.4f)
+                                else MaterialTheme.colorScheme.surface
+                            )
                             .border(
-                                width = 1.5.dp,
-                                color = if (isFilled) TealPrimary else Color(0xFFCCCCCC),
-                                shape = RoundedCornerShape(12.dp)
+                                1.5.dp,
+                                if (filled) TealPrimary else Color(0xFFCCCCCC),
+                                RoundedCornerShape(12.dp)
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        androidx.compose.foundation.text.BasicTextField(
+                        BasicTextField(
                             value         = code[i],
                             onValueChange = { v ->
                                 if (v.length <= 1 && (v.isEmpty() || v[0].isDigit()))
                                     code[i] = v
                             },
                             singleLine      = true,
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
-                            ),
-                            textStyle = androidx.compose.ui.text.TextStyle(
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            textStyle = TextStyle(
                                 textAlign  = TextAlign.Center,
                                 fontSize   = 22.sp,
                                 fontWeight = FontWeight.Bold,
-                                color      = TealDark
+                                color      = MaterialTheme.colorScheme.onSurface
                             )
                         )
                     }
                 }
             }
-
             Spacer(Modifier.height(16.dp))
-
             Row(horizontalArrangement = Arrangement.Center) {
                 Text("Didn't receive the code? ", fontSize = 13.sp, color = TextMedium)
                 Text(
@@ -354,19 +373,18 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
                     modifier   = if (timer == 0) Modifier.clickable { resent = !resent } else Modifier
                 )
             }
-
             Spacer(Modifier.height(28.dp))
-
             Button(
-                onClick  = {
+                onClick = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Welcome.route) { inclusive = true }
                     }
                 },
-                modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape    = RoundedCornerShape(27.dp),
-                enabled  = allFilled,
-                colors   = ButtonDefaults.buttonColors(containerColor = TealPrimary)
+                modifier  = Modifier.fillMaxWidth().height(56.dp),
+                shape     = RoundedCornerShape(28.dp),
+                enabled   = allFilled,
+                colors    = ButtonDefaults.buttonColors(containerColor = TealPrimary),
+                elevation = ButtonDefaults.buttonElevation(0.dp)
             ) {
                 Text("Verify & Sign In", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
@@ -374,6 +392,7 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
     }
 }
 
+// COMPLETE PROFILE SCREEN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -384,18 +403,25 @@ fun CompleteProfileScreen(navController: NavHostController) {
     var gender     by remember { mutableStateOf("") }
     var showLogout by remember { mutableStateOf(false) }
     var showGender by remember { mutableStateOf(false) }
+    var isDark     by remember { mutableStateOf(false) }
 
     if (showLogout) {
         AlertDialog(
             onDismissRequest = { showLogout = false },
-            icon  = { Icon(Icons.Filled.Logout, null, tint = Color.Red) },
+            icon  = {
+                Icon(Icons.AutoMirrored.Filled.Logout, null, tint = Color.Red)
+            },
             title = { Text("Log Out", fontWeight = FontWeight.Bold) },
-            text  = { Text("Are you sure you want to log out of your account?") },
+            text  = { Text("Are you sure you want to log out?") },
             confirmButton = {
                 TextButton(onClick = {
                     showLogout = false
-                    navController.navigate(Screen.SignIn.route) { popUpTo(0) { inclusive = true } }
-                }) { Text("Log Out", color = Color.Red, fontWeight = FontWeight.SemiBold) }
+                    navController.navigate(Screen.SignIn.route) {
+                        popUpTo(Screen.Welcome.route) { inclusive = true }
+                    }
+                }) {
+                    Text("Log Out", color = Color.Red, fontWeight = FontWeight.SemiBold)
+                }
             },
             dismissButton = {
                 TextButton(onClick = { showLogout = false }) { Text("Cancel") }
@@ -406,17 +432,29 @@ fun CompleteProfileScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("My Profile", fontWeight = FontWeight.Bold, color = TealDark) },
+                title = {
+                    Text(
+                        "My Profile",
+                        fontWeight = FontWeight.Bold,
+                        color      = MaterialTheme.colorScheme.onBackground
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = TealDark)
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            null,
+                            tint = MaterialTheme.colorScheme.onBackground
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundLight)
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
             )
         },
         bottomBar = { SugarCareBottomNav(navController, Screen.Profile.route) },
-        containerColor = BackgroundLight
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
             modifier = Modifier
@@ -435,23 +473,71 @@ fun CompleteProfileScreen(navController: NavHostController) {
                         .border(3.dp, TealPrimary, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Filled.Person, null, tint = TealPrimary, modifier = Modifier.size(60.dp))
+                    Icon(
+                        Icons.Filled.Person, null,
+                        tint     = TealPrimary,
+                        modifier = Modifier.size(60.dp)
+                    )
                 }
                 Box(
                     modifier = Modifier
                         .size(34.dp)
                         .clip(CircleShape)
                         .background(GreenAccent)
-                        .clickable { /* open image picker */ },
+                        .clickable { },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Filled.CameraAlt, null, tint = Color.White, modifier = Modifier.size(18.dp))
+                    Icon(
+                        Icons.Filled.CameraAlt, null,
+                        tint     = Color.White,
+                        modifier = Modifier.size(18.dp)
+                    )
                 }
             }
-
             Spacer(Modifier.height(6.dp))
             Text("Tap camera to change photo", fontSize = 12.sp, color = TextMedium)
-            Spacer(Modifier.height(28.dp))
+            Spacer(Modifier.height(20.dp))
+
+            Card(
+                modifier  = Modifier.fillMaxWidth(),
+                shape     = RoundedCornerShape(16.dp),
+                colors    = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
+                elevation = CardDefaults.cardElevation(0.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 14.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment     = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            if (isDark) Icons.Filled.DarkMode else Icons.Filled.LightMode,
+                            null,
+                            tint     = TealPrimary,
+                            modifier = Modifier.size(22.dp)
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Text(
+                            "Dark Mode",
+                            fontWeight = FontWeight.SemiBold,
+                            color      = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    Switch(
+                        checked         = isDark,
+                        onCheckedChange = { isDark = it },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = TealPrimary
+                        )
+                    )
+                }
+            }
+            Spacer(Modifier.height(20.dp))
 
             Text(
                 "Personal Details",
@@ -462,116 +548,113 @@ fun CompleteProfileScreen(navController: NavHostController) {
             )
             Spacer(Modifier.height(12.dp))
 
-            ProfileField(value = fullName, onValueChange = { fullName = it },
-                label = "Full Name",                icon = Icons.Filled.Person)
+            ProfileFieldItem(fullName, { fullName = it }, "Full Name",    Icons.Filled.Person)
             Spacer(Modifier.height(12.dp))
-
-            ProfileField(value = phone, onValueChange = { phone = it },
-                label = "Phone Number",             icon = Icons.Filled.Phone,
-                keyboardType = androidx.compose.ui.text.input.KeyboardType.Phone)
+            ProfileFieldItem(phone,    { phone    = it }, "Phone Number", Icons.Filled.Phone,
+                KeyboardType.Phone)
             Spacer(Modifier.height(12.dp))
-
-            ProfileField(value = dob, onValueChange = { dob = it },
-                label = "Date of Birth (DD/MM/YYYY)", icon = Icons.Filled.CalendarToday)
+            ProfileFieldItem(dob,      { dob      = it }, "Date of Birth", Icons.Filled.CalendarToday)
             Spacer(Modifier.height(12.dp))
-
 
             ExposedDropdownMenuBox(
                 expanded         = showGender,
                 onExpandedChange = { showGender = it }
             ) {
                 OutlinedTextField(
-                    value        = gender,
+                    value         = gender,
                     onValueChange = {},
-                    readOnly     = true,
-                    label        = { Text("Gender") },
-                    leadingIcon  = { Icon(Icons.Filled.Wc, null, tint = TealPrimary) },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showGender) },
-                    modifier     = Modifier.fillMaxWidth().menuAnchor(),
-                    shape        = RoundedCornerShape(14.dp),
-                    colors       = profileFieldColors()
+                    readOnly      = true,
+                    label         = { Text("Gender") },
+                    leadingIcon   = { Icon(Icons.Filled.Wc, null, tint = TealPrimary) },
+                    trailingIcon  = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = showGender)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                    shape  = RoundedCornerShape(28.dp),
+                    colors = profileTextFieldColors()
                 )
                 ExposedDropdownMenu(
                     expanded         = showGender,
                     onDismissRequest = { showGender = false },
-                    modifier         = Modifier.background(Color.White)
+                    modifier         = Modifier.background(MaterialTheme.colorScheme.surface)
                 ) {
                     listOf("Male", "Female", "Prefer not to say").forEach { opt ->
                         DropdownMenuItem(
                             text = {
                                 Text(
                                     opt,
-                                    color      = TextDark,
+                                    color      = MaterialTheme.colorScheme.onSurface,
                                     fontSize   = 15.sp,
-                                    fontWeight = if (opt == gender) FontWeight.SemiBold else FontWeight.Normal
+                                    fontWeight = if (opt == gender) FontWeight.SemiBold
+                                    else FontWeight.Normal
                                 )
                             },
-                            onClick = { gender = opt; showGender = false },
+                            onClick  = { gender = opt; showGender = false },
                             modifier = Modifier.background(
-                                if (opt == gender) TealLight.copy(alpha = 0.35f) else Color.White
-                            ),
-                            colors = MenuDefaults.itemColors(
-                                textColor = TextDark
+                                if (opt == gender) TealLight.copy(alpha = 0.3f)
+                                else MaterialTheme.colorScheme.surface
                             )
                         )
                     }
                 }
             }
-
             Spacer(Modifier.height(28.dp))
 
             Button(
-                onClick  = { navController.popBackStack() },
-                modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape    = RoundedCornerShape(27.dp),
-                colors   = ButtonDefaults.buttonColors(containerColor = TealPrimary)
+                onClick   = { navController.popBackStack() },
+                modifier  = Modifier.fillMaxWidth().height(56.dp),
+                shape     = RoundedCornerShape(28.dp),
+                colors    = ButtonDefaults.buttonColors(containerColor = TealPrimary),
+                elevation = ButtonDefaults.buttonElevation(0.dp)
             ) {
                 Icon(Icons.Filled.Save, null, modifier = Modifier.size(20.dp))
                 Spacer(Modifier.width(8.dp))
                 Text("Save Changes", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
-
             Spacer(Modifier.height(12.dp))
 
-            OutlinedButton(
-                onClick  = {
-                    navController.navigate(Screen.SignIn.route) { popUpTo(0) { inclusive = true } }
+            Button(
+                onClick = {
+                    navController.navigate(Screen.SignIn.route) {
+                        popUpTo(Screen.Welcome.route) { inclusive = true }
+                    }
                 },
-                modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape    = RoundedCornerShape(27.dp),
-                border   = androidx.compose.foundation.BorderStroke(1.5.dp, TealPrimary)
+                modifier  = Modifier.fillMaxWidth().height(56.dp),
+                shape     = RoundedCornerShape(28.dp),
+                colors    = ButtonDefaults.buttonColors(containerColor = GreenAccent),
+                elevation = ButtonDefaults.buttonElevation(0.dp)
             ) {
-                Icon(Icons.Filled.SwitchAccount, null, tint = TealPrimary)
+                Icon(Icons.Filled.SwitchAccount, null)
                 Spacer(Modifier.width(8.dp))
-                Text("Switch Account", color = TealPrimary, fontWeight = FontWeight.SemiBold)
+                Text("Switch Account", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
             }
-
             Spacer(Modifier.height(12.dp))
 
             OutlinedButton(
                 onClick  = { showLogout = true },
-                modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape    = RoundedCornerShape(27.dp),
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                shape    = RoundedCornerShape(28.dp),
                 border   = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFE53935))
             ) {
-                Icon(Icons.Filled.Logout, null, tint = Color(0xFFE53935))
+                Icon(Icons.AutoMirrored.Filled.Logout, null, tint = Color(0xFFE53935))
                 Spacer(Modifier.width(8.dp))
-                Text("Log Out", color = Color(0xFFE53935), fontWeight = FontWeight.SemiBold)
+                Text("Log Out", color = Color(0xFFE53935),
+                    fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
             }
-
             Spacer(Modifier.height(16.dp))
         }
     }
 }
 
 @Composable
-private fun ProfileField(
+private fun ProfileFieldItem(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    keyboardType: androidx.compose.ui.text.input.KeyboardType =
-        androidx.compose.ui.text.input.KeyboardType.Text
+    icon: ImageVector,
+    keyboardType: KeyboardType = KeyboardType.Text
 ) {
     OutlinedTextField(
         value           = value,
@@ -579,16 +662,18 @@ private fun ProfileField(
         label           = { Text(label) },
         leadingIcon     = { Icon(icon, null, tint = TealPrimary) },
         modifier        = Modifier.fillMaxWidth(),
-        shape           = RoundedCornerShape(14.dp),
+        shape           = RoundedCornerShape(28.dp),
         singleLine      = true,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        colors          = profileFieldColors()
+        colors          = profileTextFieldColors()
     )
 }
 
 @Composable
-private fun profileFieldColors() = OutlinedTextFieldDefaults.colors(
-    focusedBorderColor = TealPrimary,
-    focusedLabelColor  = TealPrimary,
-    cursorColor        = TealPrimary
-(
+private fun profileTextFieldColors() = OutlinedTextFieldDefaults.colors(
+    focusedBorderColor      = TealPrimary,
+    focusedLabelColor       = TealPrimary,
+    cursorColor             = TealPrimary,
+    focusedContainerColor   = MaterialTheme.colorScheme.surface,
+    unfocusedContainerColor = MaterialTheme.colorScheme.surface
+)
