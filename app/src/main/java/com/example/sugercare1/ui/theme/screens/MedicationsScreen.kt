@@ -1,4 +1,3 @@
-
 package com.sugarcare.app.ui.screens
 
 import androidx.compose.foundation.layout.*
@@ -89,7 +88,7 @@ fun MedicationsScreen(navController: NavHostController) {
 
             Spacer(Modifier.weight(1f))
 
-            //Bottom Nav 
+            //  Bottom Nav (Home/Logs/Meals/Profile)
             BottomNavBar(navController, Screen.Medications.route)
         }
     }
