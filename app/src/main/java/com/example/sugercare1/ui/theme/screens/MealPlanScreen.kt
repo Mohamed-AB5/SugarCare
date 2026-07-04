@@ -82,7 +82,7 @@ fun MealPlanScreen(navController: NavHostController) {
                 }
             }
 
-            // Bottom Nav
+            //  Bottom Nav (Home/Logs/Meals/Profile)
             BottomNavBar(navController, Screen.MealPlan.route)
         }
     }
