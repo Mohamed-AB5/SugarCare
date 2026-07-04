@@ -6,12 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 // app Colors 
-val TealPrimary     = Color(0xFF2E9B9B)   // main teal
+val TealPrimary     = Color(0xFF2E9B9B)   
 val TealDark        = Color(0xFF1F7A7A)
 val TealLight       = Color(0xFFB2DFDB)
-val GreenAccent     = Color(0xFF5BAD6F)   // "Sign Up" button green
-val OrangeDrop      = Color(0xFFE87A3E)   // blood-drop accent
-val BackgroundLight = Color(0xFFE8F5F5)   // very light teal bg
+val GreenAccent     = Color(0xFF5BAD6F)   
+val OrangeDrop      = Color(0xFFE87A3E)   
+val BackgroundLight = Color(0xFFE8F5F5)   
 val SurfaceWhite    = Color(0xFFFFFFFF)
 val TextDark        = Color(0xFF1A2B2B)
 val TextMedium      = Color(0xFF4A6565)
