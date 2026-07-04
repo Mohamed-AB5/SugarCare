@@ -5,7 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-// ── Brand Colors ──────────────────────────────────────────────
+// app Colors 
 val TealPrimary     = Color(0xFF2E9B9B)   // main teal
 val TealDark        = Color(0xFF1F7A7A)
 val TealLight       = Color(0xFFB2DFDB)
@@ -42,3 +42,4 @@ fun SugarCareTheme(
         content     = content
     )
 }
+
