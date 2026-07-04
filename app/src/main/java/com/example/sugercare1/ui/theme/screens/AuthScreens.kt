@@ -29,9 +29,8 @@ import com.sugarcare.app.R
 import com.sugarcare.app.ui.theme.TealLight
 
 
-// ─────────────────────────────────────────────────────────────
-//  Screen 3 – Sign In Flow
-// ─────────────────────────────────────────────────────────────
+//   Sign In Flow
+
 
 
 @Composable
@@ -44,8 +43,8 @@ fun SignInScreen(
     var showPass by remember { mutableStateOf(false) }
     var rememberMe by remember { mutableStateOf(false) }
 
-    //    ─── For Authentication & coroutine scope ──────────
-    // !!! -> view model will be made instead <- !!!!
+    // For Authentication & coroutine scope
+   
 
     val context = LocalContext.current
     val authManager = remember { AuthManager(context) }
@@ -123,7 +122,6 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // ─── or divider ───────────
             Row(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -166,9 +164,7 @@ fun SignInScreen(
                             }
                     }})
 
-                // !!! -> onClick will be added later <- !!!!
-//                SocialButton(label = "f", color = TealPrimary)
-//                SocialButton(label = "𝕏", color = TealDark)
+           
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -191,9 +187,9 @@ fun SignInScreen(
     }
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Screen 2 – User Registration (Sign Up)
-// ─────────────────────────────────────────────────────────────
+
+// Sign Up
+
 @Composable
 fun SignUpScreen(
     onSignUpSuccess: () -> Unit,
@@ -206,7 +202,7 @@ fun SignUpScreen(
     var acceptedPolicy by remember { mutableStateOf(false) }
     var showPass by remember { mutableStateOf(false) }
 
-//    ─── For Authentication & coroutine scope ──────────
+//   For Authentication & coroutine scope 
     val context = LocalContext.current
     val authManager = remember { AuthManager(context) }
     val coroutineScope = rememberCoroutineScope()
@@ -334,7 +330,7 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // ── Social sign-up row ────────────────────────────
+            //Social sign-up 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -377,7 +373,7 @@ private fun SocialButton(label: String, color: androidx.compose.ui.graphics.Colo
 }
 
 
-// ---- to be removed
+// to be removed
 
 @Preview
 @Composable
@@ -400,6 +396,9 @@ fun SignInScreenPreview() {
         )
     }
 }
+
+
+
 
 
 
