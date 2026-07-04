@@ -23,8 +23,6 @@ import androidx.navigation.NavHostController
 import com.example.sugercare1.navigation.Screen
 import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.theme.*
-import kotlin.collections.forEach
-import kotlin.text.isNotEmpty
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,120 +35,89 @@ fun HomeScreen(navController: NavHostController) {
         Column(modifier = Modifier.fillMaxSize()) {
 
             TopAppBar(
-                title = {
-                    Text("Sugar Care", fontWeight = FontWeight.Bold, color = TealDark)
-                },
-
+                title = { Text("Sugar Care", fontWeight = FontWeight.Bold, color = TealDark) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
                         Box(
-                            modifier = Modifier
-                                .size(38.dp)
-                                .clip(CircleShape)
-                                .background(TealLight),
+                            modifier = Modifier.size(38.dp).clip(CircleShape).background(TealLight),
                             contentAlignment = Alignment.Center
-                        ) {
-                            Icon(Icons.Filled.Person, contentDescription = "Profile", tint = TealPrimary)
-                        }
+                        ) { Icon(Icons.Filled.Person, null, tint = TealPrimary) }
                     }
                 },
-
                 actions = {
                     IconButton(onClick = { navController.navigate(Screen.Notifications.route) }) {
-                        BadgedBox(
-                            badge = {
-                                Badge(containerColor = OrangeDrop) {
-                                    Text("3", fontSize = 9.sp)
-                                }
-                            }
-                        ) {
-                            Icon(Icons.Filled.Notifications, contentDescription = "Notifications", tint = OrangeDrop)
+                        BadgedBox(badge = {
+                            Badge(containerColor = OrangeDrop) { Text("3", fontSize = 9.sp) }
+                        }) {
+                            Icon(Icons.Filled.Notifications, null, tint = OrangeDrop)
                         }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundLight)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
 
-
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-                    .padding(16.dp),
+                modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     DashboardCard(
-                        modifier      = Modifier.weight(1f),
-                        title         = "Glucose Logs",
-                        subtitle      = "Last: 120 mg/dL",
-                        icon          = Icons.Filled.Favorite,
-                        iconTint      = OrangeDrop,
-                        buttonText    = "Log New Reading",
-                        onButtonClick = { navController.navigate(Screen.Logs.route) }
-                    )
+                        modifier = Modifier.weight(1f), title = "Glucose Logs",
+                        subtitle = "Last: 120 mg/dL", icon = Icons.Filled.Favorite,
+                        iconTint = OrangeDrop, buttonText = "Log New Reading"
+                    ) { navController.navigate(Screen.Logs.route) }
+
                     DashboardCard(
-                        modifier      = Modifier.weight(1f),
-                        title         = "My Meal Plan",
-                        subtitle      = "",
-                        icon          = Icons.Filled.Restaurant,
-                        iconTint      = GreenAccent,
-                        buttonText    = "Meal Suggestions",
-                        onButtonClick = { navController.navigate(Screen.MealPlan.route) }
-                    )
+                        modifier = Modifier.weight(1f), title = "My Meal Plan",
+                        subtitle = "", icon = Icons.Filled.Restaurant,
+                        iconTint = GreenAccent, buttonText = "Meal Suggestions"
+                    ) { navController.navigate(Screen.MealPlan.route) }
                 }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     Card(
-                        modifier  = Modifier.weight(1f),
-                        shape     = RoundedCornerShape(20.dp),
-                        colors    = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(4.dp)
+                        modifier = Modifier.weight(1f), shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        elevation = CardDefaults.cardElevation(2.dp)
                     ) {
-                        Column(
-                            modifier = Modifier.padding(12.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text("Weekly Analytics", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = TextDark)
+                        Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Weekly Analytics", fontWeight = FontWeight.Bold, fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.onSurface)
                             Spacer(Modifier.height(8.dp))
-                            Icon(Icons.Filled.Vaccines, null, tint = TealPrimary, modifier = Modifier.size(40.dp))
+                            Icon(Icons.Filled.BarChart, null, tint = TealPrimary, modifier = Modifier.size(40.dp))
                             Spacer(Modifier.height(8.dp))
                             Text("Average: 12.20", fontSize = 12.sp, color = TextMedium)
                             Spacer(Modifier.height(8.dp))
                             Button(
-                                onClick  = { navController.navigate(Screen.WeeklyAnalytics.route) },
+                                onClick = { navController.navigate(Screen.WeeklyAnalytics.route) },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape    = RoundedCornerShape(20.dp),
-                                colors   = ButtonDefaults.buttonColors(containerColor = GreenAccent),
+                                shape = RoundedCornerShape(20.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = GreenAccent),
+                                elevation = ButtonDefaults.buttonElevation(0.dp),
                                 contentPadding = PaddingValues(4.dp)
                             ) { Text("Analyze Trends", fontSize = 11.sp) }
                         }
                     }
 
                     Card(
-                        modifier  = Modifier.weight(1f),
-                        shape     = RoundedCornerShape(20.dp),
-                        colors    = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(4.dp)
+                        modifier = Modifier.weight(1f), shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        elevation = CardDefaults.cardElevation(2.dp)
                     ) {
-                        Column(modifier = Modifier.padding(12.dp)) {
-                            Text("Medication Plan", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = TextDark)
+                        Column(Modifier.padding(12.dp)) {
+                            Text("Medication Plan", fontWeight = FontWeight.Bold, fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.onSurface)
                             Spacer(Modifier.height(8.dp))
                             MedToggleRow("Insulin",       insulinEnabled)   { insulinEnabled   = it }
                             MedToggleRow("Metformin",     metforminEnabled) { metforminEnabled = it }
                             MedToggleRow("Notifications", notifEnabled)     { notifEnabled     = it }
                             Spacer(Modifier.height(8.dp))
                             Button(
-                                onClick  = { navController.navigate(Screen.Medications.route) },
+                                onClick = { navController.navigate(Screen.Medications.route) },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape    = RoundedCornerShape(20.dp),
-                                colors   = ButtonDefaults.buttonColors(containerColor = GreenAccent),
+                                shape = RoundedCornerShape(20.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = GreenAccent),
+                                elevation = ButtonDefaults.buttonElevation(0.dp),
                                 contentPadding = PaddingValues(4.dp)
                             ) { Text("Set Notifications", fontSize = 11.sp) }
                         }
@@ -158,54 +125,58 @@ fun HomeScreen(navController: NavHostController) {
                 }
             }
 
-            NavigationBar(containerColor = Color.White, tonalElevation = 8.dp) {
-                listOf(
-                    Triple("Home", Icons.Filled.Home, Screen.Home.route),
-                    Triple("Logs", Icons.AutoMirrored.Filled.Assignment, Screen.Logs.route),
-                    Triple("Meals", Icons.Filled.Restaurant, Screen.MealPlan.route),
-                    Triple("Profile", Icons.Filled.Person, Screen.Profile.route)
-                ).forEach { (label, icon, route) ->
-                    NavigationBarItem(
-                        selected = route == Screen.Home.route,
-                        onClick  = {
-                            if (route != Screen.Home.route)
-                                navController.navigate(route) { launchSingleTop = true }
-                        },
-                        icon  = { Icon(icon, contentDescription = label) },
-                        label = { Text(label, fontSize = 11.sp) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor   = TealPrimary,
-                            unselectedIconColor = TextMedium,
-                            indicatorColor      = TealLight
-                        )
-                    )
-                }
-            }
+            BottomNavBar(navController, Screen.Home.route)
         }
+    }
+}
+
+// ── Shared Bottom Nav — used by ALL screens ───────────────────
+@Composable
+fun BottomNavBar(navController: NavHostController, currentRoute: String) {
+    NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 8.dp) {
+        NavigationBarItem(
+            selected = currentRoute == Screen.Home.route,
+            onClick  = { if (currentRoute != Screen.Home.route) navController.navigate(Screen.Home.route) { launchSingleTop = true } },
+            icon     = { Icon(Icons.Filled.Home, "Home") },
+            label    = { Text("Home", fontSize = 11.sp) },
+            colors   = NavigationBarItemDefaults.colors(selectedIconColor = TealPrimary, unselectedIconColor = TextMedium, indicatorColor = TealLight)
+        )
+        NavigationBarItem(
+            selected = currentRoute == Screen.Logs.route,
+            onClick  = { if (currentRoute != Screen.Logs.route) navController.navigate(Screen.Logs.route) { launchSingleTop = true } },
+            icon     = { Icon(Icons.AutoMirrored.Filled.Assignment, "Logs") },
+            label    = { Text("Logs", fontSize = 11.sp) },
+            colors   = NavigationBarItemDefaults.colors(selectedIconColor = TealPrimary, unselectedIconColor = TextMedium, indicatorColor = TealLight)
+        )
+        NavigationBarItem(
+            selected = currentRoute == Screen.MealPlan.route,
+            onClick  = { if (currentRoute != Screen.MealPlan.route) navController.navigate(Screen.MealPlan.route) { launchSingleTop = true } },
+            icon     = { Icon(Icons.Filled.Restaurant, "Meals") },
+            label    = { Text("Meals", fontSize = 11.sp) },
+            colors   = NavigationBarItemDefaults.colors(selectedIconColor = TealPrimary, unselectedIconColor = TextMedium, indicatorColor = TealLight)
+        )
+        NavigationBarItem(
+            selected = currentRoute == Screen.Profile.route,
+            onClick  = { if (currentRoute != Screen.Profile.route) navController.navigate(Screen.Profile.route) { launchSingleTop = true } },
+            icon     = { Icon(Icons.Filled.Person, "Profile") },
+            label    = { Text("Profile", fontSize = 11.sp) },
+            colors   = NavigationBarItemDefaults.colors(selectedIconColor = TealPrimary, unselectedIconColor = TextMedium, indicatorColor = TealLight)
+        )
     }
 }
 
 @Composable
 private fun DashboardCard(
-    modifier: Modifier,
-    title: String,
-    subtitle: String,
-    icon: ImageVector,
-    iconTint: Color,
-    buttonText: String,
+    modifier: Modifier, title: String, subtitle: String,
+    icon: ImageVector, iconTint: Color, buttonText: String,
     onButtonClick: () -> Unit
 ) {
-    Card(
-        modifier  = modifier,
-        shape     = RoundedCornerShape(20.dp),
-        colors    = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(4.dp)
+    Card(modifier = modifier, shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(2.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = TextDark)
+        Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
             if (subtitle.isNotEmpty()) {
                 Spacer(Modifier.height(4.dp))
                 Text(subtitle, fontSize = 11.sp, color = TextMedium)
@@ -213,11 +184,10 @@ private fun DashboardCard(
             Spacer(Modifier.height(8.dp))
             Icon(icon, null, tint = iconTint, modifier = Modifier.size(44.dp))
             Spacer(Modifier.height(8.dp))
-            Button(
-                onClick        = onButtonClick,
-                modifier       = Modifier.fillMaxWidth(),
-                shape          = RoundedCornerShape(20.dp),
-                colors         = ButtonDefaults.buttonColors(containerColor = GreenAccent),
+            Button(onClick = onButtonClick, modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = GreenAccent),
+                elevation = ButtonDefaults.buttonElevation(0.dp),
                 contentPadding = PaddingValues(4.dp)
             ) { Text(buttonText, fontSize = 11.sp) }
         }
@@ -226,19 +196,10 @@ private fun DashboardCard(
 
 @Composable
 private fun MedToggleRow(label: String, checked: Boolean, onToggle: (Boolean) -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment     = Alignment.CenterVertically
-    ) {
-        Text(label, fontSize = 12.sp, color = TextDark)
-        Switch(
-            checked         = checked,
-            onCheckedChange = onToggle,
-            colors          = SwitchDefaults.colors(
-                checkedThumbColor = TealPrimary,
-                checkedTrackColor = TealLight
-            )
-        )
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+        Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface)
+        Switch(checked = checked, onCheckedChange = onToggle,
+            colors = SwitchDefaults.colors(checkedThumbColor = TealPrimary, checkedTrackColor = TealLight))
     }
 }
+
