@@ -41,7 +41,7 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(36.dp))
 
-                // Diabetic Type dropdown
+                //  Diabetic Type dropdown
                 Text(
                     text       = "diabetic type",
                     fontWeight = FontWeight.SemiBold,
@@ -90,7 +90,7 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Age field 
+                // Age field
                 Text(
                     text       = "Age",
                     fontWeight = FontWeight.SemiBold,
@@ -106,7 +106,7 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // HbA1c field 
+                //  HbA1c field
                 Text(
                     text       = "HbA1c",
                     fontWeight = FontWeight.SemiBold,
@@ -121,7 +121,7 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
                 )
             }
 
-            // Save button 
+            // Save button
             PrimaryButton(
                 text    = "Save Health Info",
                 onClick = onSaved,
