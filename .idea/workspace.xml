@@ -9,16 +9,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4027dcf1-e93a-42bd-80e5-6a54a10c35fb" name="Changes" comment="Merge Authentication Branch with crud-2">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ProfileRepo.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ProfileRepoImpl.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ProfileUiState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/UserProfile.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/utils/VibrationUtils.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/viewModels/ProfileViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/checksums/sha1-checksums.bin" afterDir="false" />
+    <list default="true" id="4027dcf1-e93a-42bd-80e5-6a54a10c35fb" name="Changes" comment="implementing profile management and Facebook authentication&#10;&#10;- Integrated Facebook Login using `CallbackManager` and `LoginManager` in `AuthViewModel`.&#10;- Created `ProfileViewModel` and `ProfileRepo` to manage user profile data via Firestore.&#10;- Replaced `CompleteProfileScreen` with a `ProfileScreen`  data validation and social provider initialization.&#10;- Added `UserProfile` data class and `ProfileUiState` to handle profile management states.&#10;- Implemented `ProfilePicture` component to handle dynamic profile images from Google, Facebook, and local placeholders.&#10;- Added `vibrate` utility and integrated haptic feedback for validation errors in profile fields.&#10;- Refactored `HomeScreen` to display the user's profile picture.&#10;- Updated `SugarCareNavHost` and `MainActivity` to support `ProfileViewModel` and Facebook activity results.&#10;- Enhanced UI components with gradient brushes and improved styling in `SharedComponents.kt` and `Theme.kt`.&#10;- Deleted `AuthManager.kt` and `AuthResponse.kt` in favor of `AuthViewModel` logic.&#10;- Added necessary permissions and metadata for Facebook SDK and vibration to `AndroidManifest.xml`.">
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/fileHashes.bin" afterDir="false" />
@@ -26,26 +17,22 @@
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/authentication/AuthManager.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/authentication/AuthResponse.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/crud/Tracker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/crud/Tracker.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ProfileRepo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/profileRepo/ProfileRepo.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ProfileRepoImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/profileRepo/ProfileRepoImpl.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ProfileUiState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/profileRepo/ProfileUiState.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/UserProfile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/profileRepo/UserProfile.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/crud/viewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/crud/viewModel.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/navigation/SugerCareHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/navigation/SugerCareHost.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/Theme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/Theme.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/components/SharedComponents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/components/SharedComponents.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/AuthScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/AuthScreens.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/HealthInfoScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/HealthInfoScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/HomeScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/MedicationsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/MedicationsScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/NewScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/NewScreens.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/WelcomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/WelcomeScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/viewModels/AuthViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/viewModels/AuthViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/viewModels/ProfileViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/viewModels/ProfileViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +42,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=C:\Users\moham\.android\avd\Medium_Phone.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[PhysicalDevice::serial=6LPFQCHQG6UG7XWO]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -159,6 +146,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="com.example.sugercare.profile" />
       <recent name="com.example.sugercare" />
     </key>
   </component>
@@ -314,7 +302,15 @@
       <option name="project" value="LOCAL" />
       <updated>1782603148479</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="implementing profile management and Facebook authentication&#10;&#10;- Integrated Facebook Login using `CallbackManager` and `LoginManager` in `AuthViewModel`.&#10;- Created `ProfileViewModel` and `ProfileRepo` to manage user profile data via Firestore.&#10;- Replaced `CompleteProfileScreen` with a `ProfileScreen`  data validation and social provider initialization.&#10;- Added `UserProfile` data class and `ProfileUiState` to handle profile management states.&#10;- Implemented `ProfilePicture` component to handle dynamic profile images from Google, Facebook, and local placeholders.&#10;- Added `vibrate` utility and integrated haptic feedback for validation errors in profile fields.&#10;- Refactored `HomeScreen` to display the user's profile picture.&#10;- Updated `SugarCareNavHost` and `MainActivity` to support `ProfileViewModel` and Facebook activity results.&#10;- Enhanced UI components with gradient brushes and improved styling in `SharedComponents.kt` and `Theme.kt`.&#10;- Deleted `AuthManager.kt` and `AuthResponse.kt` in favor of `AuthViewModel` logic.&#10;- Added necessary permissions and metadata for Facebook SDK and vibration to `AndroidManifest.xml`.">
+      <option name="closed" value="true" />
+      <created>1783072038697</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1783072038697</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -333,7 +329,8 @@
     <MESSAGE value="implementing &quot;Remember Me&quot; functionality&#10;&#10;- Added `AuthDataStore` using DataStore to persist user email and &quot;Remember Me&quot; preference.&#10;- Updated `AuthViewModel` to handle loading, saving, and clearing login details.&#10;- Integrated `AuthDataStore` logic into `signIn` and `signInWithGoogle` methods.&#10;- Modified `checkAuthStatus` to enforce sign-out if the &quot;Remember Me&quot; preference is disabled.&#10;- Updated `SugarCareNavHost` and `MainActivity` to inject `AuthViewModel` with the required context.&#10;- Added a logout action to the `CompleteProfileScreen` via `AuthViewModel`." />
     <MESSAGE value="--" />
     <MESSAGE value="Merge Authentication Branch with crud-2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge Authentication Branch with crud-2" />
+    <MESSAGE value="implementing profile management and Facebook authentication&#10;&#10;- Integrated Facebook Login using `CallbackManager` and `LoginManager` in `AuthViewModel`.&#10;- Created `ProfileViewModel` and `ProfileRepo` to manage user profile data via Firestore.&#10;- Replaced `CompleteProfileScreen` with a `ProfileScreen`  data validation and social provider initialization.&#10;- Added `UserProfile` data class and `ProfileUiState` to handle profile management states.&#10;- Implemented `ProfilePicture` component to handle dynamic profile images from Google, Facebook, and local placeholders.&#10;- Added `vibrate` utility and integrated haptic feedback for validation errors in profile fields.&#10;- Refactored `HomeScreen` to display the user's profile picture.&#10;- Updated `SugarCareNavHost` and `MainActivity` to support `ProfileViewModel` and Facebook activity results.&#10;- Enhanced UI components with gradient brushes and improved styling in `SharedComponents.kt` and `Theme.kt`.&#10;- Deleted `AuthManager.kt` and `AuthResponse.kt` in favor of `AuthViewModel` logic.&#10;- Added necessary permissions and metadata for Facebook SDK and vibration to `AndroidManifest.xml`." />
+    <option name="LAST_COMMIT_MESSAGE" value="implementing profile management and Facebook authentication&#10;&#10;- Integrated Facebook Login using `CallbackManager` and `LoginManager` in `AuthViewModel`.&#10;- Created `ProfileViewModel` and `ProfileRepo` to manage user profile data via Firestore.&#10;- Replaced `CompleteProfileScreen` with a `ProfileScreen`  data validation and social provider initialization.&#10;- Added `UserProfile` data class and `ProfileUiState` to handle profile management states.&#10;- Implemented `ProfilePicture` component to handle dynamic profile images from Google, Facebook, and local placeholders.&#10;- Added `vibrate` utility and integrated haptic feedback for validation errors in profile fields.&#10;- Refactored `HomeScreen` to display the user's profile picture.&#10;- Updated `SugarCareNavHost` and `MainActivity` to support `ProfileViewModel` and Facebook activity results.&#10;- Enhanced UI components with gradient brushes and improved styling in `SharedComponents.kt` and `Theme.kt`.&#10;- Deleted `AuthManager.kt` and `AuthResponse.kt` in favor of `AuthViewModel` logic.&#10;- Added necessary permissions and metadata for Facebook SDK and vibration to `AndroidManifest.xml`." />
     <option name="LAST_CHUNK_COMMIT_MESSAGE" value="--" />
   </component>
   <component name="play_dynamic_filters_status">

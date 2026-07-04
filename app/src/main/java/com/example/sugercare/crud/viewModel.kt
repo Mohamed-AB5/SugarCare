@@ -1,5 +1,6 @@
 package com.example.sugercare.app
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.mutableStateOf
 import com.google.firebase.auth.FirebaseAuth
@@ -20,7 +21,9 @@ class SugarViewModel : ViewModel() {
 
     fun addReading(level: Int, note: String) {
         val reading = SugarReading(userId = currentUserId, glucoseLevel = level, note = note)
-        db.collection("sugar_readings").document(reading.id).set(reading)
+        db.collection("sugar_readings").document(reading.id).set(reading).addOnFailureListener { exception ->
+            Log.d("FIRESTORE", "Firestore Error: ${exception.message}")
+        }
     }
 
     fun getReadings() {

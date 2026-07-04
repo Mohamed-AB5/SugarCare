@@ -1,4 +1,4 @@
-package com.example.sugercare
+package com.example.sugercare.profileRepo
 
 enum class AuthProvider  {EMAIL,GOOGLE ,FACEBOOK}
 

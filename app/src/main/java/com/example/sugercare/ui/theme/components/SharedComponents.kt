@@ -17,18 +17,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Fill
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -224,7 +217,7 @@ fun SugarCareBottomBar(
 
 
 @Composable
-fun ProfilePicture(profileViewModel: ProfileViewModel){
+fun ProfilePicture(profileViewModel: ProfileViewModel,fontSize: TextUnit = 36.sp){
     val editableProfile = profileViewModel.editableProfile.collectAsState()
 
     Box(contentAlignment = Alignment.BottomEnd) {
@@ -240,7 +233,7 @@ fun ProfilePicture(profileViewModel: ProfileViewModel){
                 Text(
                     text = editableProfile.value.fullName
                         .firstOrNull()?.uppercase() ?: "?",
-                    fontSize = 36.sp,
+                    fontSize = fontSize,
                     fontWeight = FontWeight.Bold,
                     color = TealDark
                 )

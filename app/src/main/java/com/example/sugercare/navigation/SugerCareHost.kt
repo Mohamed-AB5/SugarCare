@@ -11,6 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sugercare.app.SugarTrackerScreen
+import com.example.sugercare.ui.theme.screens.SignInScreen
+import com.example.sugercare.ui.theme.screens.SignUpScreen
 import com.example.sugercare1.ProfileScreen
 import com.example.sugercare1.ForgotPasswordCodeScreen
 import com.example.sugercare1.ForgotPasswordScreen
@@ -72,10 +74,12 @@ fun SugarCareNavHost(
         composable(Screen.Welcome.route) {
             WelcomeScreen(
                 onSignIn = {
+                    authViewModel.clearFields()
                     authViewModel.resetAuthState()
                     navController.navigate(Screen.SignIn.route)
                 },
                 onSignUp = {
+                    authViewModel.clearFields()
                     authViewModel.resetAuthState()
                     navController.navigate(Screen.SignUp.route)
                 }
@@ -89,7 +93,10 @@ fun SugarCareNavHost(
                         popUpTo(Screen.Welcome.route) { inclusive = true }
                     }
                 },
-                onNavigateToSignUp = { navController.navigate(Screen.SignUp.route) },
+                onNavigateToSignUp = {
+                    authViewModel.clearFields()
+                    navController.navigate(Screen.SignUp.route)
+                                     },
                 onForgotPassword = { navController.navigate(Screen.ForgotPassword.route) },
                 authViewModel = authViewModel
             )
@@ -102,7 +109,10 @@ fun SugarCareNavHost(
                         popUpTo(Screen.Welcome.route) { inclusive = true }
                     }
                 },
-                onNavigateToSignIn = { navController.navigate(Screen.SignIn.route) },
+                onNavigateToSignIn = {
+                    authViewModel.clearFields()
+                    navController.navigate(Screen.SignIn.route)
+                                     },
                 authViewModel = authViewModel
             )
         }
@@ -144,7 +154,7 @@ fun SugarCareNavHost(
             NotificationsScreen(navController = navController)
         }
         composable(Screen.ForgotPassword.route) {
-            ForgotPasswordScreen(navController = navController)
+            ForgotPasswordScreen(navController = navController,authViewModel=authViewModel)
         }
         composable(Screen.ForgotPasswordCode.route) {
             ForgotPasswordCodeScreen(navController = navController)

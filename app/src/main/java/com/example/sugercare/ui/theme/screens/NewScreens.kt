@@ -1,7 +1,6 @@
 package com.example.sugercare1
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,20 +19,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
-import com.example.sugercare.ProfileUiState
+import com.example.sugercare.profileRepo.ProfileUiState
 import com.example.sugercare.utils.vibrate
 import com.example.sugercare.viewModels.AuthViewModel
 import com.example.sugercare.viewModels.ProfileViewModel
@@ -41,11 +36,9 @@ import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.PrimaryButton
 import com.sugarcare.app.ui.components.ProfilePicture
 import com.sugarcare.app.ui.theme.BackgroundLight
-import com.sugarcare.app.ui.theme.GreenAccent
 import com.sugarcare.app.ui.theme.TealDark
 import com.sugarcare.app.ui.theme.TealLight
 import com.sugarcare.app.ui.theme.TealPrimary
-import com.sugarcare.app.ui.theme.TealPrimary2
 import com.sugarcare.app.ui.theme.TextDark
 import com.sugarcare.app.ui.theme.TextMedium
 import kotlinx.coroutines.delay
@@ -59,6 +52,7 @@ import kotlin.text.isNotEmpty
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.rememberDatePickerState
+import com.example.sugercare.viewModels.ResetPassState
 
 private data class NavItem(
     val label: String,
@@ -159,9 +153,27 @@ fun NotificationsScreen(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ForgotPasswordScreen(navController: NavHostController) {
-    var email by remember { mutableStateOf("") }
-    var isLoading by remember { mutableStateOf(false) }
+fun ForgotPasswordScreen(navController: NavHostController, authViewModel: AuthViewModel) {
+    val email = authViewModel.email.collectAsState()
+    val resetPassState = authViewModel.resetPassState.collectAsState()
+    val context = LocalContext.current
+
+
+    LaunchedEffect(resetPassState.value) {
+        when(resetPassState.value) {
+            is ResetPassState.Success-> {
+                Toast.makeText(
+                    context,
+                    "Reset email sent! Check your inbox.",
+                    Toast.LENGTH_LONG
+                ).show()
+                authViewModel.resetPasswordState()
+                navController.popBackStack()
+            }
+            else -> {}
+        }
+
+        }
 
     Scaffold(
         topBar = {
@@ -215,8 +227,8 @@ fun ForgotPasswordScreen(navController: NavHostController) {
             Spacer(Modifier.height(36.dp))
 
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = email.value,
+                onValueChange = { authViewModel.updateEmail(it) },
                 label = { Text("Email address") },
                 leadingIcon = { Icon(Icons.Filled.Email, null, tint = TealPrimary) },
                 modifier = Modifier.fillMaxWidth(),
@@ -236,17 +248,16 @@ fun ForgotPasswordScreen(navController: NavHostController) {
 
             Button(
                 onClick = {
-                    isLoading = true
-                    navController.navigate(Screen.ForgotPasswordCode.route)
+                    authViewModel.sendPasswordReset(email.value)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
                 shape = RoundedCornerShape(27.dp),
-                enabled = email.isNotBlank() && !isLoading,
+                enabled = email.value.isNotBlank() && resetPassState.value !is ResetPassState.Loading,
                 colors = ButtonDefaults.buttonColors(containerColor = TealPrimary)
             ) {
-                if (isLoading) {
+                if (resetPassState.value is ResetPassState.Loading) {
                     CircularProgressIndicator(
                         color = Color.White,
                         modifier = Modifier.size(22.dp),
@@ -255,6 +266,15 @@ fun ForgotPasswordScreen(navController: NavHostController) {
                 } else {
                     Text("Send Code", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
+            }
+
+            if (resetPassState.value is ResetPassState.Error) {
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = (resetPassState.value as ResetPassState.Error).message,
+                    color = Color.Red,
+                    fontSize = 12.sp
+                )
             }
 
             Spacer(Modifier.height(20.dp))
@@ -270,7 +290,7 @@ fun ForgotPasswordScreen(navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+/*@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForgotPasswordCodeScreen(navController: NavHostController) {
     val codeLength = 6
@@ -416,7 +436,7 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
             }
         }
     }
-}
+}*/
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -643,30 +663,6 @@ fun ProfileScreen(
                     }
 
                     Spacer(Modifier.height(28.dp))
-
-                    /*     Box(
-                             modifier = Modifier
-                                 .fillMaxWidth()
-                                 .height(54.dp)
-                                 .clip(RoundedCornerShape(27.dp))
-                                 .background(
-                                     Brush.horizontalGradient(
-                                         listOf(TealPrimary, TealPrimary2)
-                                     )
-                                 )
-                                 .clickable { profileViewModel.saveProfile() }
-                                 .padding(vertical = 4.dp),
-                             contentAlignment = Alignment.Center
-                         ) {
-                             Row(
-                                 verticalAlignment = Alignment.CenterVertically,
-                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
-                             ) {
-                                 Icon(Icons.Filled.Save, null, modifier = Modifier.size(20.dp))
-                                 Spacer(Modifier.width(1.dp))
-                                 Text("Save Changes", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                             }
-                         }*/
 
                     PrimaryButton(
                         text = if (isSaving) "Saving..." else "Save",

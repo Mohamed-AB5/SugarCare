@@ -1,6 +1,5 @@
 package com.example.sugercare.viewModels
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -46,6 +45,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     val authState: StateFlow<AuthState> = _authState.asStateFlow()
+
     private val _email = MutableStateFlow("")
     val email: StateFlow<String> = _email.asStateFlow()
 
@@ -64,8 +64,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val _rememberMe = MutableStateFlow(false)
     val rememberMe: StateFlow<Boolean> = _rememberMe.asStateFlow()
 
+    private val _resetPassState = MutableStateFlow<ResetPassState>(ResetPassState.Idle)
+    val resetPassState: StateFlow<ResetPassState> = _resetPassState.asStateFlow()
 
-
+    // ── Edit Fields ───────────────────────
     fun updateEmail(newEmail: String) {
         _email.value = newEmail
     }
@@ -190,7 +192,7 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun signIn(email: String, password: String) {
+    fun validateSignIn(email: String, password: String) {
         when {
             email.isEmpty() -> {
                 _authState.value = AuthState.Error("Email is required")
@@ -364,6 +366,35 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         facebookCallbackManager.onActivityResult(requestCode, resultCode, data)
     }
 
+    // ———— Forgot Password ————————————————————————
+
+
+    fun sendPasswordReset(email: String){
+        viewModelScope.launch {
+            if(!isValidEmail(email)) {
+                _resetPassState.value = ResetPassState.Error("Invalid Email Format")
+                return@launch
+            }
+
+            _resetPassState.value = ResetPassState.Loading
+
+            auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener { task ->
+                    _resetPassState.value = if (task.isSuccessful) {
+                        ResetPassState.Success
+                    } else {
+                        ResetPassState.Error(task.exception?.message ?: "Failed to send reset email")
+                    }
+
+                }
+        }
+    }
+
+
+    fun resetPasswordState() {
+        _resetPassState.value = ResetPassState.Idle
+    }
+
     fun logout() {
         auth.signOut()
         _password.value = ""
@@ -373,6 +404,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             clearRememberMeDetails()
         }
     }
+        // ———— TO Clear Data after navigation between sign IN \ Up ————————————
+    fun clearFields(){
+        _email.value = ""
+        _password.value = ""
+        _rememberMe.value = false
+
+    }
+
 }
 
 sealed class AuthState {
@@ -380,4 +419,12 @@ sealed class AuthState {
     object UnAuthenticated : AuthState()
     object Loading : AuthState()
     data class Error(val message: String) : AuthState()
+}
+
+
+sealed class ResetPassState {
+    object Idle : ResetPassState()
+    object Loading : ResetPassState()
+    object Success : ResetPassState()
+    data class Error(val message: String) : ResetPassState()
 }

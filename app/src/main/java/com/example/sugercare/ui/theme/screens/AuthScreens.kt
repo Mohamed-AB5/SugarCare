@@ -1,12 +1,14 @@
-package com.sugarcare.app.ui.screens
+package com.example.sugercare.ui.theme.screens
 
-import android.app.Activity
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -46,20 +48,13 @@ fun SignInScreen(
 ) {
     val context = LocalContext.current
     //    ─── For Authentication & Auth View Model ──────────
-    val activity = LocalContext.current as ComponentActivity
-    val email = authViewModel.email.collectAsState()
-    val password = authViewModel.password.collectAsState()
+    val activity      = LocalContext.current as ComponentActivity
+    val email         = authViewModel.email.collectAsState()
+    val password      = authViewModel.password.collectAsState()
     val visibleFields = authViewModel.visiblePasswordFields.collectAsState()
-    val authState = authViewModel.authState.collectAsState()
-    val rememberMe = authViewModel.rememberMe.collectAsState()
+    val authState     = authViewModel.authState.collectAsState()
+    val rememberMe    = authViewModel.rememberMe.collectAsState()
 
-    /*TODO
-    * Activate
-    * -Loading
-    * -Error
-    * -UnAuthenticated
-    * Status'
-    * */
     Log.d("TextState1", "Current email Value: '$email'")
     Log.d("TextState", "Current TextField Value: '$password'")
     LaunchedEffect(authState.value) {
@@ -76,6 +71,7 @@ fun SignInScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Center
         ) {
@@ -164,7 +160,7 @@ fun SignInScreen(
             PrimaryButton(
                 text = "Sign in",
                 onClick = {
-                    authViewModel.signIn(email.value, password.value)
+                    authViewModel.validateSignIn(email.value, password.value)
                 },
                 enabled = email.value.isNotBlank() && password.value.isNotBlank()
             )
@@ -225,8 +221,6 @@ fun SignInScreen(
                         authViewModel.signInWithFacebook(activity)
                     })
 
-                // !!! -> onClick will be added later <- !!!!
-//                SocialButton(label = "𝕏", color = TealDark)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -240,7 +234,7 @@ fun SignInScreen(
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .clickable { onNavigateToSignUp() },
+                    .clickable { (onNavigateToSignUp())},
                 fontSize = 14.sp
             )
 
@@ -261,12 +255,12 @@ fun SignUpScreen(
     val context = LocalContext.current
 
 //    ─── For Authentication & View Model ──────────
-    val activity = LocalContext.current as ComponentActivity
-    val email = authViewModel.email.collectAsState()
-    val password = authViewModel.password.collectAsState()
-    val authState = authViewModel.authState.collectAsState()
-    val visibleFields = authViewModel.visiblePasswordFields.collectAsState()
-    val fullName = authViewModel.fullName.collectAsState()
+    val activity        = LocalContext.current as ComponentActivity
+    val email           = authViewModel.email.collectAsState()
+    val password        = authViewModel.password.collectAsState()
+    val authState       = authViewModel.authState.collectAsState()
+    val visibleFields   = authViewModel.visiblePasswordFields.collectAsState()
+    val fullName        = authViewModel.fullName.collectAsState()
     val confirmPassword = authViewModel.confirmPassword.collectAsState()
     var acceptedPolicy by remember { mutableStateOf(false) }
 
@@ -397,6 +391,7 @@ fun SignUpScreen(
             SecondaryButton(
                 text = "Sign Up",
                 onClick = {
+                    authViewModel.clearFields()
                     authViewModel.signUp(email.value, password.value)
                 },
                 enabled = email.value.isNotBlank()
@@ -461,14 +456,14 @@ private fun SocialButton(
     onClick: () -> Unit
 ) {
     Surface(
-        shape = androidx.compose.foundation.shape.CircleShape,
+        shape = CircleShape,
         shadowElevation = 6.dp,
         color = color.copy(alpha = 0.12f),
     ) {
         Box(
             modifier = Modifier
                 .size(52.dp)
-                .clip(androidx.compose.foundation.shape.CircleShape)
+                .clip(CircleShape)
                 .background(brush = brush)
                 .clickable { onClick() },
             contentAlignment = Alignment.Center

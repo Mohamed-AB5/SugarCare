@@ -1,4 +1,4 @@
-package com.example.sugercare
+package com.example.sugercare.profileRepo
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions

@@ -3,7 +3,6 @@ package com.sugarcare.app.ui.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 
 // ── Brand Colors ──────────────────────────────────────────────

@@ -4,11 +4,11 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.sugercare.AuthProvider
-import com.example.sugercare.ProfileRepo
-import com.example.sugercare.ProfileRepoImpl
-import com.example.sugercare.ProfileUiState
-import com.example.sugercare.UserProfile
+import com.example.sugercare.profileRepo.AuthProvider
+import com.example.sugercare.profileRepo.ProfileRepo
+import com.example.sugercare.profileRepo.ProfileRepoImpl
+import com.example.sugercare.profileRepo.ProfileUiState
+import com.example.sugercare.profileRepo.UserProfile
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -102,7 +102,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     private fun initializeProfile(
         user: FirebaseUser, provider: AuthProvider
     ): UserProfile {
-        var PhotoUrl = user.photoUrl?.toString()
+        var photoUrl = user.photoUrl?.toString()
 
         when (provider) {
             AuthProvider.FACEBOOK -> {
@@ -110,11 +110,11 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                     .firstOrNull { it.providerId == "facebook.com" }?.uid
 
                 if (facebookUid != null) {
-                    PhotoUrl = "https://graph.facebook.com/$facebookUid/picture?type=large"
+                    photoUrl = "https://graph.facebook.com/$facebookUid/picture?type=large"
                 }
             }
             AuthProvider.GOOGLE -> {
-                PhotoUrl = PhotoUrl?.replace("s96-c", "s400-c")
+                photoUrl = photoUrl?.replace("s96-c", "s400-c") // trick to get high quality photos
             }
             else -> {}
 
@@ -128,7 +128,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             dob = "",
             gender = "",
             authProvider = provider,
-            photoUrl = PhotoUrl ?: ""
+            photoUrl = photoUrl ?: ""
         )
     }
 

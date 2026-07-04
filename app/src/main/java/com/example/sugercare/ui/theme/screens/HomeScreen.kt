@@ -56,7 +56,7 @@ fun HomeScreen(navController: NavHostController, profileViewModel: ProfileViewMo
 
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
-                        ProfilePicture(profileViewModel)
+                        ProfilePicture(profileViewModel,fontSize = 14.sp)
                     }
                 },
 

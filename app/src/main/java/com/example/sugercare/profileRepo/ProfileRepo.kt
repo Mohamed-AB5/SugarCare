@@ -1,4 +1,4 @@
-package com.example.sugercare
+package com.example.sugercare.profileRepo
 
 interface ProfileRepo {
     suspend fun getProfile(uid: String): Result<UserProfile>
