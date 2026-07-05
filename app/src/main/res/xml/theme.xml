@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  
+    <style name="Theme.SugerCare1" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+ 
+    <style name="Theme.SugerCare1.Splash" parent="Theme.SugerCare1">
+        <item name="android:windowBackground">@drawable/ic_launcher_background</item>
+    </style>
+</resources>
