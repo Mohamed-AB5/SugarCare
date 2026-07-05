@@ -130,7 +130,7 @@ fun HomeScreen(navController: NavHostController) {
     }
 }
 
-//Shared Bottom Nav — used by ALL screens
+
 @Composable
 fun BottomNavBar(navController: NavHostController, currentRoute: String) {
     NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 8.dp) {
@@ -202,5 +202,4 @@ private fun MedToggleRow(label: String, checked: Boolean, onToggle: (Boolean) ->
             colors = SwitchDefaults.colors(checkedThumbColor = TealPrimary, checkedTrackColor = TealLight))
     }
 }
-
 
