@@ -1,6 +1,7 @@
 package com.example.sugercare.viewModels
 
 import android.app.Application
+import android.icu.util.Calendar
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -126,6 +127,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             email = user.email ?: "",
             phone = "",
             dob = "",
+            age = 0,
+            weight = "",
             gender = "",
             authProvider = provider,
             photoUrl = photoUrl ?: ""
@@ -142,11 +145,27 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun updateDateOfBirth(value: String) {
-        _editableProfile.value = _editableProfile.value.copy(dob = value)
+        _editableProfile.value = _editableProfile.value.copy(
+            dob = value,
+            age = calculateAgeFromDOB(value)
+        )
     }
 
     fun updateGender(value: String) {
         _editableProfile.value = _editableProfile.value.copy(gender = value)
+    }
+
+    fun updateAge(value: String) {
+        return try {
+            val age = value.toInt()
+            _editableProfile.value = _editableProfile.value.copy(
+                age = age,
+                dob = calculateDOBFromAge(age)
+            )
+        } catch (e: Exception) { }
+    }
+    fun updateWeight(value: String) {
+        _editableProfile.value = _editableProfile.value.copy(weight = value)
     }
 
 
@@ -167,9 +186,61 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                 errors["dob"] = "Use format DD/MM/YYYY"
         }
 
+        if(profile.age !in 1..150)
+        {
+            errors["age"] = "Enter a valid age"
+        }
+
+        if(profile.weight.toInt() !in 1..300)
+        {
+            errors["weight"] = "Enter a valid weight"
+        }
+
         _fieldErrors.value = errors
         return errors.isEmpty()
     }
+
+    // ── Calculate age from DOB ──────────────────────────────────
+    private fun calculateAgeFromDOB(dob: String): Int {
+
+     return try{
+         val parts = dob.split("/")
+         if (parts.size != 3) return 0
+         val day = parts[0].toInt()
+         val month = parts[1].toInt()
+         val year = parts[2].toInt()
+
+         val today = Calendar.getInstance()
+         val birthDate = Calendar.getInstance().apply {
+             set(year, month-1, day)
+         }
+
+         var age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR)
+         // if the birthday has not yet passed this year, decrement the age
+         if (today.get(Calendar.DAY_OF_YEAR) < birthDate.get(Calendar.DAY_OF_YEAR)) {
+             age--
+         }
+         age
+     }
+
+     catch (e: Exception){0}
+
+    }
+
+    // ── Calculate DOB from age ──────────────────────────────────
+    private fun calculateDOBFromAge(age: Int): String {
+
+        val today     = Calendar.getInstance()
+        val birthYear = today.get(Calendar.YEAR) - age
+        val month     = today.get(Calendar.MONTH) + 1
+        val day       = today.get(Calendar.DAY_OF_MONTH)
+
+        val formattedDay = day.toString().padStart(2, '0')
+        val formattedMonth = month.toString().padStart(2, '0')
+
+        return "$formattedDay/$formattedMonth/$birthYear"
+    }
+
 
 //  ── Saving Profile Data  ────────────────────────────
 
@@ -194,6 +265,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                         "fullName"     to profile.fullName,
                         "phone"        to profile.phone,
                         "dob"          to profile.dob,
+                        "age"          to profile.age,
+                        "weight"       to profile.weight,
                         "gender"       to profile.gender,
                         "email"        to profile.email,
                         "authProvider" to profile.authProvider.name,

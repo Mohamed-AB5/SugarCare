@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -132,7 +133,9 @@ fun SugarCareTextField(
     label: String,
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
-    trailingIcon: @Composable (() -> Unit)? = null
+    trailingIcon: @Composable (() -> Unit)? = null,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
 ) {
     val visualTransformation = if (isPassword)
         androidx.compose.ui.text.input.PasswordVisualTransformation()

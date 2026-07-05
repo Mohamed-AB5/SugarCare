@@ -548,6 +548,7 @@ fun ProfileScreen(
                     Spacer(Modifier.height(12.dp))
 
                     ProfileField(
+                        modifier = Modifier.fillMaxWidth(),
                         value = editableProfile.value.fullName,
                         onValueChange = {
                             profileViewModel.updateFullName(it)
@@ -565,6 +566,7 @@ fun ProfileScreen(
                     Spacer(Modifier.height(12.dp))
 
                     ProfileField(
+                        modifier = Modifier.fillMaxWidth(),
                         value = editableProfile.value.phone,
                         onValueChange = {
                             profileViewModel.updatePhoneNumber(it)
@@ -613,6 +615,49 @@ fun ProfileScreen(
                     )
                     Spacer(Modifier.height(12.dp))
 
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        ProfileField(
+                            modifier = Modifier.weight(1f),
+                            value = editableProfile.value.age.toString(),
+                            onValueChange = {
+                                profileViewModel.updateAge(it)
+                                profileViewModel.clearFieldError("age")
+                            },
+                            label = "Age",
+                            isError = fieldErrors.value.containsKey("age"),
+                            supportingText = {
+                                fieldErrors.value["age"]?.let {
+                                    Text(text = it, color = Color.Red, fontSize = 12.sp)
+                                }
+                            },
+                            icon = Icons.Filled.HealthAndSafety,
+                            keyboardType = androidx.compose.ui.text.input.KeyboardType.Phone
+                        )
+                        Spacer(Modifier.height(12.dp))
+
+                        ProfileField(
+                            modifier = Modifier.weight(1.5f),
+                            value = editableProfile.value.weight,
+                            onValueChange = {
+                                profileViewModel.updateWeight(it)
+                                profileViewModel.clearFieldError("weight")
+                            },
+                            label = "Weight",
+                            isError = fieldErrors.value.containsKey("weight"),
+                            supportingText = {
+                                fieldErrors.value["weight"]?.let {
+                                    Text(text = it, color = Color.Red, fontSize = 12.sp)
+                                }
+                            },
+                            icon = Icons.Filled.MonitorWeight,
+                            keyboardType = androidx.compose.ui.text.input.KeyboardType.Phone
+                        )
+                    }
+                    Spacer(Modifier.height(12.dp))
+
 
                     ExposedDropdownMenuBox(
                         expanded = showGender,
@@ -648,7 +693,7 @@ fun ProfileScreen(
                                     },
                                     onClick = {
                                         profileViewModel.updateGender(opt); showGender = false
-                                    }, // maybe error here
+                                    },
                                     modifier = Modifier.background(
                                         if (opt == editableProfile.value.gender) TealLight.copy(
                                             alpha = 0.35f
@@ -695,6 +740,7 @@ fun ProfileScreen(
 
 @Composable
 private fun ProfileField(
+    modifier: Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
@@ -710,7 +756,7 @@ private fun ProfileField(
         leadingIcon = { Icon(icon, null, tint = TealPrimary) },
         isError = isError,
         supportingText = supportingText,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         shape = RoundedCornerShape(14.dp),
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
@@ -735,7 +781,6 @@ fun DatePickerField(
 ) {
     var showPicker by remember { mutableStateOf(false) }
 
-    // ✅ Show calendar dialog
     if (showPicker) {
         val datePickerState = rememberDatePickerState()
 

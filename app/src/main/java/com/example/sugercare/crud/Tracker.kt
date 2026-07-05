@@ -1,35 +1,56 @@
 package com.example.sugercare.app
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import co.yml.charts.axis.AxisData
 import co.yml.charts.common.model.Point
 import co.yml.charts.ui.linechart.LineChart
 import co.yml.charts.ui.linechart.model.LineChartData
 import co.yml.charts.ui.linechart.model.LinePlotData
 import co.yml.charts.ui.linechart.model.LineStyle
+import com.sugarcare.app.ui.components.SugarCareTextField
+import com.sugarcare.app.ui.theme.GreenAccent
+import com.sugarcare.app.ui.theme.GreenAccent2
+import com.sugarcare.app.ui.theme.OrangeDrop
+import com.sugarcare.app.ui.theme.OrangeDrop2
+import com.sugarcare.app.ui.theme.TealDark
+import com.sugarcare.app.ui.theme.TealPrimary
+import com.sugarcare.app.ui.theme.TealPrimary2
+import com.sugarcare.app.ui.theme.TextDark
+import com.sugarcare.app.ui.theme.White
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     var glucoseInput by remember { mutableStateOf("") }
-    var mealRelation by remember { mutableStateOf("") }
     var note by remember { mutableStateOf("") }
     var hourInput by remember { mutableStateOf("") }
     var minuteInput by remember { mutableStateOf("") }
     var amPmSelection by remember { mutableStateOf("AM") }
     val readings = viewModel.readingsList.value
+    val mealOptions = listOf("Before", "After")
+    var selectedMeal by remember { mutableStateOf("") }
+    var showMealOptions by remember { mutableStateOf(false) }
 
 
     Scaffold(
@@ -42,29 +63,75 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedTextField(
+            SugarCareTextField(
                 value = glucoseInput,
                 onValueChange = { glucoseInput = it },
-                label = { Text("Glucose Level (mg/dL)") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
+                label = "Glucose Level (mg/dL)",
+                keyboardType = KeyboardType.Phone,
+                modifier = Modifier.fillMaxWidth(),
+                colors = trackerFieldColors()
+
             )
+
             Spacer(modifier = Modifier.height(6.dp))
 
-            OutlinedTextField(
+            SugarCareTextField(
                 value = note,
                 onValueChange = { note = it },
-                label = { Text("Notes") },
-                modifier = Modifier.fillMaxWidth()
+                label = "Notes",
+                modifier = Modifier.fillMaxWidth(),
+                colors = trackerFieldColors()
             )
+
             Spacer(modifier = Modifier.height(6.dp))
 
-            OutlinedTextField(
-                value = mealRelation,
-                onValueChange = { mealRelation = it },
-                label = { Text("before/after the meal") },
-                modifier = Modifier.fillMaxWidth()
-            )
+            ExposedDropdownMenuBox(
+                expanded = showMealOptions,
+                onExpandedChange = { showMealOptions = !showMealOptions }
+            ) {
+                OutlinedTextField(
+                    value = selectedMeal,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Before / After Meal") },
+                    placeholder = { Text("Select") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = showMealOptions)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = trackerFieldColors()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = showMealOptions,
+                    onDismissRequest = { showMealOptions = false },
+                    modifier = Modifier.background(Color.White)
+                ) {
+                    mealOptions.forEach { option ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = option,
+                                    color = TextDark,
+                                    fontWeight = if (option == selectedMeal)
+                                        FontWeight.SemiBold
+                                    else
+                                        FontWeight.Normal
+                                )
+                            },
+                            onClick = {
+                                selectedMeal = option
+                                showMealOptions = false
+                            },
+                            modifier = Modifier.background(Color.White)
+                        )
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.height(6.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -77,7 +144,9 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
                     label = { Text("HH") },
                     placeholder = { Text("12") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = trackerFieldColors()
                 )
                 Text(":", style = MaterialTheme.typography.titleLarge)
                 OutlinedTextField(
@@ -86,10 +155,12 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
                     label = { Text("MM") },
                     placeholder = { Text("00") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = trackerFieldColors()
                 )
-                Button(
-                    onClick = { amPmSelection = if (amPmSelection == "AM") "PM" else "AM" },
+                /* Button(
+                        onClick = { amPmSelection = if (amPmSelection == "AM") "PM" else "AM" },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer
@@ -100,48 +171,112 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
                 ) {
                     Text(amPmSelection, style = MaterialTheme.typography.bodyLarge)
                 }
+            }*/
+
+                Box(
+                    modifier = Modifier
+                        .height(56.dp)
+                        .width(72.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(
+                                    GreenAccent,
+                                    GreenAccent2
+                                )
+                            )
+                        )
+                        .clickable {
+                            amPmSelection =
+                                if (amPmSelection == "AM") "PM"
+                                else "AM"
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+
+                    Text(
+                        text = amPmSelection,
+                        color = White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(6.dp))
 
-            Button(
-                onClick = {
-                    val level = glucoseInput.toIntOrNull() ?: 0
-                    if (level > 0) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .clip(RoundedCornerShape(28.dp))
+                    .background(
+                        Brush.horizontalGradient(
+                            listOf(TealDark, TealPrimary2)
+                        )
+                    )
+                    .clickable {
+                        val level = glucoseInput.toIntOrNull() ?: return@clickable
 
                         val detailsBuilder = mutableListOf<String>()
-                        if (mealRelation.isNotEmpty()) detailsBuilder.add(mealRelation)
-                        if (note.isNotEmpty()) detailsBuilder.add("Note: $note")
-                        val formattedTime =
-                            if (hourInput.isNotEmpty() && minuteInput.isNotEmpty()) {
-                                "$hourInput:$minuteInput $amPmSelection"
-                            } else {
-                                ""
-                            }
 
-                        val fullDetails = detailsBuilder.joinToString(" | ")
+                        if (selectedMeal.isNotBlank()) {
+                            detailsBuilder.add(selectedMeal)
+                        }
 
-                        viewModel.addReading(level, fullDetails)
+                        if (hourInput.isNotBlank() && minuteInput.isNotBlank()) {
+                            detailsBuilder.add("$hourInput:$minuteInput $amPmSelection")
+                        }
 
+                        if (note.isNotBlank()) {
+                            detailsBuilder.add("Note: $note")
+                        }
+                        viewModel.addReading(
+                            level = level,
+                            note = note,
+                        )
+
+                        // Reset fields
                         glucoseInput = ""
-                        mealRelation = ""
+                        selectedMeal = ""
                         note = ""
                         hourInput = ""
                         minuteInput = ""
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) { Text("Save Reading") }
+                        amPmSelection = "AM"
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
 
+                    Spacer(Modifier.width(8.dp))
+
+                    Text(
+                        text = "Add Reading",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(24.dp))
 
             if (readings.size > 1) {
                 val points = readings.mapIndexed { index, sugarReading ->
                     Point(index.toFloat(), sugarReading.glucoseLevel.toFloat())
                 }
-                val xAxisData = AxisData.Builder().axisStepSize(40.dp).steps(points.size - 1)
-                    .labelData { i -> (i + 1).toString() }.build()
+                val xAxisData =
+                    AxisData.Builder().axisStepSize(40.dp).steps(points.size - 1)
+                        .labelData { i -> (i + 1).toString() }.build()
                 val yAxisData =
-                    AxisData.Builder().steps(5).labelData { i -> (i * 50).toString() }.build()
+                    AxisData.Builder().steps(5).labelData { i -> (i * 50).toString() }
+                        .build()
                 val lineChartData = LineChartData(
                     linePlotData = LinePlotData(
                         lines = listOf(
@@ -167,9 +302,11 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(readings) { reading ->
-                    Card(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp)) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -197,6 +334,23 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
     }
 }
 
+
+@Composable
+private fun trackerFieldColors() = OutlinedTextFieldDefaults.colors(
+    focusedBorderColor = TealPrimary,
+    unfocusedBorderColor = TealPrimary.copy(alpha = 0.5f),
+
+    focusedLabelColor = TealPrimary,
+    unfocusedLabelColor = TextDark.copy(alpha = 0.7f),
+
+    focusedTextColor = TextDark,
+    unfocusedTextColor = TextDark,
+
+    focusedPlaceholderColor = TextDark.copy(alpha = 0.4f),
+    unfocusedPlaceholderColor = TextDark.copy(alpha = 0.4f),
+
+    cursorColor = TealPrimary
+)
 
 /*
 package com.example.sugercare.viewModels

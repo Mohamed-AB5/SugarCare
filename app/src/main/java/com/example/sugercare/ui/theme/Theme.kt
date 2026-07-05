@@ -10,6 +10,7 @@ val TealPrimary     = Color(0xFF2E9B9B)   // main teal
 val TealPrimary2     = Color(0xFF7BE1E3)
 val TealDark        = Color(0xFF1F7A7A)
 val TealLight       = Color(0xFFB2DFDB)
+val TealDark2        =Color(0xFF048C8C)
 val GreenAccent     = Color(0xFF5BAD6F)   // "Sign Up" button green
 val GreenAccent2     = Color(0xFF93F5A8)
 val GreenAccent3     = Color(0xFF88DA99)

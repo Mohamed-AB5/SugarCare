@@ -3,6 +3,7 @@ package com.example.sugercare.profileRepo
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.tasks.await
+import kotlin.String
 
 class ProfileRepoImpl : ProfileRepo {
 
@@ -20,6 +21,8 @@ class ProfileRepoImpl : ProfileRepo {
                     fullName     = doc.getString("fullName") ?: "",
                     phone        = doc.getString("phone") ?: "",
                     dob          = doc.getString("dob") ?: "",
+                    age          = doc.getLong("age")?.toInt() ?: 0,
+                    weight       = doc.getString("weight") ?: "",
                     gender       = doc.getString("gender") ?: "",
                     email        = doc.getString("email") ?: "",
                     authProvider = AuthProvider.valueOf(
@@ -48,6 +51,8 @@ class ProfileRepoImpl : ProfileRepo {
                 "fullName"     to profile.fullName,
                 "phone"        to profile.phone,
                 "dob"          to profile.dob,
+                "age"          to profile.age,
+                "weight"      to profile.weight,
                 "gender"       to profile.gender,
                 "email"        to profile.email,
                 "authProvider" to profile.authProvider.name,

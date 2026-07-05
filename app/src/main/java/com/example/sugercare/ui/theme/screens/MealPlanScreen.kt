@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.sugercare1.navigation.Screen
+import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.components.SugarCareCard
 import com.sugarcare.app.ui.theme.*
@@ -33,27 +33,33 @@ data class MealItem(val type: String, val name: String)
 fun MealPlanScreen(navController: NavHostController) {
     val meals = listOf(
         MealItem("Breakfast", "Oatmeal with Berries"),
-        MealItem("Lunch",     "Grilled Chicken Salad"),
-        MealItem("Dinner",    "Grilled Chicken Salad")
+        MealItem("Lunch", "Grilled Chicken Salad"),
+        MealItem("Dinner", "Grilled Chicken Salad")
     )
 
     SugarCareBackground {
         Column(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background)
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Your Personalized\nMeal Plan",
+                Text(
+                    "Your Personalized\nMeal Plan",
                     style = MaterialTheme.typography.headlineMedium,
                     color = TealDark, fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center)
+                    textAlign = TextAlign.Center
+                )
 
                 Spacer(Modifier.height(16.dp))
 
-                Button(onClick = {},
-                    modifier = Modifier.fillMaxWidth(0.8f).height(52.dp),
+                Button(
+                    onClick = {},
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(52.dp),
                     shape = RoundedCornerShape(26.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = GreenAccent),
                     elevation = ButtonDefaults.buttonElevation(0.dp)
@@ -61,17 +67,24 @@ fun MealPlanScreen(navController: NavHostController) {
             }
 
             Column(
-                modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 SugarCareCard {
-                    Text("General: [Doctor's overall diet type, e.g., Low Carb] Morning Planning | Haditime]",
-                        fontSize = 13.sp, color = TextMedium)
+                    Text(
+                        "General: [Doctor's overall diet type, e.g., Low Carb] Morning Planning | Haditime]",
+                        fontSize = 13.sp, color = TextMedium
+                    )
                 }
 
                 Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
-                    Text("Meal Suggestions", style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                    Text(
+                        "Meal Suggestions", style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground
+                    )
                     Icon(Icons.Filled.Restaurant, null, tint = TealPrimary)
                 }
 
@@ -83,25 +96,39 @@ fun MealPlanScreen(navController: NavHostController) {
             }
 
             //  Bottom Nav (Home/Logs/Meals/Profile)
-            BottomNavBar(navController, Screen.MealPlan.route)
+            SugarCareBottomNavBar(navController, Screen.MealPlan.route)
         }
     }
 }
 
 @Composable
 private fun MealCard(modifier: Modifier, type: String, name: String) {
-    Card(modifier = modifier, shape = RoundedCornerShape(16.dp),
+    Card(
+        modifier = modifier, shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Column(Modifier.padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(type, fontWeight = FontWeight.Bold, fontSize = 13.sp,
-                color = MaterialTheme.colorScheme.onSurface)
+            Text(
+                type, fontWeight = FontWeight.Bold, fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
             Text(type, fontSize = 11.sp, color = TextLight)
             Spacer(Modifier.height(8.dp))
-            Box(Modifier.size(56.dp).clip(CircleShape).background(TealLight),
+            Box(
+                Modifier
+                    .size(56.dp)
+                    .clip(CircleShape)
+                    .background(TealLight),
                 contentAlignment = Alignment.Center
-            ) { Icon(Icons.Filled.Restaurant, null, tint = TealPrimary, modifier = Modifier.size(28.dp)) }
+            ) {
+                Icon(
+                    Icons.Filled.Restaurant,
+                    null,
+                    tint = TealPrimary,
+                    modifier = Modifier.size(28.dp)
+                )
+            }
             Spacer(Modifier.height(8.dp))
             Text(name, fontSize = 11.sp, color = TextMedium, textAlign = TextAlign.Center)
         }

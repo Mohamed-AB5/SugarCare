@@ -14,11 +14,9 @@ import com.example.sugercare.app.SugarTrackerScreen
 import com.example.sugercare.ui.theme.screens.SignInScreen
 import com.example.sugercare.ui.theme.screens.SignUpScreen
 import com.example.sugercare1.ProfileScreen
-import com.example.sugercare1.ForgotPasswordCodeScreen
 import com.example.sugercare1.ForgotPasswordScreen
 import com.example.sugercare1.NotificationsScreen
 import com.example.sugercare.viewModels.AuthState
-//import com.example.sugercare.crud.SugarTrackerScreen
 import com.example.sugercare.viewModels.AuthViewModel
 import com.example.sugercare.viewModels.ProfileViewModel
 import com.sugarcare.app.ui.screens.*
@@ -155,9 +153,6 @@ fun SugarCareNavHost(
         }
         composable(Screen.ForgotPassword.route) {
             ForgotPasswordScreen(navController = navController,authViewModel=authViewModel)
-        }
-        composable(Screen.ForgotPasswordCode.route) {
-            ForgotPasswordCodeScreen(navController = navController)
         }
     }
 }

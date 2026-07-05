@@ -7,8 +7,10 @@ data class UserProfile(
     val fullName     : String = "",
     val phone        : String = "",
     val dob          : String = "",
+    val age          : Int    = 0,
+    val weight       : String = "",
     val gender       : String = "",
-    val email        : String ="",
+    val email        : String = "",
     val authProvider : AuthProvider = AuthProvider.EMAIL,
     val photoUrl     : String? = null,
     val createdAt    : Long = System.currentTimeMillis()

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.sugercare1.navigation.Screen
+import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.components.SugarCareCard
 import com.sugarcare.app.ui.theme.*
@@ -89,7 +89,7 @@ fun MedicationsScreen(navController: NavHostController) {
             Spacer(Modifier.weight(1f))
 
             //  Bottom Nav (Home/Logs/Meals/Profile)
-            BottomNavBar(navController, Screen.Medications.route)
+            SugarCareBottomNavBar(navController, Screen.Medications.route)
         }
     }
 }
