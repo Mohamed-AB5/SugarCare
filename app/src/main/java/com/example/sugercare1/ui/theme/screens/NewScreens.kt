@@ -28,7 +28,7 @@ import com.example.sugercare1.navigation.Screen
 import com.sugarcare.app.ui.theme.*
 import kotlinx.coroutines.delay
 
-//   NOTIFICATIONS SCREEN
+//  NOTIFICATIONS SCREEN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,8 +67,7 @@ fun NotificationsScreen(navController: NavHostController) {
     }
 }
 
-
-//  FORGOT PASSWORD
+//   FORGOT PASSWORD
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -135,7 +134,8 @@ fun ForgotPasswordScreen(navController: NavHostController) {
     }
 }
 
-// FORGOT PASSWORD —  OTP
+
+// OTP
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -215,7 +215,8 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
     }
 }
 
-// COMPLETE PROFILE SCREEN
+
+//   COMPLETE PROFILE SCREEN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -308,7 +309,6 @@ fun CompleteProfileScreen(navController: NavHostController) {
             ProfileField(dob, { dob = it }, "Date of Birth (DD/MM/YYYY)", Icons.Filled.CalendarToday)
             Spacer(Modifier.height(12.dp))
 
-            // Gender dropdown
             ExposedDropdownMenuBox(expanded = showGender, onExpandedChange = { showGender = it }) {
                 OutlinedTextField(value = gender, onValueChange = {}, readOnly = true,
                     label = { Text("Gender") },
