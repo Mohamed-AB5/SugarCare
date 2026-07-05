@@ -1,8 +1,10 @@
 package com.sugarcare.app.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -10,8 +12,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -25,378 +27,276 @@ import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
 import kotlinx.coroutines.launch
 
-import com.sugarcare.app.R
-import com.sugarcare.app.ui.theme.TealLight
-
-
-//   Sign In Flow
-
-
-
+// Sign In 
 @Composable
 fun SignInScreen(
     onSignInSuccess: () -> Unit,
     onNavigateToSignUp: () -> Unit
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var showPass by remember { mutableStateOf(false) }
+    var email     by remember { mutableStateOf("") }
+    var password  by remember { mutableStateOf("") }
+    var showPass  by remember { mutableStateOf(false) }
     var rememberMe by remember { mutableStateOf(false) }
 
-    // For Authentication & coroutine scope
-   
-
-    val context = LocalContext.current
-    val authManager = remember { AuthManager(context) }
-    val coroutineScope = rememberCoroutineScope()
+    val context      = LocalContext.current
+    val authManager  = remember { AuthManager(context) }
+    val scope        = rememberCoroutineScope()
 
     SugarCareBackground {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 32.dp),
+            modifier            = Modifier.fillMaxSize().padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "Welcome back",
+            Text("Welcome back",
                 style = MaterialTheme.typography.headlineMedium,
-                color = TealDark,
-                fontWeight = FontWeight.Bold
-            )
+                color = TealDark, fontWeight = FontWeight.Bold)
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(Modifier.height(32.dp))
 
-            SugarCareTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = "Email"
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
+            SugarCareTextField(value = email, onValueChange = { email = it }, label = "Email")
+            Spacer(Modifier.height(16.dp))
 
             SugarCareTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = "Password",
-                isPassword = !showPass,
+                value = password, onValueChange = { password = it },
+                label = "Password", isPassword = !showPass,
                 trailingIcon = {
                     IconButton(onClick = { showPass = !showPass }) {
-                        Icon(
-                            imageVector = if (showPass) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = null,
-                            tint = TealPrimary
-                        )
+                        Icon(if (showPass) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            null, tint = TealPrimary)
+                    }
+                }
+            )
+            Spacer(Modifier.height(8.dp))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(checked = rememberMe, onCheckedChange = { rememberMe = it },
+                    colors = CheckboxDefaults.colors(checkedColor = TealPrimary))
+                Text("Remember Me", color = TextMedium)
+                Spacer(Modifier.weight(1f))
+                Text("Forgot password?", color = TealPrimary, fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold, modifier = Modifier.clickable { /* handled in SignInScreen.kt */ })
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            PrimaryButton(
+                text = "Sign in", enabled = email.isNotBlank() && password.isNotBlank(),
+                onClick = {
+                    scope.launch {
+                        authManager.loginWithEmail(email, password).collect { response ->
+                            if (response is AuthResponse.Success) onSignInSuccess()
+                        }
                     }
                 }
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(Modifier.height(20.dp))
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = rememberMe,
-                    onCheckedChange = { rememberMe = it },
-                    colors = CheckboxDefaults.colors(checkedColor = TealPrimary)
-                )
-                Text(text = "Remember Me", color = TextMedium)
-                Spacer(modifier = Modifier.width(40.dp))
-                Text(text = "Forgot Password?", color = TextMedium, modifier = Modifier.clickable {/*ToDO*/})
+            // divider
+            Row(Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                HorizontalDivider(Modifier.weight(1f), thickness = 1.5.dp, color = TealLight)
+                Text(" or ", fontSize = 15.sp, color = TextLight, modifier = Modifier.padding(horizontal = 8.dp))
+                HorizontalDivider(Modifier.weight(1f), thickness = 1.5.dp, color = TealLight)
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(Modifier.height(12.dp))
 
-            PrimaryButton(
-                text = "Sign in",
-                onClick = {
-                    coroutineScope.launch {
-                        authManager.loginWithEmail(email,password)
-                            .collect{ response ->
-                                if (response is AuthResponse.Success) {
-                                    onSignInSuccess()
-                                }
+            //  Social buttons: Google + Facebook
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                // Google 
+                SocialButton(
+                    icon  = SocialIcon.Google,
+                    label = "Google",
+                    onClick = {
+                        scope.launch {
+                            authManager.signInWithGoogle().collect { response ->
+                                if (response is AuthResponse.Success) onSignInSuccess()
                             }
+                        }
                     }
-                },
-                enabled = email.isNotBlank() && password.isNotBlank()
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            )
-            {
-
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f),
-                    thickness = 2.dp,
-                    color = TealLight)
-
-                Text(
-                    text = "or",
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    fontSize = 17.sp,
-                    color = TextLight
-
                 )
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f),
-                    thickness = 2.dp,
-                    color = TealLight
+                // Facebook 
+                SocialButton(
+                    icon  = SocialIcon.Facebook,
+                    label = "Facebook",
+                    onClick = { /* Facebook auth — add later */ }
                 )
             }
 
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                SocialButton(label = "G", color = OrangeDrop, onClick = {
-                    coroutineScope.launch {
-                        authManager.signInWithGoogle()
-                            .collect{ response ->
-                                if (response is AuthResponse.Success) {
-                                    onSignInSuccess()
-                                }
-                            }
-                    }})
-
-           
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
             Text(
-                text = buildAnnotatedString {
+                buildAnnotatedString {
                     append("No account?  ")
                     withStyle(SpanStyle(color = TealPrimary, fontWeight = FontWeight.SemiBold)) {
                         append("Create one")
                     }
                 },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .clickable { onNavigateToSignUp() },
+                modifier = Modifier.align(Alignment.CenterHorizontally).clickable { onNavigateToSignUp() },
                 fontSize = 14.sp
             )
-
-
         }
     }
 }
 
-
-// Sign Up
-
+// Sign Up 
 @Composable
 fun SignUpScreen(
     onSignUpSuccess: () -> Unit,
     onNavigateToSignIn: () -> Unit
 ) {
-    var fullName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var fullName        by remember { mutableStateOf("") }
+    var email           by remember { mutableStateOf("") }
+    var password        by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    var acceptedPolicy by remember { mutableStateOf(false) }
-    var showPass by remember { mutableStateOf(false) }
+    var acceptedPolicy  by remember { mutableStateOf(false) }
+    var showPass        by remember { mutableStateOf(false) }
 
-//   For Authentication & coroutine scope 
-    val context = LocalContext.current
+    val context     = LocalContext.current
     val authManager = remember { AuthManager(context) }
-    val coroutineScope = rememberCoroutineScope()
+    val scope       = rememberCoroutineScope()
 
     SugarCareBackground {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 32.dp),
+            modifier            = Modifier.fillMaxSize().padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "Get Started",
+            Text("Get Started",
                 style = MaterialTheme.typography.headlineMedium,
-                color = GreenAccent,
-                fontWeight = FontWeight.Bold
-            )
+                color = GreenAccent, fontWeight = FontWeight.Bold)
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(Modifier.height(24.dp))
 
-            SugarCareTextField(
-                value = fullName,
-                onValueChange = { fullName = it },
-                label = "Full Name"
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            SugarCareTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = "Email"
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            SugarCareTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = "Password",
-                isPassword = !showPass,
+            SugarCareTextField(value = fullName, onValueChange = { fullName = it }, label = "Full Name")
+            Spacer(Modifier.height(12.dp))
+            SugarCareTextField(value = email, onValueChange = { email = it }, label = "Email")
+            Spacer(Modifier.height(12.dp))
+            SugarCareTextField(value = password, onValueChange = { password = it },
+                label = "Password", isPassword = !showPass,
                 trailingIcon = {
                     IconButton(onClick = { showPass = !showPass }) {
-                        Icon(
-                            imageVector = if (showPass) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = null,
-                            tint = TealPrimary
-                        )
+                        Icon(if (showPass) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            null, tint = TealPrimary)
                     }
-                }
-
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-
-            SugarCareTextField(
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
-                label = "Confirm Password",
-                isPassword = !showPass,
+                })
+            Spacer(Modifier.height(12.dp))
+            SugarCareTextField(value = confirmPassword, onValueChange = { confirmPassword = it },
+                label = "Confirm Password", isPassword = !showPass,
                 trailingIcon = {
                     IconButton(onClick = { showPass = !showPass }) {
-                        Icon(
-                            imageVector = if (showPass) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = null,
-                            tint = TealPrimary
-                        )
+                        Icon(if (showPass) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            null, tint = TealPrimary)
                     }
-                }
-            )
+                })
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = acceptedPolicy,
-                    onCheckedChange = { acceptedPolicy = it },
-                    colors = CheckboxDefaults.colors(checkedColor = GreenAccent)
-                )
-                Text(
-                    text = buildAnnotatedString {
-                        append("Accept ")
-                        withStyle(
-                            SpanStyle(
-                                color = TealPrimary,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        ) {
-                            append("Privacy Policy")
-                        }
-                        append(" & Registration Rules")
-                    },
-                    fontSize = 13.sp,
-                    color = TextMedium
-                )
+                Checkbox(checked = acceptedPolicy, onCheckedChange = { acceptedPolicy = it },
+                    colors = CheckboxDefaults.colors(checkedColor = GreenAccent))
+                Text(buildAnnotatedString {
+                    append("Accept ")
+                    withStyle(SpanStyle(color = TealPrimary, fontWeight = FontWeight.SemiBold)) { append("Privacy Policy") }
+                    append(" & Registration Rules")
+                }, fontSize = 13.sp, color = TextMedium)
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(Modifier.height(20.dp))
 
             SecondaryButton(
                 text = "Sign Up",
                 onClick = {
-                    coroutineScope.launch {
-                        authManager.createAccountWithEmail(email,password)
-                            .collect{ response ->
-                                if (response is AuthResponse.Success) {
-                                    onSignUpSuccess()
-                                }
-                            }
+                    scope.launch {
+                        authManager.createAccountWithEmail(email, password).collect { response ->
+                            if (response is AuthResponse.Success) onSignUpSuccess()
+                        }
                     }
                 }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
             Text(
-                text = buildAnnotatedString {
+                buildAnnotatedString {
                     append("Already have an account? ")
-                    withStyle(SpanStyle(color = TealPrimary, fontWeight = FontWeight.SemiBold)) {
-                        append("Sign In")
-                    }
+                    withStyle(SpanStyle(color = TealPrimary, fontWeight = FontWeight.SemiBold)) { append("Sign In") }
                 },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .clickable { onNavigateToSignIn() },
+                modifier = Modifier.align(Alignment.CenterHorizontally).clickable { onNavigateToSignIn() },
                 fontSize = 14.sp
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
 
-            //Social sign-up 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                SocialButton(label = "G", color = OrangeDrop, onClick = {
-                    coroutineScope.launch {
-                    authManager.signInWithGoogle()
-                        .collect{ response ->
-                            if (response is AuthResponse.Success) {
-                                onSignUpSuccess()
-                            }
+            //Social sign-up
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                SocialButton(SocialIcon.Google, "Google") {
+                    scope.launch {
+                        authManager.signInWithGoogle().collect { response ->
+                            if (response is AuthResponse.Success) onSignUpSuccess()
                         }
-                }})
-
-                    // !!! -> onClick will be added later <- !!!!
-//                SocialButton(label = "f", color = TealPrimary)
-//                SocialButton(label = "𝕏", color = TealDark)
+                    }
+                }
+                SocialButton(SocialIcon.Facebook, "Facebook") {  }
             }
         }
     }
 }
 
 
+enum class SocialIcon { Google, Facebook }
+
 @Composable
-private fun SocialButton(label: String, color: androidx.compose.ui.graphics.Color,onClick: () -> Unit) {
-    Surface(
-        shape = androidx.compose.foundation.shape.CircleShape,
-        color = color.copy(alpha = 0.12f),
-        modifier = Modifier.size(52.dp).clickable{ onClick() }
+fun SocialButton(icon: SocialIcon, label: String, onClick: () -> Unit) {
+    OutlinedButton(
+        onClick  = onClick,
+        modifier = Modifier.height(48.dp),
+        shape    = RoundedCornerShape(24.dp),
+        border   = BorderStroke(1.5.dp, if (icon == SocialIcon.Google) Color(0xFFDB4437) else Color(0xFF1877F2)),
+        colors   = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
     ) {
-        Box(contentAlignment = Alignment.Center) {
+        if (icon == SocialIcon.Google) {
             Text(
-                text = label,
-                color = color,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
+                text = buildAnnotatedString {
+                    withStyle(SpanStyle(color = Color(0xFF4285F4))) { append("G") }
+                    withStyle(SpanStyle(color = Color(0xFFDB4437))) { append("o") }
+                    withStyle(SpanStyle(color = Color(0xFFF4B400))) { append("o") }
+                    withStyle(SpanStyle(color = Color(0xFF4285F4))) { append("g") }
+                    withStyle(SpanStyle(color = Color(0xFF34A853))) { append("l") }
+                    withStyle(SpanStyle(color = Color(0xFFDB4437))) { append("e") }
+                },
+                fontWeight = FontWeight.Bold, fontSize = 16.sp
+            )
+        } else {
+         
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(SpanStyle(color = Color(0xFF1877F2), fontWeight = FontWeight.ExtraBold)) {
+                        append("f ")
+                    }
+                    withStyle(SpanStyle(color = Color(0xFF1877F2))) { append("Facebook") }
+                },
+                fontSize = 15.sp, fontWeight = FontWeight.SemiBold
             )
         }
     }
 }
 
-
-// to be removed
-
 @Preview
 @Composable
 fun SignUpScreenPreview() {
-    SugarCareTheme {
-        SignUpScreen(
-            onSignUpSuccess = {},
-            onNavigateToSignIn = {}
-        )
+    com.sugarcare.app.ui.theme.SugarCareTheme {
+        SignUpScreen(onSignUpSuccess = {}, onNavigateToSignIn = {})
     }
 }
 
 @Preview
 @Composable
 fun SignInScreenPreview() {
-    SugarCareTheme {
-        SignInScreen(
-            onSignInSuccess = {},
-            onNavigateToSignUp = {}
-        )
+    com.sugarcare.app.ui.theme.SugarCareTheme {
+        SignInScreen(onSignInSuccess = {}, onNavigateToSignUp = {})
     }
 }
-
 
 
 
