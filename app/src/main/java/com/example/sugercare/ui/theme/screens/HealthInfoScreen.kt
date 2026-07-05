@@ -15,10 +15,7 @@ import androidx.compose.ui.unit.sp
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
 
-/**
- * Health Information Screen – captures diabetic type, age, HbA1c
- * after successful sign-up before entering the main app.
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HealthInfoScreen(onSaved: () -> Unit) {
@@ -46,7 +43,7 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(36.dp))
 
-                // ── Diabetic Type dropdown ─────────────────────
+                //  Diabetic Type dropdown
                 Text(
                     text       = "Diabetic type",
                     fontWeight = FontWeight.SemiBold,
@@ -96,7 +93,7 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // ── Age field ─────────────────────────────────
+                // Age field
                 Text(
                     text       = "Age",
                     fontWeight = FontWeight.SemiBold,
@@ -112,7 +109,7 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // ── HbA1c field ───────────────────────────────
+                //  HbA1c field
                 Text(
                     text       = "HbA1c",
                     fontWeight = FontWeight.SemiBold,
@@ -127,7 +124,7 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
                 )
             }
 
-            // ── Save button ───────────────────────────────────
+            // Save button
             PrimaryButton(
                 text    = "Save Health Info",
                 onClick = onSaved,
