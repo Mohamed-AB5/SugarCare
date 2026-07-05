@@ -3,61 +3,55 @@ package com.sugarcare.app.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Medication
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Assignment
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sugarcare.app.ui.theme.*
 
-
+//Background
 @Composable
 fun SugarCareBackground(content: @Composable BoxScope.() -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundLight),
-        content = content
+            .background(MaterialTheme.colorScheme.background),
+        content  = content
     )
 }
 
+// Primary Button 
 @Composable
 fun PrimaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean   = true
 ) {
     Button(
-        onClick  = onClick,
-        enabled  = enabled,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        shape  = RoundedCornerShape(28.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = TealPrimary,
-            contentColor   = Color.White
+        onClick   = onClick,
+        enabled   = enabled,
+        modifier  = modifier.fillMaxWidth().height(56.dp),
+        shape     = RoundedCornerShape(28.dp),
+        colors    = ButtonDefaults.buttonColors(
+            containerColor         = TealPrimary,
+            contentColor           = Color.White,
+            disabledContainerColor = TealLight
         ),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp) // no shadow square
     ) {
-        Text(
-            text       = text,
-            fontWeight = FontWeight.Bold,
-            fontSize   = 18.sp
-        )
+        Text(text = text, fontWeight = FontWeight.Bold, fontSize = 18.sp)
     }
 }
 
+// ── Secondary Button — Green pill (matches "Sign Up" on Welcome)
 @Composable
 fun SecondaryButton(
     text: String,
@@ -65,25 +59,20 @@ fun SecondaryButton(
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick  = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        shape  = RoundedCornerShape(28.dp),
-        colors = ButtonDefaults.buttonColors(
+        onClick   = onClick,
+        modifier  = modifier.fillMaxWidth().height(56.dp),
+        shape     = RoundedCornerShape(28.dp),
+        colors    = ButtonDefaults.buttonColors(
             containerColor = GreenAccent,
             contentColor   = Color.White
         ),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp) // no shadow square
     ) {
-        Text(
-            text       = text,
-            fontWeight = FontWeight.Bold,
-            fontSize   = 18.sp
-        )
+        Text(text = text, fontWeight = FontWeight.Bold, fontSize = 18.sp)
     }
 }
 
+// Text Field rounded
 @Composable
 fun SugarCareTextField(
     value: String,
@@ -99,23 +88,26 @@ fun SugarCareTextField(
         androidx.compose.ui.text.input.VisualTransformation.None
 
     OutlinedTextField(
-        value            = value,
-        onValueChange    = onValueChange,
-        label            = { Text(label) },
-        modifier         = modifier.fillMaxWidth(),
-        shape            = RoundedCornerShape(16.dp),
-        singleLine       = true,
+        value                = value,
+        onValueChange        = onValueChange,
+        label                = { Text(label) },
+        modifier             = modifier.fillMaxWidth(),
+        shape                = RoundedCornerShape(28.dp),
+        singleLine           = true,
         visualTransformation = visualTransformation,
-        trailingIcon     = trailingIcon,
-        colors           = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor   = TealPrimary,
-            unfocusedBorderColor = TealLight,
-            focusedLabelColor    = TealPrimary,
-            cursorColor          = TealPrimary
+        trailingIcon         = trailingIcon,
+        colors               = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor      = TealPrimary,
+            unfocusedBorderColor    = TealLight,
+            focusedLabelColor       = TealPrimary,
+            cursorColor             = TealPrimary,
+            focusedContainerColor   = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface
         )
     )
 }
 
+//  no square shadow
 @Composable
 fun SugarCareCard(
     modifier: Modifier = Modifier,
@@ -124,51 +116,10 @@ fun SugarCareCard(
     Card(
         modifier  = modifier.fillMaxWidth(),
         shape     = RoundedCornerShape(20.dp),
-        colors    = CardDefaults.cardColors(containerColor = SurfaceWhite),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors    = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         content   = { Column(modifier = Modifier.padding(16.dp), content = content) }
     )
-}
-
-@Composable
-fun SugarCareBottomBar(
-    currentRoute: String,
-    onHome: () -> Unit,
-    onMeds: () -> Unit,
-    onTrends: () -> Unit,
-    onProfile: () -> Unit
-) {
-    NavigationBar(
-        containerColor = SurfaceWhite,
-        tonalElevation = 8.dp
-    ) {
-        NavigationBarItem(
-            selected = currentRoute == "home",
-            onClick  = onHome,
-            icon     = { Icon(androidx.compose.material.icons.Icons.Filled.Home, null) },
-            label    = { Text("Home") },
-            colors   = NavigationBarItemDefaults.colors(indicatorColor = TealLight)
-        )
-        NavigationBarItem(
-            selected = currentRoute == "medications",
-            onClick  = onMeds,
-            icon     = { Icon(androidx.compose.material.icons.Icons.Filled.Medication, null) },
-            label    = { Text("Meds") },
-            colors   = NavigationBarItemDefaults.colors(indicatorColor = TealLight)
-        )
-        NavigationBarItem(
-            selected = currentRoute == "weekly_analytics",
-            onClick  = onTrends,
-            icon     = { Icon(androidx.compose.material.icons.Icons.Filled.BarChart, null) },
-            label    = { Text("Trends") },
-            colors   = NavigationBarItemDefaults.colors(indicatorColor = TealLight)
-        )
-        NavigationBarItem(
-            selected = currentRoute == "profile",
-            onClick  = onProfile,
-            icon     = { Icon(androidx.compose.material.icons.Icons.Filled.Person, null) },
-            label    = { Text("Profile") },
-            colors   = NavigationBarItemDefaults.colors(indicatorColor = TealLight)
-        )
-    }
 }
