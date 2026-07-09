@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,8 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.sugercare1.navigation.Screen
-import com.sugarcare.app.ui.components.SugarCareBackground
-import com.sugarcare.app.ui.components.SugarCareCard
+import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
 
 data class MealItem(val type: String, val name: String)
@@ -47,17 +47,22 @@ fun MealPlanScreen(navController: NavHostController) {
             ) {
                 Text("Your Personalized\nMeal Plan",
                     style = MaterialTheme.typography.headlineMedium,
-                    color = TealDark, fontWeight = FontWeight.Bold,
+                   
+                    color = MaterialTheme.colorScheme.onBackground, 
+                    fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center)
 
                 Spacer(Modifier.height(16.dp))
 
-                Button(onClick = {},
-                    modifier = Modifier.fillMaxWidth(0.8f).height(52.dp),
-                    shape = RoundedCornerShape(26.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = GreenAccent),
-                    elevation = ButtonDefaults.buttonElevation(0.dp)
-                ) { Text("Add Reading", fontWeight = FontWeight.Bold, fontSize = 16.sp) }
+                
+                SugarCareGradientButton(
+                    text = "Add Reading",
+                    gradientColors = listOf(Color(0xFF65B96E), Color(0xFF9DF0A5)),
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                    onClick = { 
+                    navController.navigate(Screen.Logs.route)
+                    }
+                )
             }
 
             Column(
