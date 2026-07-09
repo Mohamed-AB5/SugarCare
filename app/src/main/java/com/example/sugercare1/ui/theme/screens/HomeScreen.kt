@@ -35,6 +35,11 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import android.Manifest
+import android.os.Build
+import com.sugarcare.app.utils.scheduleMedicationNotification
 
 fun scheduleMedicationNotification(context: Context, isEnabled: Boolean, medName: String) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -63,6 +68,16 @@ fun scheduleMedicationNotification(context: Context, isEnabled: Boolean, medName
 @Composable
 fun HomeScreen(navController: NavHostController) {
     val context = LocalContext.current
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        
+    }
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
     var insulinEnabled   by remember { mutableStateOf(true) }
     var metforminEnabled by remember { mutableStateOf(true) }
     var notifEnabled     by remember { mutableStateOf(false) }
