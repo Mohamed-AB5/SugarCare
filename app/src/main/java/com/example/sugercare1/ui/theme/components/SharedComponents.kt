@@ -123,3 +123,19 @@ fun SugarCareCard(
         content   = { Column(modifier = Modifier.padding(16.dp), content = content) }
     )
 }
+@Composable
+fun SugarCareButton(text: String, onClick: () -> Unit) {
+    androidx.compose.material3.Button(
+        onClick = onClick,
+        modifier = androidx.compose.ui.Modifier
+            .androidx.compose.foundation.layout.fillMaxWidth()
+            .androidx.compose.foundation.layout.height(50.dp),
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+            containerColor = androidx.compose.ui.graphics.Color(0xFF4CAF50), 
+            contentColor = androidx.compose.ui.graphics.Color.White
+        )
+    ) {
+        androidx.compose.material3.Text(text = text)
+    }
+}
