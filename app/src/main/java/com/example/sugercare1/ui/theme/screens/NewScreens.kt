@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.sugercare1.navigation.Screen
+import com.sugarcare.app.ui.components.* // استدعاء مكوناتنا
 import com.sugarcare.app.ui.theme.*
 import kotlinx.coroutines.delay
 
@@ -118,15 +119,19 @@ fun ForgotPasswordScreen(navController: NavHostController) {
                     unfocusedContainerColor = MaterialTheme.colorScheme.surface)
             )
             Spacer(Modifier.height(28.dp))
-            Button(onClick = { isLoading = true; navController.navigate(Screen.ForgotPasswordCode.route) },
-                modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(28.dp),
-                enabled = email.isNotBlank() && !isLoading,
-                colors = ButtonDefaults.buttonColors(containerColor = TealPrimary),
-                elevation = ButtonDefaults.buttonElevation(0.dp)
-            ) {
-                if (isLoading) CircularProgressIndicator(color = Color.White, modifier = Modifier.size(22.dp), strokeWidth = 2.dp)
-                else Text("Send Code", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            }
+            
+         
+            SugarCareGradientButton(
+                text = if (isLoading) "Sending..." else "Send Code",
+                gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
+                onClick = { 
+                    if (email.isNotBlank() && !isLoading) {
+                        isLoading = true
+                        navController.navigate(Screen.ForgotPasswordCode.route) 
+                    }
+                }
+            )
+            
             Spacer(Modifier.height(20.dp))
             Text("← Back to Sign In", color = TealPrimary, fontSize = 14.sp, fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.clickable { navController.popBackStack() })
@@ -206,11 +211,17 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
                     modifier = if (timer == 0) Modifier.clickable { resent = !resent } else Modifier)
             }
             Spacer(Modifier.height(28.dp))
-            Button(onClick = { navController.navigate(Screen.Home.route) { popUpTo(Screen.Welcome.route) { inclusive = true } } },
-                modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(28.dp),
-                enabled = allFilled, colors = ButtonDefaults.buttonColors(containerColor = TealPrimary),
-                elevation = ButtonDefaults.buttonElevation(0.dp)
-            ) { Text("Verify & Sign In", fontWeight = FontWeight.Bold, fontSize = 16.sp) }
+            
+            // تم تعديل الزرار
+            SugarCareGradientButton(
+                text = "Verify & Sign In",
+                gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
+                onClick = { 
+                    if (allFilled) {
+                        navController.navigate(Screen.Home.route) { popUpTo(Screen.Welcome.route) { inclusive = true } } 
+                    }
+                }
+            )
         }
     }
 }
@@ -333,25 +344,22 @@ fun CompleteProfileScreen(navController: NavHostController) {
             }
             Spacer(Modifier.height(28.dp))
 
-            Button(onClick = { navController.popBackStack() },
-                modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(28.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = TealPrimary),
-                elevation = ButtonDefaults.buttonElevation(0.dp)
-            ) {
-                Icon(Icons.Filled.Save, null, modifier = Modifier.size(20.dp))
-                Spacer(Modifier.width(8.dp))
-                Text("Save Changes", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            }
+            
+            SugarCareGradientButton(
+                text = "Save Changes",
+                gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
+                onClick = { navController.popBackStack() }
+            )
+            
             Spacer(Modifier.height(12.dp))
-            Button(onClick = { navController.navigate(Screen.SignIn.route) { popUpTo(Screen.Welcome.route) { inclusive = true } } },
-                modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(28.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = GreenAccent),
-                elevation = ButtonDefaults.buttonElevation(0.dp)
-            ) {
-                Icon(Icons.Filled.SwitchAccount, null)
-                Spacer(Modifier.width(8.dp))
-                Text("Switch Account", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-            }
+            
+            
+            SugarCareGradientButton(
+                text = "Switch Account",
+                gradientColors = listOf(Color(0xFF65B96E), Color(0xFF9DF0A5)),
+                onClick = { navController.navigate(Screen.SignIn.route) { popUpTo(Screen.Welcome.route) { inclusive = true } } }
+            )
+            
             Spacer(Modifier.height(12.dp))
             OutlinedButton(onClick = { showLogout = true },
                 modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(28.dp),
