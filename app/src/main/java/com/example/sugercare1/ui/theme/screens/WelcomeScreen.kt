@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,8 +33,7 @@ fun WelcomeScreen(
             verticalArrangement   = Arrangement.Center,
             horizontalAlignment   = Alignment.CenterHorizontally
         ) {
-            // ── Logo ──────────────────────────────────────────
-            // Replace R.drawable.ic_logo with your actual vector asset
+            
             Image(
                 painter            = painterResource(id = R.drawable.ic_logo),
                 contentDescription = "SugarCare logo",
@@ -42,7 +42,6 @@ fun WelcomeScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // ── App name ──────────────────────────────────────
             Text(
                 text       = "Sugar",
                 color      = TealPrimary,
@@ -78,12 +77,20 @@ fun WelcomeScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // ── CTA buttons ───────────────────────────────────
-            PrimaryButton(text = "Sign In", onClick = onSignIn)
+            
+            SugarCareGradientButton(
+                text = "Sign In",
+                gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
+                onClick = onSignIn
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            SecondaryButton(text = "Sign Up", onClick = onSignUp)
+            SugarCareGradientButton(
+                text = "Sign Up",
+                gradientColors = listOf(Color(0xFF65B96E), Color(0xFF9DF0A5)),
+                onClick = onSignUp
+            )
         }
     }
 }
