@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.sugercare1.navigation.Screen
+import com.sugarcare.app.ui.theme.* 
 import kotlinx.coroutines.delay
 
 @Composable
@@ -40,12 +41,9 @@ fun SplashScreen(navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
             .background(
+                
                 Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF1F7A7A),
-                        Color(0xFF2E9B9B),
-                        Color(0xFFB2DFDB)
-                    )
+                    colors = listOf(TealPrimary, TealDark, GreenAccent.copy(alpha = 0.8f))
                 )
             ),
         contentAlignment = Alignment.Center
@@ -64,13 +62,13 @@ fun SplashScreen(navController: NavHostController) {
                 Icon(
                     Icons.Filled.Favorite,
                     contentDescription = null,
-                    tint     = Color.White,
+                    tint   = Color.White,
                     modifier = Modifier.size(64.dp)
                 )
             }
             Spacer(Modifier.height(24.dp))
             Text("Sugar", fontSize = 42.sp, fontWeight = FontWeight.Bold, color = Color.White)
-            Text("Care",  fontSize = 42.sp, fontWeight = FontWeight.Bold, color = Color(0xFFB2DFDB))
+            Text("Care",  fontSize = 42.sp, fontWeight = FontWeight.Bold, color = GreenAccent)
             Spacer(Modifier.height(8.dp))
             Text(
                 "Your Path to Healthy Living",
