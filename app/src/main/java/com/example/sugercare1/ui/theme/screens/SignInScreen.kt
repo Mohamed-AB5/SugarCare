@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color 
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -17,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
-import kotlin.text.isNotBlank
 
 @Composable
 fun SignInScreen(
@@ -92,10 +92,16 @@ fun SignInScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            PrimaryButton(
-                text    = "Sign in",
-                onClick = onSignInSuccess,
-                enabled = email.isNotBlank() && password.isNotBlank()
+        
+            SugarCareGradientButton(
+                text = "Sign in",
+                gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
+                onClick = {
+                    
+                    if (email.isNotBlank() && password.isNotBlank()) {
+                        onSignInSuccess()
+                    }
+                }
             )
 
             Spacer(Modifier.height(20.dp))
