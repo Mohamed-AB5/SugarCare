@@ -3,7 +3,6 @@ package com.sugarcare.app.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -14,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sugercare1.Authentication.AuthManager
 import com.example.sugercare1.Authentication.AuthResponse
+import com.example.sugercare1.R // تأكدي إن ده مسار الـ R بتاع مشروعك
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
 import kotlinx.coroutines.launch
@@ -33,7 +34,7 @@ fun SignInScreen(
     onSignInSuccess: () -> Unit,
     onNavigateToSignUp: () -> Unit
 ) {
-    var email     by remember { mutableStateOf("") }
+    var email      by remember { mutableStateOf("") }
     var password  by remember { mutableStateOf("") }
     var showPass  by remember { mutableStateOf(false) }
     var rememberMe by remember { mutableStateOf(false) }
@@ -79,8 +80,10 @@ fun SignInScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            PrimaryButton(
-                text = "Sign in", enabled = email.isNotBlank() && password.isNotBlank(),
+           
+            SugarCareGradientButton(
+                text = "Sign in",
+                gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
                 onClick = {
                     scope.launch {
                         authManager.loginWithEmail(email, password).collect { response ->
@@ -204,8 +207,10 @@ fun SignUpScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            SecondaryButton(
+        
+            SugarCareGradientButton(
                 text = "Sign Up",
+                gradientColors = listOf(Color(0xFF65B96E), Color(0xFF9DF0A5)),
                 onClick = {
                     scope.launch {
                         authManager.createAccountWithEmail(email, password).collect { response ->
@@ -243,7 +248,6 @@ fun SignUpScreen(
     }
 }
 
-
 enum class SocialIcon { Google, Facebook }
 
 @Composable
@@ -252,32 +256,27 @@ fun SocialButton(icon: SocialIcon, label: String, onClick: () -> Unit) {
         onClick  = onClick,
         modifier = Modifier.height(48.dp),
         shape    = RoundedCornerShape(24.dp),
-        border   = BorderStroke(1.5.dp, if (icon == SocialIcon.Google) Color(0xFFDB4437) else Color(0xFF1877F2)),
+        border   = BorderStroke(1.5.dp, Color(0xFFE0E0E0)),
         colors   = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
     ) {
         if (icon == SocialIcon.Google) {
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(SpanStyle(color = Color(0xFF4285F4))) { append("G") }
-                    withStyle(SpanStyle(color = Color(0xFFDB4437))) { append("o") }
-                    withStyle(SpanStyle(color = Color(0xFFF4B400))) { append("o") }
-                    withStyle(SpanStyle(color = Color(0xFF4285F4))) { append("g") }
-                    withStyle(SpanStyle(color = Color(0xFF34A853))) { append("l") }
-                    withStyle(SpanStyle(color = Color(0xFFDB4437))) { append("e") }
-                },
-                fontWeight = FontWeight.Bold, fontSize = 16.sp
+            Icon(
+                painter = painterResource(id = R.drawable.ic_google), 
+                contentDescription = "Google Logo",
+                modifier = Modifier.size(24.dp),
+                tint = Color.Unspecified 
             )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Google", color = Color.Black, fontWeight = FontWeight.SemiBold)
         } else {
-         
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(SpanStyle(color = Color(0xFF1877F2), fontWeight = FontWeight.ExtraBold)) {
-                        append("f ")
-                    }
-                    withStyle(SpanStyle(color = Color(0xFF1877F2))) { append("Facebook") }
-                },
-                fontSize = 15.sp, fontWeight = FontWeight.SemiBold
+            Icon(
+                painter = painterResource(id = R.drawable.ic_facebook),
+                contentDescription = "Facebook Logo",
+                modifier = Modifier.size(24.dp),
+                tint = Color.Unspecified
             )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Facebook", color = Color.Black, fontWeight = FontWeight.SemiBold)
         }
     }
 }
@@ -297,8 +296,4 @@ fun SignInScreenPreview() {
         SignInScreen(onSignInSuccess = {}, onNavigateToSignUp = {})
     }
 }
-
-
-
-
 
