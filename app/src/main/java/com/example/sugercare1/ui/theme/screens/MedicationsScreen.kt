@@ -16,8 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.sugercare1.navigation.Screen
-import com.sugarcare.app.ui.components.SugarCareBackground
-import com.sugarcare.app.ui.components.SugarCareCard
+import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
 
 data class Medication(val name: String, var taken: Boolean = true)
@@ -73,17 +72,13 @@ fun MedicationsScreen(navController: NavHostController) {
                     if (index < medications.lastIndex) Spacer(Modifier.height(8.dp))
                 }
                 Spacer(Modifier.height(16.dp))
-                Button(
-                    onClick  = { medications = medications + Medication("New Medication", false) },
-                    modifier = Modifier.fillMaxWidth().height(52.dp),
-                    shape    = RoundedCornerShape(26.dp),
-                    colors   = ButtonDefaults.buttonColors(containerColor = TealPrimary),
-                    elevation = ButtonDefaults.buttonElevation(0.dp)
-                ) {
-                    Text("Add medication", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    Spacer(Modifier.width(8.dp))
-                    Icon(Icons.Filled.Add, null)
-                }
+                
+                
+                SugarCareGradientButton(
+                    text = "Add Medication",
+                    gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
+                    onClick = { medications = medications + Medication("New Medication", false) }
+                )
             }
 
             Spacer(Modifier.weight(1f))
