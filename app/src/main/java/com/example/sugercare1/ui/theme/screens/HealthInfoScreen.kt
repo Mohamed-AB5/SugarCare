@@ -7,12 +7,12 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -121,11 +121,15 @@ fun HealthInfoScreen(onSaved: () -> Unit) {
                 )
             }
 
-            // Save button
-            PrimaryButton(
+            
+            SugarCareGradientButton(
                 text    = "Save Health Info",
-                onClick = onSaved,
-                enabled = selectedType.isNotEmpty() && age.isNotEmpty() && hba1c.isNotEmpty()
+                gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
+                onClick = {
+                    if (selectedType.isNotEmpty() && age.isNotEmpty() && hba1c.isNotEmpty()) {
+                        onSaved()
+                    }
+                }
             )
         }
     }
