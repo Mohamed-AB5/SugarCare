@@ -10,13 +10,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sugarcare.app.ui.theme.*
 
-//Background
+// Background
 @Composable
 fun SugarCareBackground(content: @Composable BoxScope.() -> Unit) {
     Box(
@@ -51,7 +52,7 @@ fun PrimaryButton(
     }
 }
 
-// ── Secondary Button — Green pill (matches "Sign Up" on Welcome)
+// Secondary Button — Green pill (matches "Sign Up" on Welcome)
 @Composable
 fun SecondaryButton(
     text: String,
@@ -69,6 +70,45 @@ fun SecondaryButton(
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp) // no shadow square
     ) {
         Text(text = text, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+    }
+}
+
+// Gradient Button 
+@Composable
+fun SugarCareGradientButton(
+    text: String,
+    gradientColors: List<Color>,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent
+        ),
+        contentPadding = PaddingValues(0.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .background(
+                    brush = Brush.horizontalGradient(colors = gradientColors),
+                    shape = RoundedCornerShape(28.dp)
+                )
+                .fillMaxWidth()
+                .height(56.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = text,
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
@@ -107,7 +147,7 @@ fun SugarCareTextField(
     )
 }
 
-//  no square shadow
+// no square shadow
 @Composable
 fun SugarCareCard(
     modifier: Modifier = Modifier,
@@ -122,20 +162,4 @@ fun SugarCareCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         content   = { Column(modifier = Modifier.padding(16.dp), content = content) }
     )
-}
-@Composable
-fun SugarCareButton(text: String, onClick: () -> Unit) {
-    androidx.compose.material3.Button(
-        onClick = onClick,
-        modifier = androidx.compose.ui.Modifier
-            .androidx.compose.foundation.layout.fillMaxWidth()
-            .androidx.compose.foundation.layout.height(50.dp),
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
-        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-            containerColor = androidx.compose.ui.graphics.Color(0xFF4CAF50), 
-            contentColor = androidx.compose.ui.graphics.Color.White
-        )
-    ) {
-        androidx.compose.material3.Text(text = text)
-    }
 }
