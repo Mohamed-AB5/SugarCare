@@ -18,7 +18,6 @@ import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.theme.*
 import kotlin.collections.forEach
 
-
 @Composable
 fun LogsScreen(navController: NavHostController) {
     PlaceholderScreen(
@@ -30,7 +29,8 @@ fun LogsScreen(navController: NavHostController) {
 
 @Composable
 fun SugarCareBottomNavBar(navController: NavHostController, currentRoute: String) {
-    NavigationBar(containerColor = Color.White, tonalElevation = 8.dp) {
+  
+    NavigationBar(containerColor = MaterialTheme.colorScheme.surface, tonalElevation = 8.dp) {
         listOf(
             Triple("Home", Icons.Filled.Home, Screen.Home.route),
             Triple("Logs", Icons.AutoMirrored.Filled.Assignment, Screen.Logs.route),
@@ -80,7 +80,3 @@ private fun PlaceholderScreen(
                     Text("Coming soon…", color = TextMedium, fontSize = 14.sp)
                 }
             }
-            SugarCareBottomNavBar(navController, currentRoute)
-        }
-    }
-}
