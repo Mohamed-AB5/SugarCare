@@ -62,6 +62,7 @@ fun scheduleMedicationNotification(context: Context, isEnabled: Boolean, medName
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavHostController) {
+    val context = LocalContext.current
     var insulinEnabled   by remember { mutableStateOf(true) }
     var metforminEnabled by remember { mutableStateOf(true) }
     var notifEnabled     by remember { mutableStateOf(false) }
@@ -351,9 +352,18 @@ private fun DashboardCard(modifier: Modifier, title: String, subtitle: String, i
 }
 
 @Composable
-private fun MedToggleRow(label: String, checked: Boolean, onToggle: (Boolean) -> Unit) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-        Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface)
-        Switch(checked = checked, onCheckedChange = onToggle, colors = SwitchDefaults.colors(checkedThumbColor = TealPrimary, checkedTrackColor = TealLight))
-    }
+MedToggleRow("Insulin", insulinEnabled) { checked ->
+    insulinEnabled = checked
+    scheduleMedicationNotification(context, checked, "Insulin")
+}
+
+MedToggleRow("Metformin", metforminEnabled) { checked ->
+    metforminEnabled = checked
+    scheduleMedicationNotification(context, checked, "Metformin")
+}
+
+MedToggleRow("Notifications", notifEnabled) { checked ->
+    notifEnabled = checked
+    
+}
 }
