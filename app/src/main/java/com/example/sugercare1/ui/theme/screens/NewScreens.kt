@@ -120,7 +120,7 @@ fun ForgotPasswordScreen(navController: NavHostController) {
             )
             Spacer(Modifier.height(28.dp))
             
-         
+           
             SugarCareGradientButton(
                 text = if (isLoading) "Sending..." else "Send Code",
                 gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
@@ -212,7 +212,7 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
             }
             Spacer(Modifier.height(28.dp))
             
-            // تم تعديل الزرار
+
             SugarCareGradientButton(
                 text = "Verify & Sign In",
                 gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
@@ -231,17 +231,24 @@ fun ForgotPasswordCodeScreen(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CompleteProfileScreen(navController: NavHostController) {
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CompleteProfileScreen(
+    navController: NavHostController, 
+    isDark: Boolean,           
+    onToggleTheme: () -> Unit  
+) {
     var fullName   by remember { mutableStateOf("") }
     var phone      by remember { mutableStateOf("") }
     var dob        by remember { mutableStateOf("") }
     var gender     by remember { mutableStateOf("") }
     var showLogout by remember { mutableStateOf(false) }
     var showGender by remember { mutableStateOf(false) }
-    var isDark     by remember { mutableStateOf(false) }
+    
 
     if (showLogout) {
-        AlertDialog(onDismissRequest = { showLogout = false },
+        AlertDialog(
+            onDismissRequest = { showLogout = false },
             icon = { Icon(Icons.AutoMirrored.Filled.Logout, null, tint = Color.Red) },
             title = { Text("Log Out", fontWeight = FontWeight.Bold) },
             text = { Text("Are you sure you want to log out?") },
@@ -275,21 +282,7 @@ fun CompleteProfileScreen(navController: NavHostController) {
                 .verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Profile picture
-            Box(contentAlignment = Alignment.BottomEnd) {
-                Box(Modifier.size(108.dp).clip(CircleShape).background(TealLight).border(3.dp, TealPrimary, CircleShape),
-                    contentAlignment = Alignment.Center) {
-                    Icon(Icons.Filled.Person, null, tint = TealPrimary, modifier = Modifier.size(60.dp))
-                }
-                Box(Modifier.size(34.dp).clip(CircleShape).background(GreenAccent).clickable { },
-                    contentAlignment = Alignment.Center) {
-                    Icon(Icons.Filled.CameraAlt, null, tint = Color.White, modifier = Modifier.size(18.dp))
-                }
-            }
-            Spacer(Modifier.height(6.dp))
-            Text("Tap camera to change photo", fontSize = 12.sp, color = TextMedium)
-            Spacer(Modifier.height(20.dp))
-
+            
             // Dark Mode toggle
             Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -303,64 +296,28 @@ fun CompleteProfileScreen(navController: NavHostController) {
                         Spacer(Modifier.width(12.dp))
                         Text("Dark Mode", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
                     }
-                    Switch(checked = isDark, onCheckedChange = { isDark = it },
-                        colors = SwitchDefaults.colors(checkedThumbColor = Color.White, checkedTrackColor = TealPrimary))
+                    Switch(
+                        checked = isDark, 
+                        onCheckedChange = { onToggleTheme() },
+                        colors = SwitchDefaults.colors(checkedThumbColor = Color.White, checkedTrackColor = TealPrimary)
+                    )
                 }
             }
             Spacer(Modifier.height(20.dp))
 
-            Text("Personal Details", fontSize = 14.sp, fontWeight = FontWeight.SemiBold,
-                color = TealDark, modifier = Modifier.fillMaxWidth())
-            Spacer(Modifier.height(12.dp))
+            
             ProfileField(fullName, { fullName = it }, "Full Name", Icons.Filled.Person)
             Spacer(Modifier.height(12.dp))
-            ProfileField(phone, { phone = it }, "Phone Number", Icons.Filled.Phone,
-                androidx.compose.ui.text.input.KeyboardType.Phone)
+            ProfileField(phone, { phone = it }, "Phone Number", Icons.Filled.Phone, androidx.compose.ui.text.input.KeyboardType.Phone)
             Spacer(Modifier.height(12.dp))
             ProfileField(dob, { dob = it }, "Date of Birth (DD/MM/YYYY)", Icons.Filled.CalendarToday)
-            Spacer(Modifier.height(12.dp))
-
-            ExposedDropdownMenuBox(expanded = showGender, onExpandedChange = { showGender = it }) {
-                OutlinedTextField(value = gender, onValueChange = {}, readOnly = true,
-                    label = { Text("Gender") },
-                    leadingIcon = { Icon(Icons.Filled.Wc, null, tint = TealPrimary) },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = showGender) },
-                    modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable),
-                    shape = RoundedCornerShape(28.dp), colors = profileFieldColors()
-                )
-                ExposedDropdownMenu(expanded = showGender, onDismissRequest = { showGender = false },
-                    modifier = Modifier.background(MaterialTheme.colorScheme.surface)
-                ) {
-                    listOf("Male", "Female", "Prefer not to say").forEach { opt ->
-                        DropdownMenuItem(
-                            text = { Text(opt, color = MaterialTheme.colorScheme.onSurface, fontSize = 15.sp,
-                                fontWeight = if (opt == gender) FontWeight.SemiBold else FontWeight.Normal) },
-                            onClick = { gender = opt; showGender = false },
-                            modifier = Modifier.background(
-                                if (opt == gender) TealLight.copy(alpha = 0.3f) else MaterialTheme.colorScheme.surface)
-                        )
-                    }
-                }
-            }
             Spacer(Modifier.height(28.dp))
 
-            
-            SugarCareGradientButton(
-                text = "Save Changes",
-                gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
-                onClick = { navController.popBackStack() }
-            )
-            
+            SugarCareGradientButton(text = "Save Changes", gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)), onClick = { navController.popBackStack() })
+            Spacer(Modifier.height(12.dp))
+            SugarCareGradientButton(text = "Switch Account", gradientColors = listOf(Color(0xFF65B96E), Color(0xFF9DF0A5)), onClick = { navController.navigate(Screen.SignIn.route) { popUpTo(Screen.Welcome.route) { inclusive = true } } })
             Spacer(Modifier.height(12.dp))
             
-            
-            SugarCareGradientButton(
-                text = "Switch Account",
-                gradientColors = listOf(Color(0xFF65B96E), Color(0xFF9DF0A5)),
-                onClick = { navController.navigate(Screen.SignIn.route) { popUpTo(Screen.Welcome.route) { inclusive = true } } }
-            )
-            
-            Spacer(Modifier.height(12.dp))
             OutlinedButton(onClick = { showLogout = true },
                 modifier = Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(28.dp),
                 border = androidx.compose.foundation.BorderStroke(1.5.dp, Color(0xFFE53935))
@@ -369,11 +326,9 @@ fun CompleteProfileScreen(navController: NavHostController) {
                 Spacer(Modifier.width(8.dp))
                 Text("Log Out", color = Color(0xFFE53935), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
             }
-            Spacer(Modifier.height(16.dp))
         }
     }
 }
-
 @Composable
 private fun ProfileField(
     value: String, onValueChange: (String) -> Unit, label: String,
