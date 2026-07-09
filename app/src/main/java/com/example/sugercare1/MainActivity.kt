@@ -16,6 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        createNotificationChannel()
         setContent {
        
             val darkThemeState = remember { mutableStateOf(false) }
@@ -29,7 +30,15 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+            
         }
     }
+    private fun createNotificationChannel() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val channel = NotificationChannel("sugar_care_channel", "SugarCare Reminders", NotificationManager.IMPORTANCE_HIGH)
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+}
 }
 
