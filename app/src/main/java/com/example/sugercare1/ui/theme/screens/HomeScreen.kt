@@ -30,6 +30,34 @@ import com.example.sugercare1.navigation.Screen
 import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.components.SugarCareTextField
 import com.sugarcare.app.ui.theme.*
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.SystemClock
+
+fun scheduleMedicationNotification(context: Context, isEnabled: Boolean, medName: String) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    val intent = Intent(context, NotificationReceiver::class.java).apply {
+        putExtra("med_name", medName)
+    }
+    val pendingIntent = PendingIntent.getBroadcast(
+        context, medName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    if (isEnabled) {
+        
+        alarmManager.setRepeating(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime() + 60000, 
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    } else {
+        alarmManager.cancel(pendingIntent)
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
