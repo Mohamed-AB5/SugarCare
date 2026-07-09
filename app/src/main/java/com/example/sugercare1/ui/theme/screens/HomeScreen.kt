@@ -1,5 +1,8 @@
 package com.sugarcare.app.ui.screens
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -14,14 +17,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.sugercare1.navigation.Screen
 import com.sugarcare.app.ui.components.SugarCareBackground
+import com.sugarcare.app.ui.components.SugarCareTextField
 import com.sugarcare.app.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,12 +37,28 @@ fun HomeScreen(navController: NavHostController) {
     var insulinEnabled   by remember { mutableStateOf(true) }
     var metforminEnabled by remember { mutableStateOf(true) }
     var notifEnabled     by remember { mutableStateOf(false) }
+    var isDarkTheme      by remember { mutableStateOf(false) }
+    
+    val context = LocalContext.current
 
-    SugarCareBackground {
-        Column(modifier = Modifier.fillMaxSize()) {
+    
+    val sharedPref = remember { context.getSharedPreferences("EmergencyPrefs", Context.MODE_PRIVATE) }
+    
+    
+    var savedName by remember { mutableStateOf(sharedPref.getString("em_name", "") ?: "") }
+    var savedRelation by remember { mutableStateOf(sharedPref.getString("em_relation", "") ?: "") }
+    var savedPhone by remember { mutableStateOf(sharedPref.getString("em_phone", "123") ?: "123") }
 
+    
+    var showEmergencyMenu by remember { mutableStateOf(false) }
+    var showEditContactDialog by remember { mutableStateOf(false) }
+
+    Scaffold(
+        topBar = {
             TopAppBar(
-                title = { Text("Sugar Care", fontWeight = FontWeight.Bold, color = TealDark) },
+                title = { 
+                    Text("Sugar Care", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) 
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
                         Box(
@@ -45,19 +68,40 @@ fun HomeScreen(navController: NavHostController) {
                     }
                 },
                 actions = {
+                    Switch(
+                        checked = isDarkTheme,
+                        onCheckedChange = { isDarkTheme = it },
+                        modifier = Modifier.scale(0.8f)
+                    )
                     IconButton(onClick = { navController.navigate(Screen.Notifications.route) }) {
-                        BadgedBox(badge = {
-                            Badge(containerColor = OrangeDrop) { Text("3", fontSize = 9.sp) }
-                        }) {
+                        BadgedBox(badge = { Badge(containerColor = OrangeDrop) { Text("3", fontSize = 9.sp) } }) {
                             Icon(Icons.Filled.Notifications, null, tint = OrangeDrop)
                         }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
-
+        },
+        bottomBar = { BottomNavBar(navController, Screen.Home.route) },
+        floatingActionButton = {
+           
+            FloatingActionButton(
+                onClick = { showEmergencyMenu = true },
+                containerColor = Color.Red,
+                contentColor = Color.White,
+                shape = CircleShape
+            ) {
+                Icon(Icons.Filled.Warning, contentDescription = "Emergency")
+            }
+        }
+    ) { paddingValues ->
+        SugarCareBackground {
             Column(
-                modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -88,14 +132,12 @@ fun HomeScreen(navController: NavHostController) {
                             Spacer(Modifier.height(8.dp))
                             Text("Average: 12.20", fontSize = 12.sp, color = TextMedium)
                             Spacer(Modifier.height(8.dp))
-                            Button(
-                                onClick = { navController.navigate(Screen.WeeklyAnalytics.route) },
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(20.dp),
-                                colors = ButtonDefaults.buttonColors(containerColor = GreenAccent),
-                                elevation = ButtonDefaults.buttonElevation(0.dp),
-                                contentPadding = PaddingValues(4.dp)
-                            ) { Text("Analyze Trends", fontSize = 11.sp) }
+                            
+                            SmallGradientButton(
+                                text = "Analyze Trends",
+                                gradientColors = listOf(Color(0xFF65B96E), Color(0xFF9DF0A5)),
+                                onClick = { navController.navigate(Screen.WeeklyAnalytics.route) }
+                            )
                         }
                     }
 
@@ -112,24 +154,127 @@ fun HomeScreen(navController: NavHostController) {
                             MedToggleRow("Metformin",     metforminEnabled) { metforminEnabled = it }
                             MedToggleRow("Notifications", notifEnabled)     { notifEnabled     = it }
                             Spacer(Modifier.height(8.dp))
-                            Button(
-                                onClick = { navController.navigate(Screen.Medications.route) },
-                                modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(20.dp),
-                                colors = ButtonDefaults.buttonColors(containerColor = GreenAccent),
-                                elevation = ButtonDefaults.buttonElevation(0.dp),
-                                contentPadding = PaddingValues(4.dp)
-                            ) { Text("Set Notifications", fontSize = 11.sp) }
+                            
+                            SmallGradientButton(
+                                text = "Set Notifications",
+                                gradientColors = listOf(Color(0xFF3B9E9E), Color(0xFF7FE3E1)),
+                                onClick = { navController.navigate(Screen.Medications.route) }
+                            )
                         }
                     }
                 }
             }
-
-            BottomNavBar(navController, Screen.Home.route)
         }
+    }
+
+   
+    if (showEmergencyMenu) {
+        AlertDialog(
+            onDismissRequest = { showEmergencyMenu = false },
+            title = { Text("Emergency Action", fontWeight = FontWeight.Bold, color = Color.Red) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                   
+                    Button(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:123"))
+                            context.startActivity(intent)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                    ) {
+                        Icon(Icons.Filled.LocalHospital, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
+                        Text("Call Ambulance (123)")
+                    }
+
+               
+                    if (savedName.isNotEmpty()) {
+                        Button(
+                            onClick = {
+                                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$savedPhone"))
+                                context.startActivity(intent)
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = TealPrimary)
+                        ) {
+                            Icon(Icons.Filled.Phone, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
+                            Text("Call $savedName ($savedRelation)")
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { 
+                    showEmergencyMenu = false
+                    showEditContactDialog = true 
+                }) {
+                    Text(if (savedName.isEmpty()) "Add Contact" else "Edit Contact", color = TealPrimary)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEmergencyMenu = false }) { Text("Cancel", color = TextMedium) }
+            }
+        )
+    }
+
+    
+    if (showEditContactDialog) {
+    
+        var inputName by remember { mutableStateOf(savedName) }
+        var inputRelation by remember { mutableStateOf(savedRelation) }
+        var inputPhone by remember { mutableStateOf(if (savedPhone == "123") "" else savedPhone) }
+
+        AlertDialog(
+            onDismissRequest = { showEditContactDialog = false },
+            title = { Text("Personal Emergency Contact") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    SugarCareTextField(value = inputName, onValueChange = { inputName = it }, label = "Contact Name (e.g. Ali)")
+                    SugarCareTextField(value = inputRelation, onValueChange = { inputRelation = it }, label = "Relation (e.g. Brother)")
+                    SugarCareTextField(value = inputPhone, onValueChange = { inputPhone = it }, label = "Phone Number")
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        
+                        savedName = inputName
+                        savedRelation = inputRelation
+                        savedPhone = inputPhone.ifEmpty { "123" }
+
+                        with(sharedPref.edit()) {
+                            putString("em_name", savedName)
+                            putString("em_relation", savedRelation)
+                            putString("em_phone", savedPhone)
+                            apply() 
+                        }
+                        showEditContactDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = TealPrimary)
+                ) { Text("Save") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEditContactDialog = false }) { Text("Cancel", color = TextMedium) }
+            }
+        )
     }
 }
 
+@Composable
+fun SmallGradientButton(text: String, gradientColors: List<Color>, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth().height(36.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+        contentPadding = PaddingValues(0.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+    ) {
+        Box(
+            modifier = Modifier.background(Brush.horizontalGradient(colors = gradientColors), RoundedCornerShape(20.dp)).fillMaxWidth().fillMaxHeight(),
+            contentAlignment = Alignment.Center
+        ) { Text(text = text, color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold) }
+    }
+}
 
 @Composable
 fun BottomNavBar(navController: NavHostController, currentRoute: String) {
@@ -166,30 +311,13 @@ fun BottomNavBar(navController: NavHostController, currentRoute: String) {
 }
 
 @Composable
-private fun DashboardCard(
-    modifier: Modifier, title: String, subtitle: String,
-    icon: ImageVector, iconTint: Color, buttonText: String,
-    onButtonClick: () -> Unit
-) {
-    Card(modifier = modifier, shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(2.dp)
-    ) {
+private fun DashboardCard(modifier: Modifier, title: String, subtitle: String, icon: ImageVector, iconTint: Color, buttonText: String, onButtonClick: () -> Unit) {
+    Card(modifier = modifier, shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(2.dp)) {
         Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-            if (subtitle.isNotEmpty()) {
-                Spacer(Modifier.height(4.dp))
-                Text(subtitle, fontSize = 11.sp, color = TextMedium)
-            }
-            Spacer(Modifier.height(8.dp))
-            Icon(icon, null, tint = iconTint, modifier = Modifier.size(44.dp))
-            Spacer(Modifier.height(8.dp))
-            Button(onClick = onButtonClick, modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = GreenAccent),
-                elevation = ButtonDefaults.buttonElevation(0.dp),
-                contentPadding = PaddingValues(4.dp)
-            ) { Text(buttonText, fontSize = 11.sp) }
+            if (subtitle.isNotEmpty()) { Spacer(Modifier.height(4.dp)); Text(subtitle, fontSize = 11.sp, color = TextMedium) }
+            Spacer(Modifier.height(8.dp)); Icon(icon, null, tint = iconTint, modifier = Modifier.size(44.dp)); Spacer(Modifier.height(8.dp))
+            SmallGradientButton(text = buttonText, gradientColors = listOf(Color(0xFF65B96E), Color(0xFF9DF0A5)), onClick = onButtonClick)
         }
     }
 }
@@ -198,8 +326,6 @@ private fun DashboardCard(
 private fun MedToggleRow(label: String, checked: Boolean, onToggle: (Boolean) -> Unit) {
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
         Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface)
-        Switch(checked = checked, onCheckedChange = onToggle,
-            colors = SwitchDefaults.colors(checkedThumbColor = TealPrimary, checkedTrackColor = TealLight))
+        Switch(checked = checked, onCheckedChange = onToggle, colors = SwitchDefaults.colors(checkedThumbColor = TealPrimary, checkedTrackColor = TealLight))
     }
 }
-
