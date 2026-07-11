@@ -152,12 +152,6 @@ users/{uid}/
 
 ---
 
-## 📄 License
-
-This project is for educational purposes as part of a university graduation project.
-
----
-
 <div align="center">
 Made with ❤️ for diabetes patients
 </div>
