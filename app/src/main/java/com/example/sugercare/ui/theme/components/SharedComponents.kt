@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Medication
@@ -134,7 +135,7 @@ fun SugarCareTextField(
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
     trailingIcon: @Composable (() -> Unit)? = null,
-    keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
 ) {
     val visualTransformation = if (isPassword)
@@ -156,7 +157,8 @@ fun SugarCareTextField(
             unfocusedBorderColor = TealLight,
             focusedLabelColor    = TealPrimary,
             cursorColor          = TealPrimary
-        )
+        ),
+        keyboardOptions          = keyboardOptions
     )
 }
 

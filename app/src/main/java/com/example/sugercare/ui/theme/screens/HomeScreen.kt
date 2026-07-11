@@ -15,15 +15,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.sugercare.viewModels.CounterViewModel
 import com.example.sugercare.viewModels.ProfileViewModel
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.ProfilePicture
@@ -38,64 +44,109 @@ import kotlin.text.isNotEmpty
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController, profileViewModel: ProfileViewModel) {
+fun HomeScreen(
+    navController: NavHostController,
+    profileViewModel: ProfileViewModel,
+    counterViewModel: CounterViewModel
+) {
     var insulinEnabled by remember { mutableStateOf(true) }
     var metforminEnabled by remember { mutableStateOf(true) }
     var notifEnabled by remember { mutableStateOf(false) }
+    val state = counterViewModel.uiState.collectAsState() // for fire streak icon (counter)
 
     LaunchedEffect(Unit) {
         profileViewModel.loadProfile()
     }
     SugarCareBackground {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            containerColor = Color.Transparent,
 
-            TopAppBar(
-                title = {
-                    Text("Sugar Care", fontWeight = FontWeight.Bold, color = TealDark)
-                },
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            "Sugar Care",
+                            fontWeight = FontWeight.Bold,
+                            color = TealDark
+                        )
+                    },
 
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
-                        ProfilePicture(profileViewModel,fontSize = 14.sp)
-                    }
-                },
-
-                actions = {
-                    IconButton(onClick = { navController.navigate(Screen.Notifications.route) }) {
-                        BadgedBox(
-                            badge = {
-                                Badge(containerColor = OrangeDrop) {
-                                    Text("3", fontSize = 9.sp)
-                                }
-                            }
-                        ) {
-                            Icon(
-                                Icons.Filled.Notifications,
-                                contentDescription = "Notifications",
-                                tint = OrangeDrop
-                            )
+                    navigationIcon = {
+                        IconButton(onClick = { navController.navigate(Screen.Profile.route) }) {
+                            ProfilePicture(profileViewModel, fontSize = 14.sp)
                         }
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundLight)
-            )
+                    },
 
+                    actions = {
+                        IconButton(onClick = { navController.navigate(Screen.Notifications.route) }) {
+                            BadgedBox(
+                                badge = {
+                                    Badge(containerColor = OrangeDrop) {
+                                        Text("3", fontSize = 9.sp)
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Filled.Notifications,
+                                    contentDescription = "Notifications",
+                                    tint = OrangeDrop
+                                )
+                            }
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = BackgroundLight
+                    )
+                )
+            },
+
+
+            bottomBar = {
+                NavigationBar(containerColor = Color.White, tonalElevation = 8.dp) {
+                    listOf(
+                        Triple("Home", Icons.Filled.Home, Screen.Home.route),
+                        Triple("Logs", Icons.AutoMirrored.Filled.Assignment, Screen.Logs.route),
+                        Triple("Meals", Icons.Filled.Restaurant, Screen.MealPlan.route),
+                        Triple("Profile", Icons.Filled.Person, Screen.Profile.route)
+                    ).forEach { (label, icon, route) ->
+                        NavigationBarItem(
+                            selected = route == Screen.Home.route,
+                            onClick = {
+                                if (route != Screen.Home.route)
+                                    navController.navigate(route) { launchSingleTop = true }
+                            },
+                            icon = { Icon(icon, contentDescription = label) },
+                            label = { Text(label, fontSize = 11.sp) },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = TealPrimary,
+                                unselectedIconColor = TextMedium,
+                                indicatorColor = TealLight
+                            )
+                        )
+                    }
+                }
+            }
+        )
+        { paddingValues ->
 
             // ── Dashboard grid ────────────────────────────────
-            Column(
+            Row(
                 modifier = Modifier
-                    .weight(1f)
+                    .fillMaxSize()
+                    .padding(paddingValues)
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Row 1: Glucose Logs | Meal Plan
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+
+                // Left : Column 1: Glucose Logs | Chat Bot | Weekly Analytics    ▬▬▬▬
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    // ──── Glucose Logs mini card  ───────
                     DashboardCard(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.fillMaxWidth(),
                         title = "Glucose Logs",
                         subtitle = "Last: 120 mg/dL",
                         icon = Icons.Filled.Favorite,
@@ -103,25 +154,10 @@ fun HomeScreen(navController: NavHostController, profileViewModel: ProfileViewMo
                         buttonText = "Log New Reading",
                         onButtonClick = { navController.navigate(Screen.Logs.route) }
                     )
-                    DashboardCard(
-                        modifier = Modifier.weight(1f),
-                        title = "My Meal Plan",
-                        subtitle = "",
-                        icon = Icons.Filled.Restaurant,
-                        iconTint = GreenAccent,
-                        buttonText = "Meal Suggestions",
-                        onButtonClick = { navController.navigate(Screen.MealPlan.route) }
-                    )
-                }
 
-                // Row 2: Weekly Analytics | Medication Plan
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    // Weekly analytics mini card
+                    // ──── Weekly analytics mini card ────────
                     Card(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White),
                         elevation = CardDefaults.cardElevation(4.dp)
@@ -155,18 +191,90 @@ fun HomeScreen(navController: NavHostController, profileViewModel: ProfileViewMo
                                             listOf(GreenAccent, GreenAccent3)
                                         )
                                     )
-                                    .clickable { navController.navigate(Screen.WeeklyAnalytics.route)}
+                                    .clickable { navController.navigate(Screen.WeeklyAnalytics.route) }
                                     .padding(vertical = 8.dp),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text("Analyze Trends", fontSize = 12.sp, color = White, fontWeight = FontWeight.Bold)
+                                Text(
+                                    "Analyze Trends",
+                                    fontSize = 12.sp,
+                                    color = White,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
                         }
                     }
 
+                    // ──── ChatBot mini card ────────
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                "AI Sugar Chat 🤖",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp,
+                                color = TextDark
+                            )
+                            Spacer(Modifier.height(8.dp))
+
+                            Icon(
+                                painterResource(com.sugarcare.app.R.drawable.ic_chat),
+                                null,
+                                tint = OrangeDrop,
+                                modifier = Modifier.size(40.dp)
+                            )
+
+                            Spacer(Modifier.height(8.dp))
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .background(
+                                        Brush.horizontalGradient(
+                                            listOf(GreenAccent, GreenAccent3)
+                                        )
+                                    )
+                                    .clickable { navController.navigate(Screen.ChatScreen.route) }
+                                    .padding(vertical = 8.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    "Get AI Advice !",
+                                    fontSize = 12.sp,
+                                    color = White,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Right : Column 2: Meal Plan | Medication Plan | Sugar Counter ▬▬▬▬
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    // ──── Meal Plan mini card ────────
+                    DashboardCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        title = "My Meal Plan",
+                        subtitle = "",
+                        icon = Icons.Filled.Restaurant,
+                        iconTint = GreenAccent,
+                        buttonText = "Meal Suggestions",
+                        onButtonClick = { navController.navigate(Screen.MealPlan.route) }
+                    )
+
                     // Medication Plan mini card
                     Card(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White),
                         elevation = CardDefaults.cardElevation(4.dp)
@@ -180,8 +288,12 @@ fun HomeScreen(navController: NavHostController, profileViewModel: ProfileViewMo
                             )
                             Spacer(Modifier.height(8.dp))
                             MedToggleRow("Insulin", insulinEnabled) { insulinEnabled = it }
-                            MedToggleRow("Metformin", metforminEnabled) { metforminEnabled = it }
-                            MedToggleRow("Notifications", notifEnabled) { notifEnabled = it }
+                            MedToggleRow("Metformin", metforminEnabled) {
+                                metforminEnabled = it
+                            }
+                            MedToggleRow("Notifications", notifEnabled) {
+                                notifEnabled = it
+                            }
                             Spacer(Modifier.height(8.dp))
                             Box(
                                 modifier = Modifier
@@ -196,35 +308,60 @@ fun HomeScreen(navController: NavHostController, profileViewModel: ProfileViewMo
                                     .padding(vertical = 8.dp),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text("Set Notifications", fontSize = 12.sp, color = White, fontWeight = FontWeight.Bold)
+                                Text(
+                                    "Set Notifications",
+                                    fontSize = 12.sp,
+                                    color = White,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
                         }
                     }
-                }
-            }
 
-            NavigationBar(containerColor = Color.White, tonalElevation = 8.dp) {
-                listOf(
-                    Triple("Home", Icons.Filled.Home, Screen.Home.route),
-                    Triple("Logs", Icons.AutoMirrored.Filled.Assignment, Screen.Logs.route),
-                    Triple("Meals", Icons.Filled.Restaurant, Screen.MealPlan.route),
-                    Triple("Profile", Icons.Filled.Person, Screen.Profile.route)
-                ).forEach { (label, icon, route) ->
-                    NavigationBarItem(
-                        selected = route == Screen.Home.route,
-                        onClick = {
-                            if (route != Screen.Home.route)
-                                navController.navigate(route) { launchSingleTop = true }
-                        },
-                        icon = { Icon(icon, contentDescription = label) },
-                        label = { Text(label, fontSize = 11.sp) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = TealPrimary,
-                            unselectedIconColor = TextMedium,
-                            indicatorColor = TealLight
-                        )
-                    )
+                    // ──── Sugar Counter mini card ────────
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                "No Sugar Challenge ",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp,
+                                color = TextDark
+                            )
+                            Spacer(Modifier.height(8.dp))
+
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    modifier = Modifier
+                                        .clickable { navController.navigate(Screen.CounterScreen.route) }
+                                        .size(40.dp),
+                                    imageVector = Icons.Filled.LocalFireDepartment,
+                                    contentDescription = null,
+                                    tint = FireIcon,
+                                )
+                                Spacer(Modifier.width(4.dp))
+                                Text(
+                                    modifier = Modifier.clickable { navController.navigate(Screen.CounterScreen.route) },
+                                    text = "${state.value.bestStreak} days",
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = FireIcon
+                                )
+                            }
+                            Spacer(Modifier.height(8.dp))
+
+                        }
+                    }
+
                 }
+
             }
         }
     }

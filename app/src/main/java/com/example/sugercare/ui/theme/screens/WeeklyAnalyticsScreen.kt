@@ -4,8 +4,11 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -42,7 +45,7 @@ fun WeeklyAnalyticsScreen(navController: NavHostController) {
     LaunchedEffect(Unit) { animate = true }
 
     SugarCareBackground {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
             Text(
                 "Weekly Analytics",
                 style = MaterialTheme.typography.headlineMedium,
@@ -155,7 +158,8 @@ fun WeeklyAnalyticsScreen(navController: NavHostController) {
 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+                    .width(300.dp)
                     .height(56.dp)
                     .clip(RoundedCornerShape(28.dp))
                     .background(

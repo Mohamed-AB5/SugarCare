@@ -2,17 +2,21 @@ package com.sugarcare.app
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sugercare.viewModels.AuthViewModel
+import com.example.sugercare.viewModels.ChatViewModel
+import com.example.sugercare.viewModels.CounterViewModel
 import com.example.sugercare.viewModels.ProfileViewModel
 import com.sugarcare.app.navigation.SugarCareNavHost
 import com.sugarcare.app.ui.theme.SugarCareTheme
@@ -22,6 +26,7 @@ import java.security.NoSuchAlgorithmException
 import kotlin.io.encoding.Base64
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,9 +35,13 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     val authViewModel: AuthViewModel = viewModel()
                     val profileViewModel: ProfileViewModel = viewModel()
+                    val chatViewModel : ChatViewModel = viewModel()
+                    val counterViewModel : CounterViewModel = viewModel()
                     SugarCareNavHost(
-                        authViewModel = authViewModel,
-                        profileViewModel = profileViewModel
+                        authViewModel    = authViewModel,
+                        profileViewModel = profileViewModel,
+                        chatViewModel    = chatViewModel,
+                        counterViewModel = counterViewModel
                     )
                 }
             }

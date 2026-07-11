@@ -1,7 +1,9 @@
 package com.sugarcare.app.navigation
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.sugercare.ui.theme.screens.HomeScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -11,6 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sugercare.app.SugarTrackerScreen
+import com.example.sugercare.ui.theme.screens.CounterScreen
+import com.example.sugercare.ui.theme.screens.ChatScreen
 import com.example.sugercare.ui.theme.screens.SignInScreen
 import com.example.sugercare.ui.theme.screens.SignUpScreen
 import com.example.sugercare1.ProfileScreen
@@ -18,6 +22,8 @@ import com.example.sugercare1.ForgotPasswordScreen
 import com.example.sugercare1.NotificationsScreen
 import com.example.sugercare.viewModels.AuthState
 import com.example.sugercare.viewModels.AuthViewModel
+import com.example.sugercare.viewModels.ChatViewModel
+import com.example.sugercare.viewModels.CounterViewModel
 import com.example.sugercare.viewModels.ProfileViewModel
 import com.sugarcare.app.ui.screens.*
 
@@ -34,15 +40,19 @@ sealed class Screen(val route: String) {
     object Profile : Screen("profile")
     object Notifications : Screen("notifications")
     object ForgotPassword : Screen("forgot_password")
-    object ForgotPasswordCode : Screen("forgot_password_code")
+    object ChatScreen : Screen("chat_screen")
+    object CounterScreen : Screen("countdown_timer_screen")
 }
 
+@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun SugarCareNavHost(
     navController: NavHostController = rememberNavController(),
     authViewModel: AuthViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    chatViewModel: ChatViewModel,
+    counterViewModel: CounterViewModel
 ) {
 //  ———— TO check if user is logged in or not ————————————————
 
@@ -126,10 +136,11 @@ fun SugarCareNavHost(
         }
 
         composable(Screen.Home.route) {
-            HomeScreen(navController = navController,profileViewModel = profileViewModel)
+            HomeScreen(navController = navController,
+                profileViewModel = profileViewModel,
+                counterViewModel = counterViewModel)
         }
         composable(Screen.Logs.route) {
-//            LogsScreen(navController = navController)
             SugarTrackerScreen()
         }
         composable(Screen.MealPlan.route) {
@@ -153,6 +164,13 @@ fun SugarCareNavHost(
         }
         composable(Screen.ForgotPassword.route) {
             ForgotPasswordScreen(navController = navController,authViewModel=authViewModel)
+        }
+        composable(Screen.ChatScreen.route) {
+            ChatScreen(chatViewModel = chatViewModel)
+        }
+
+        composable(Screen.CounterScreen.route) {
+            CounterScreen()
         }
     }
 }

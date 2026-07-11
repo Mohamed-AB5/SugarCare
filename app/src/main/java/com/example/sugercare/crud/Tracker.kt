@@ -67,7 +67,7 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
                 value = glucoseInput,
                 onValueChange = { glucoseInput = it },
                 label = "Glucose Level (mg/dL)",
-                keyboardType = KeyboardType.Phone,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth(),
                 colors = trackerFieldColors()
 
@@ -159,19 +159,6 @@ fun SugarTrackerScreen(viewModel: SugarViewModel = androidx.lifecycle.viewmodel.
                     shape = RoundedCornerShape(16.dp),
                     colors = trackerFieldColors()
                 )
-                /* Button(
-                        onClick = { amPmSelection = if (amPmSelection == "AM") "PM" else "AM" },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                    ),
-                    modifier = Modifier
-                        .height(56.dp)
-                        .padding(top = 8.dp)
-                ) {
-                    Text(amPmSelection, style = MaterialTheme.typography.bodyLarge)
-                }
-            }*/
 
                 Box(
                     modifier = Modifier
