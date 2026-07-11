@@ -8,10 +8,13 @@ import com.example.sugercare.ui.theme.screens.HomeScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.sugercare.app.SugarTrackerScreen
+import com.example.sugercare.app.SugarViewModel
 import com.example.sugercare.ui.theme.screens.CounterScreen
 import com.example.sugercare.ui.theme.screens.ChatScreen
 import com.example.sugercare.ui.theme.screens.EmergencyContactScreen
@@ -27,7 +30,6 @@ import com.example.sugercare.viewModels.AuthViewModel
 import com.example.sugercare.viewModels.ChatViewModel
 import com.example.sugercare.viewModels.CounterViewModel
 import com.sugarcare.app.ui.screens.*
-import com.example.sugercare.ui.theme.screens.WeeklyAnalyticsScreen
 import com.example.sugercare.viewModels.ProfileViewModel
 
 
@@ -58,7 +60,8 @@ fun SugarCareNavHost(
     authViewModel: AuthViewModel,
     profileViewModel: ProfileViewModel,
     chatViewModel: ChatViewModel,
-    counterViewModel: CounterViewModel
+    counterViewModel: CounterViewModel,
+    sugarViewModel: SugarViewModel
 ) {
 //  ———— TO check if user is logged in or not ————————————————
 
@@ -151,7 +154,7 @@ fun SugarCareNavHost(
         }
 
         composable(Screen.Logs.route) {
-            com.example.sugercare.crud.SugarTrackerScreen()
+            SugarTrackerScreen(navController,sugarViewModel)
         }
 
         composable(Screen.MealPlan.route) {

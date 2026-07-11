@@ -63,6 +63,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("co.yml:ycharts:2.1.0")
     implementation("com.google.firebase:firebase-firestore-ktx")
+//    implementation(libs.androidx.junit.ktx)
+//    androidTestImplementation(libs.junit.junit)
 
 
     val composeBom = platform("androidx.compose:compose-bom:2024.12.01")
@@ -92,4 +94,3 @@ dependencies {
 kotlin {
     jvmToolchain(21)
 }
-

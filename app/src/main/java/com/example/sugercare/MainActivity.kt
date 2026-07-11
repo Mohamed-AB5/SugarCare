@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import com.example.sugercare.app.SugarViewModel
 import com.example.sugercare.viewModels.AuthViewModel
 import com.example.sugercare.viewModels.ChatViewModel
 import com.example.sugercare.viewModels.CounterViewModel
@@ -31,12 +32,14 @@ class MainActivity : ComponentActivity() {
     private val profileViewModel: ProfileViewModel by viewModels()
     private val chatViewModel   : ChatViewModel    by viewModels()
     private val counterViewModel   : CounterViewModel    by viewModels()
+    private val sugarViewModel   : SugarViewModel    by viewModels()
+
+
 
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ── SHA Key Hash for Facebook Login ──────────────────
         // ── SHA Key Hash for Facebook Login ──────────────────
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -82,7 +85,8 @@ class MainActivity : ComponentActivity() {
                             authViewModel    = authViewModel,
                             profileViewModel = profileViewModel,
                             chatViewModel    = chatViewModel,
-                            counterViewModel = counterViewModel
+                            counterViewModel = counterViewModel,
+                            sugarViewModel   = sugarViewModel
                         )
                     }
                 }

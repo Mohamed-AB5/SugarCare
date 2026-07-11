@@ -29,10 +29,14 @@ class SugarViewModel : ViewModel() {
     fun getReadings() {
         db.collection("sugar_readings")
             .whereEqualTo("userId", currentUserId)
-            .orderBy("timestamp", Query.Direction.ASCENDING)
-            .addSnapshotListener { snapshot, _ ->
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("FIRESTORE", "Listen failed: ${error.message}")
+                    return@addSnapshotListener
+                }
                 if (snapshot != null) {
                     readingsList.value = snapshot.toObjects(SugarReading::class.java)
+                        .sortedBy { it.timestamp }
                 }
             }
     }

@@ -98,7 +98,6 @@ fun SugarCareTextField(
     isPassword   : Boolean  = false,
     trailingIcon : @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors()
 ) {
     OutlinedTextField(
         value                = value,
