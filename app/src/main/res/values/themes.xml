@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- FILE: app/src/main/res/values/themes.xml -->
 <resources>
-
-    <style name="Theme.SugerCare1" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.SugerCare1" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Make status bar transparent so time/icons show over the app -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Remove the title bar -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- Fix screen size — do NOT use fullscreen, let edge-to-edge handle it -->
+        <item name="android:windowFullscreen">false</item>
+    </style>
 </resources>

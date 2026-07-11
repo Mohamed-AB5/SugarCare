@@ -2,7 +2,7 @@ package com.sugarcare.app.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 
 // ── Brand Colors ──────────────────────────────────────────────
@@ -25,30 +25,49 @@ val White            = Color(0xFFFFFFFF)
 val TextGray         = Color(0xFF9AA0A6)
 val FireIcon         = Color(0xFFFF6B35)
 
+// ── Dark colors ───────────────────────────────────────────────
+val BackgroundDark  = Color(0xFF0D1F1F)
+val SurfaceDark     = Color(0xFF1A2E2E)
+val TextDarkMode    = Color(0xFFE0F2F1)
+val TextMediumDark  = Color(0xFF80CBC4)
 
+// ── Global state: hoisted in MainActivity, shared everywhere ──
+val LocalDarkTheme = compositionLocalOf { mutableStateOf(false) }
 
-
-private val LightColorScheme = lightColorScheme(
+private val LightColors = lightColorScheme(
     primary          = TealPrimary,
     onPrimary        = Color.White,
     primaryContainer = TealLight,
     secondary        = GreenAccent,
     onSecondary      = Color.White,
-    tertiary         = OrangeDrop,
     background       = BackgroundLight,
     surface          = SurfaceWhite,
     onBackground     = TextDark,
     onSurface        = TextDark,
+    tertiary         = OrangeDrop,
+)
+
+private val DarkColors = darkColorScheme(
+    primary          = TealPrimary,
+    onPrimary        = Color.White,
+    primaryContainer = Color(0xFF1A4F4F),
+    secondary        = GreenAccent,
+    onSecondary      = Color.White,
+    background       = BackgroundDark,
+    surface          = SurfaceDark,
+    onBackground     = TextDarkMode,
+    onSurface        = TextDarkMode,
+    tertiary         = OrangeDrop,
 )
 
 @Composable
 fun SugarCareTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content  : @Composable () -> Unit
 ) {
     // App uses a fixed light theme matching the design
     MaterialTheme(
-        colorScheme = LightColorScheme,
+        colorScheme = if (darkTheme) DarkColors else LightColors,
         typography  = SugarCareTypography,
         content     = content
     )

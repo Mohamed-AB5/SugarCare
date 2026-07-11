@@ -32,8 +32,11 @@ import com.example.sugercare.viewModels.AuthViewModel
 import com.example.sugercare.viewModels.AuthState
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
+import com.sugarcare.app.ui.theme.TealLight
 import kotlin.text.isNotBlank
 import com.sugarcare.app.R
+import com.sugarcare.app.ui.theme.OrangeDrop2
+import com.sugarcare.app.ui.theme.TealPrimary2
 
 
 // ─────────────────────────────────────────────────────────────
@@ -446,6 +449,7 @@ fun SignUpScreen(
         }
     }
 }
+
 
 
 @Composable

@@ -22,7 +22,7 @@
             android:value="@string/facebook_client_token" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.sugercare.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.SugerCare1"

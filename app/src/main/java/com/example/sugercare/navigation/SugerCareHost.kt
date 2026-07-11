@@ -12,36 +12,42 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.sugercare.app.SugarTrackerScreen
 import com.example.sugercare.ui.theme.screens.CounterScreen
 import com.example.sugercare.ui.theme.screens.ChatScreen
+import com.example.sugercare.ui.theme.screens.EmergencyContactScreen
+import com.example.sugercare.ui.theme.screens.ForgotPasswordScreen
+import com.example.sugercare.ui.theme.screens.MealPlanScreen
+import com.example.sugercare.ui.theme.screens.MedicationsScreen
+import com.example.sugercare.ui.theme.screens.NotificationsScreen
+import com.example.sugercare.ui.theme.screens.ProfileScreen
 import com.example.sugercare.ui.theme.screens.SignInScreen
 import com.example.sugercare.ui.theme.screens.SignUpScreen
-import com.example.sugercare1.ProfileScreen
-import com.example.sugercare1.ForgotPasswordScreen
-import com.example.sugercare1.NotificationsScreen
 import com.example.sugercare.viewModels.AuthState
 import com.example.sugercare.viewModels.AuthViewModel
 import com.example.sugercare.viewModels.ChatViewModel
 import com.example.sugercare.viewModels.CounterViewModel
-import com.example.sugercare.viewModels.ProfileViewModel
 import com.sugarcare.app.ui.screens.*
+import com.example.sugercare.ui.theme.screens.WeeklyAnalyticsScreen
+import com.example.sugercare.viewModels.ProfileViewModel
+
 
 sealed class Screen(val route: String) {
-    object Welcome : Screen("welcome")
-    object SignIn : Screen("sign_in")
-    object SignUp : Screen("sign_up")
-    object HealthInfo : Screen("health_info")
-    object Home : Screen("home")
-    object Logs : Screen("logs")
-    object MealPlan : Screen("meal_plan")
-    object Medications : Screen("medications")
-    object WeeklyAnalytics : Screen("weekly_analytics")
-    object Profile : Screen("profile")
-    object Notifications : Screen("notifications")
-    object ForgotPassword : Screen("forgot_password")
-    object ChatScreen : Screen("chat_screen")
-    object CounterScreen : Screen("countdown_timer_screen")
+    object Splash           : Screen("splash")
+    object Welcome          : Screen("welcome")
+    object SignIn           : Screen("sign_in")
+    object SignUp           : Screen("sign_up")
+    object HealthInfo       : Screen("health_info")
+    object Home             : Screen("home")
+    object Logs             : Screen("logs")
+    object MealPlan         : Screen("meal_plan")
+    object Medications      : Screen("medications")
+    object WeeklyAnalytics  : Screen("weekly_analytics")
+    object Profile          : Screen("profile")
+    object Notifications    : Screen("notifications")
+    object ForgotPassword   : Screen("forgot_password")
+    object ChatScreen       : Screen("chat_screen")
+    object CounterScreen    : Screen("countdown_timer_screen")
+    object EmergencyContact : Screen("emergency_contact")
 }
 
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
@@ -72,13 +78,16 @@ fun SugarCareNavHost(
     }
 
 
-//    TODO -> We need to add splash screen instead
-    val startDest = Screen.Welcome.route
+    val startDest = Screen.Splash.route
 
     NavHost(
         navController = navController,
         startDestination = startDest
     ) {
+        composable(Screen.Splash.route) {
+//            android.window.SplashScreen(navController)
+            SplashScreen(navController)
+        }
         composable(Screen.Welcome.route) {
             WelcomeScreen(
                 onSignIn = {
@@ -96,7 +105,7 @@ fun SugarCareNavHost(
 
         composable(Screen.SignIn.route) {
             SignInScreen(
-                onSignInSuccess = {
+                onSignInSuccess    = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Welcome.route) { inclusive = true }
                     }
@@ -104,15 +113,15 @@ fun SugarCareNavHost(
                 onNavigateToSignUp = {
                     authViewModel.clearFields()
                     navController.navigate(Screen.SignUp.route)
-                                     },
-                onForgotPassword = { navController.navigate(Screen.ForgotPassword.route) },
-                authViewModel = authViewModel
+                },
+                onForgotPassword   = { navController.navigate(Screen.ForgotPassword.route) },
+                authViewModel      = authViewModel
             )
         }
 
         composable(Screen.SignUp.route) {
             SignUpScreen(
-                onSignUpSuccess = {
+                onSignUpSuccess    = {
                     navController.navigate(Screen.HealthInfo.route) {
                         popUpTo(Screen.Welcome.route) { inclusive = true }
                     }
@@ -120,7 +129,7 @@ fun SugarCareNavHost(
                 onNavigateToSignIn = {
                     authViewModel.clearFields()
                     navController.navigate(Screen.SignIn.route)
-                                     },
+                },
                 authViewModel = authViewModel
             )
         }
@@ -140,37 +149,53 @@ fun SugarCareNavHost(
                 profileViewModel = profileViewModel,
                 counterViewModel = counterViewModel)
         }
+
         composable(Screen.Logs.route) {
-            SugarTrackerScreen()
+            com.example.sugercare.crud.SugarTrackerScreen()
         }
+
         composable(Screen.MealPlan.route) {
             MealPlanScreen(navController = navController)
         }
+
         composable(Screen.Medications.route) {
             MedicationsScreen(navController = navController)
         }
+
         composable(Screen.WeeklyAnalytics.route) {
             WeeklyAnalyticsScreen(navController = navController)
         }
+
         composable(Screen.Profile.route) {
-            ProfileScreen(navController = navController,
-                authViewModel = authViewModel,
-                profileViewModel=profileViewModel,
-                onSaveSuccess = {}
+            ProfileScreen(
+                navController    = navController,
+                authViewModel    = authViewModel,
+                profileViewModel = profileViewModel,
+                onSaveSuccess    = {}
             )
         }
+
         composable(Screen.Notifications.route) {
             NotificationsScreen(navController = navController)
         }
+
         composable(Screen.ForgotPassword.route) {
-            ForgotPasswordScreen(navController = navController,authViewModel=authViewModel)
+            ForgotPasswordScreen(
+                navController = navController,
+                authViewModel = authViewModel
+            )
         }
+
         composable(Screen.ChatScreen.route) {
             ChatScreen(chatViewModel = chatViewModel)
         }
 
         composable(Screen.CounterScreen.route) {
             CounterScreen()
+        }
+
+        composable(Screen.EmergencyContact.route) {
+            EmergencyContactScreen(navController = navController)
         }
     }
 }

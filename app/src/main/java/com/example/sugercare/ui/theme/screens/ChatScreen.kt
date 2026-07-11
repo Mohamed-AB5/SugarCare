@@ -41,8 +41,9 @@ import com.sugarcare.app.ui.theme.GreenAccent2
 import com.sugarcare.app.ui.theme.OrangeDrop
 import com.sugarcare.app.ui.theme.OrangeDrop2
 import com.sugarcare.app.ui.theme.TealPrimary
-
-
+import com.sugarcare.app.ui.theme.GreenAccent2
+import com.sugarcare.app.ui.theme.OrangeDrop2
+import com.sugarcare.app.ui.theme.LocalDarkTheme
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 @Composable
 fun ChatScreen(chatViewModel: ChatViewModel) {
@@ -52,7 +53,7 @@ fun ChatScreen(chatViewModel: ChatViewModel) {
                 "AI Sugar Chat 🤖",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(start = 24.dp, top = 48.dp, bottom = 8.dp),
-                color = TealPrimary, fontWeight = FontWeight.Bold
+                color = if (LocalDarkTheme.current.value) Color.White else TealPrimary, fontWeight = FontWeight.Bold
             )
             MessageList(modifier = Modifier.weight(1f), messageList = chatViewModel.messageList.toList())
             MessageInput(chatViewModel, onMessageSend = { chatViewModel.sendMessage(it) })
@@ -160,6 +161,10 @@ fun MessageField(messageModel: MessageModel) {
 @Composable
 private fun chatFieldColors() = OutlinedTextFieldDefaults.colors(
     focusedBorderColor = TealPrimary,
+    unfocusedBorderColor = if (LocalDarkTheme.current.value) Color.LightGray else Color.Gray,
     focusedLabelColor = TealPrimary,
+    unfocusedLabelColor = if (LocalDarkTheme.current.value) Color.LightGray else Color.Gray,
+    focusedTextColor = if (LocalDarkTheme.current.value) Color.White else Color.Black,
+    unfocusedTextColor = if (LocalDarkTheme.current.value) Color.White else Color.Black,
     cursorColor = TealPrimary
 )
