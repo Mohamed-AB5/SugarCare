@@ -19,7 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +34,9 @@ import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
 import com.sugarcare.app.ui.theme.TealLight
 import kotlin.text.isNotBlank
+import com.sugarcare.app.R
+import com.example.sugarcare.app.ui.theme.OrangeDrop2
+import com.example.sugarcare.app.ui.theme.TealPrimary2
 
 
 // ─────────────────────────────────────────────────────────────
@@ -205,7 +210,7 @@ fun SignInScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 SocialButton(
-                    label = "G",
+                    icon = painterResource(R.drawable.ic_google),
                     color = OrangeDrop,
                     brush = Brush.verticalGradient(
                         listOf(Color(0xFFEED4C8), OrangeDrop2)
@@ -214,7 +219,7 @@ fun SignInScreen(
                         authViewModel.signInWithGoogle(context)
                     })
                 SocialButton(
-                    label = "f",
+                    icon = painterResource(R.drawable.ic_facebook),
                     color = TealPrimary,
                     brush = Brush.verticalGradient(listOf(Color(0xFFC6F1F1), TealPrimary2)),
                     onClick = {
@@ -234,7 +239,7 @@ fun SignInScreen(
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .clickable { (onNavigateToSignUp())},
+                    .clickable { (onNavigateToSignUp()) },
                 fontSize = 14.sp
             )
 
@@ -424,7 +429,7 @@ fun SignUpScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 SocialButton(
-                    label = "G",
+                    icon = painterResource(R.drawable.ic_google),
                     color = OrangeDrop,
                     brush = Brush.verticalGradient(
                         listOf(Color(0xFFEED4C8), OrangeDrop2)
@@ -433,15 +438,13 @@ fun SignUpScreen(
                         authViewModel.signInWithGoogle(context)
                     })
                 SocialButton(
-                    label = "f",
+                    icon = painterResource(R.drawable.ic_facebook),
                     color = TealPrimary,
                     brush = Brush.verticalGradient(listOf(Color(0xFFC6F1F1), TealPrimary2)),
                     onClick = {
                         authViewModel.signInWithFacebook(activity)
                     })
 
-                // !!! -> onClick will be added later <- !!!!
-//                SocialButton(label = "𝕏", color = TealDark)
             }
         }
     }
@@ -450,7 +453,7 @@ fun SignUpScreen(
 
 @Composable
 private fun SocialButton(
-    label: String,
+    icon: Painter,
     color: Color, // androidx.compose.ui.graphics removed -> for cleaner route
     brush: Brush,
     onClick: () -> Unit
@@ -468,11 +471,11 @@ private fun SocialButton(
                 .clickable { onClick() },
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = label,
-                color = color,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
+            Icon(
+                painter = icon,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                tint = Color.Unspecified
             )
         }
     }

@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sugarcare.app.ui.components.*
 import com.sugarcare.app.ui.theme.*
+import com.example.sugarcare.app.ui.theme.White
 
 
 @OptIn(ExperimentalMaterial3Api::class)

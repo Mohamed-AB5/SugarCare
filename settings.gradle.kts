@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "SugerCare1"
 include(":app")
+

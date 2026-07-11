@@ -1,9 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- FILE: app/src/main/res/drawable/ic_logo.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-    <path
-        android:fillColor="#FF000000"
-        android:pathData="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2Z" />
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Heart left half — Teal -->
+    <path android:fillColor="#2E9B9B"
+        android:pathData="M100,165 C100,165 28,112 28,68 C28,44 46,32 64,32 C78,32 90,40 100,54 Z"/>
+
+    <!-- Heart right half — Steel blue -->
+    <path android:fillColor="#7FB5C8"
+        android:pathData="M100,165 C100,165 172,112 172,68 C172,44 154,32 136,32 C122,32 110,40 100,54 Z"/>
+
+    <!-- Dots on right side -->
+    <path android:fillColor="#5A8FA8" android:pathData="M163,58 A4,4 0 1,1 163,57.9 Z"/>
+    <path android:fillColor="#5A8FA8" android:pathData="M168,72 A3.5,3.5 0 1,1 168,71.9 Z"/>
+    <path android:fillColor="#5A8FA8" android:pathData="M165,86 A3,3 0 1,1 165,85.9 Z"/>
+
+    <!-- Green leaf -->
+    <path android:fillColor="#5BAD6F"
+        android:pathData="M66,122 C52,96 56,60 74,46 C88,36 100,54 100,54 C84,70 74,92 80,118 Z"/>
+    <!-- Leaf highlight -->
+    <path android:fillColor="#7DC88A"
+        android:pathData="M74,46 C85,40 97,50 100,54 C88,67 78,82 78,100 C71,82 66,62 74,46 Z"/>
+
+    <!-- Water drop -->
+    <path android:fillColor="#1F7A7A"
+        android:pathData="M114,36 C114,36 100,56 100,70 C100,81 106,90 116,90 C126,90 132,81 132,70 C132,56 118,36 114,36 Z"/>
+    <!-- Drop highlight -->
+    <path android:fillColor="#5CBDBD"
+        android:pathData="M108,48 C105,57 104,64 106,70 C104,63 107,51 108,48 Z"/>
+
+    <!-- Arrow in drop -->
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="3"
+        android:fillColor="#00000000"
+        android:pathData="M110,82 L122,62"/>
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M122,62 L115,65 L118,69 Z"/>
+
 </vector>

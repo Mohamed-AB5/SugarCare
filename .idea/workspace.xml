@@ -4,31 +4,99 @@
     <shared>
       <config />
     </shared>
+    <layouts>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_facebook.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_google.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_background.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_foreground.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_logo.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/mipmap-anydpi/ic_launcher.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/mipmap-anydpi/ic_launcher_round.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
+    </layouts>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4027dcf1-e93a-42bd-80e5-6a54a10c35fb" name="Changes" comment="implementing profile management and Facebook authentication&#10;&#10;- Integrated Facebook Login using `CallbackManager` and `LoginManager` in `AuthViewModel`.&#10;- Created `ProfileViewModel` and `ProfileRepo` to manage user profile data via Firestore.&#10;- Replaced `CompleteProfileScreen` with a `ProfileScreen`  data validation and social provider initialization.&#10;- Added `UserProfile` data class and `ProfileUiState` to handle profile management states.&#10;- Implemented `ProfilePicture` component to handle dynamic profile images from Google, Facebook, and local placeholders.&#10;- Added `vibrate` utility and integrated haptic feedback for validation errors in profile fields.&#10;- Refactored `HomeScreen` to display the user's profile picture.&#10;- Updated `SugarCareNavHost` and `MainActivity` to support `ProfileViewModel` and Facebook activity results.&#10;- Enhanced UI components with gradient brushes and improved styling in `SharedComponents.kt` and `Theme.kt`.&#10;- Deleted `AuthManager.kt` and `AuthResponse.kt` in favor of `AuthViewModel` logic.&#10;- Added necessary permissions and metadata for Facebook SDK and vibration to `AndroidManifest.xml`.">
+    <list default="true" id="4027dcf1-e93a-42bd-80e5-6a54a10c35fb" name="Changes" comment="enhancing profile management and tracker UI&#10;&#10;- Expanded `UserProfile` data class and `ProfileViewModel` to include age and weight fields.&#10;- Implemented automatic age calculation from date of birth and vice versa in `ProfileViewModel`.&#10;- optimize `SugarTrackerScreen` with a new dropdown for meal relations and gradient-styled action buttons.&#10;- Updated `WeeklyAnalyticsScreen` UI, replacing standard buttons with custom gradient components.&#10;- Refactored `SugarCareTextField` in `SharedComponents` to support custom colors and keyboard types.&#10;- Integrated age and weight validation and Firestore persistence in `ProfileViewModel` and `ProfileRepoImpl`.&#10;- Standardized navigation by renaming `BottomNavBar` to `SugarCareBottomNavBar` and removing the">
+      <change afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/planningMode.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/chatBot/Constants.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/chatBot/MessageModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/ChatScreen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/EmergencyContactScreen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/splashScreen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/viewModels/ChatViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_facebook.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_google.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.2.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/example/sugercare/ExampleInstrumentedTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/example/sugercare/ExampleInstrumentedTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/MainActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/crud/Tracker.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/crud/Tracker.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/navigation/SugerCareHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/navigation/SugerCareHost.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/profileRepo/ProfileRepoImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/profileRepo/ProfileRepoImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/profileRepo/UserProfile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/profileRepo/UserProfile.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/Color.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/Color.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/Theme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/Theme.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/components/SharedComponents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/components/SharedComponents.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/AuthScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/AuthScreens.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/HealthInfoScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/HealthInfoScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/HomeScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/MealPlanScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/MealPlanScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/MedicationsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/MedicationsScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/NewScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/NewScreens.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/PlaceholderScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/PlaceholderScreens.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/WeeklyAnalyticsScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/screens/WeeklyAnalyticsScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/viewModels/ProfileViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/viewModels/ProfileViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_foreground.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_foreground.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_logo.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_logo.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +106,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[PhysicalDevice::serial=6LPFQCHQG6UG7XWO]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -81,9 +149,16 @@
         <option value="Kotlin Enum" />
         <option value="Kotlin Interface" />
         <option value="Class" />
+        <option value="Kotlin Object" />
+        <option value="Kotlin Data Class" />
+        <option value="Kotlin File" />
+        <option value="valueResourceFile" />
         <option value="Kotlin Class" />
       </list>
     </option>
+  </component>
+  <component name="GenerateSignedApkSettings">
+    <option name="BUILD_TARGET_KEY" value="apk" />
   </component>
   <component name="Git.Merge.Settings">
     <option name="BRANCH" value="origin/crud-2" />
@@ -97,13 +172,13 @@
     &quot;assignee&quot;: &quot;Mohamed-AB5&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Mohamed-AB5/SugarCare.git&quot;,
-    &quot;accountId&quot;: &quot;efd6254c-4f7a-45cc-b6bb-9442b91ec008&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Mohamed-AB5/SugarCare.git",
+    "accountId": "efd6254c-4f7a-45cc-b6bb-9442b91ec008"
   }
-}</component>
-  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="C:\Users\moham\.gradle\wrapper\dists\gradle-9.2.1-bin\2t0n5ozlw9xmuyvbp7dnzaxug\gradle-9.2.1" javaHome="D:\Andriod studio\jbr" gradleVersion="9.2.1" />
+}]]></component>
+  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="C:\Users\moham\.gradle\wrapper\dists\gradle-9.4.1-bin\arn2x92ynaizyzdaamcbpbhtj\gradle-9.4.1" javaHome="D:\Andriod studio\jbr" gradleVersion="9.4.1" />
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -116,32 +191,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SugerCare1 [signingReport].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Authentication-branch&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Android App.app.executor": "Run",
+    "ApkExportedModule": "SugerCare1.app",
+    "Gradle.Download Sources.executor": "Run",
+    "Gradle.SugerCare1 [signingReport].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "android.gradle.sync.needed": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "git-widget-placeholder": "Authentication-branch",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/moham/Downloads/SugerCare1/SugerCare1",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.17",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="com.example.sugercare.chatBot" />
       <recent name="com.example.sugercare.profile" />
       <recent name="com.example.sugercare" />
     </key>
@@ -306,7 +385,15 @@
       <option name="project" value="LOCAL" />
       <updated>1783072038697</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="enhancing profile management and tracker UI&#10;&#10;- Expanded `UserProfile` data class and `ProfileViewModel` to include age and weight fields.&#10;- Implemented automatic age calculation from date of birth and vice versa in `ProfileViewModel`.&#10;- optimize `SugarTrackerScreen` with a new dropdown for meal relations and gradient-styled action buttons.&#10;- Updated `WeeklyAnalyticsScreen` UI, replacing standard buttons with custom gradient components.&#10;- Refactored `SugarCareTextField` in `SharedComponents` to support custom colors and keyboard types.&#10;- Integrated age and weight validation and Firestore persistence in `ProfileViewModel` and `ProfileRepoImpl`.&#10;- Standardized navigation by renaming `BottomNavBar` to `SugarCareBottomNavBar` and removing the">
+      <option name="closed" value="true" />
+      <created>1783230815828</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1783230815828</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -326,7 +413,8 @@
     <MESSAGE value="--" />
     <MESSAGE value="Merge Authentication Branch with crud-2" />
     <MESSAGE value="implementing profile management and Facebook authentication&#10;&#10;- Integrated Facebook Login using `CallbackManager` and `LoginManager` in `AuthViewModel`.&#10;- Created `ProfileViewModel` and `ProfileRepo` to manage user profile data via Firestore.&#10;- Replaced `CompleteProfileScreen` with a `ProfileScreen`  data validation and social provider initialization.&#10;- Added `UserProfile` data class and `ProfileUiState` to handle profile management states.&#10;- Implemented `ProfilePicture` component to handle dynamic profile images from Google, Facebook, and local placeholders.&#10;- Added `vibrate` utility and integrated haptic feedback for validation errors in profile fields.&#10;- Refactored `HomeScreen` to display the user's profile picture.&#10;- Updated `SugarCareNavHost` and `MainActivity` to support `ProfileViewModel` and Facebook activity results.&#10;- Enhanced UI components with gradient brushes and improved styling in `SharedComponents.kt` and `Theme.kt`.&#10;- Deleted `AuthManager.kt` and `AuthResponse.kt` in favor of `AuthViewModel` logic.&#10;- Added necessary permissions and metadata for Facebook SDK and vibration to `AndroidManifest.xml`." />
-    <option name="LAST_COMMIT_MESSAGE" value="implementing profile management and Facebook authentication&#10;&#10;- Integrated Facebook Login using `CallbackManager` and `LoginManager` in `AuthViewModel`.&#10;- Created `ProfileViewModel` and `ProfileRepo` to manage user profile data via Firestore.&#10;- Replaced `CompleteProfileScreen` with a `ProfileScreen`  data validation and social provider initialization.&#10;- Added `UserProfile` data class and `ProfileUiState` to handle profile management states.&#10;- Implemented `ProfilePicture` component to handle dynamic profile images from Google, Facebook, and local placeholders.&#10;- Added `vibrate` utility and integrated haptic feedback for validation errors in profile fields.&#10;- Refactored `HomeScreen` to display the user's profile picture.&#10;- Updated `SugarCareNavHost` and `MainActivity` to support `ProfileViewModel` and Facebook activity results.&#10;- Enhanced UI components with gradient brushes and improved styling in `SharedComponents.kt` and `Theme.kt`.&#10;- Deleted `AuthManager.kt` and `AuthResponse.kt` in favor of `AuthViewModel` logic.&#10;- Added necessary permissions and metadata for Facebook SDK and vibration to `AndroidManifest.xml`." />
+    <MESSAGE value="enhancing profile management and tracker UI&#10;&#10;- Expanded `UserProfile` data class and `ProfileViewModel` to include age and weight fields.&#10;- Implemented automatic age calculation from date of birth and vice versa in `ProfileViewModel`.&#10;- optimize `SugarTrackerScreen` with a new dropdown for meal relations and gradient-styled action buttons.&#10;- Updated `WeeklyAnalyticsScreen` UI, replacing standard buttons with custom gradient components.&#10;- Refactored `SugarCareTextField` in `SharedComponents` to support custom colors and keyboard types.&#10;- Integrated age and weight validation and Firestore persistence in `ProfileViewModel` and `ProfileRepoImpl`.&#10;- Standardized navigation by renaming `BottomNavBar` to `SugarCareBottomNavBar` and removing the" />
+    <option name="LAST_COMMIT_MESSAGE" value="enhancing profile management and tracker UI&#10;&#10;- Expanded `UserProfile` data class and `ProfileViewModel` to include age and weight fields.&#10;- Implemented automatic age calculation from date of birth and vice versa in `ProfileViewModel`.&#10;- optimize `SugarTrackerScreen` with a new dropdown for meal relations and gradient-styled action buttons.&#10;- Updated `WeeklyAnalyticsScreen` UI, replacing standard buttons with custom gradient components.&#10;- Refactored `SugarCareTextField` in `SharedComponents` to support custom colors and keyboard types.&#10;- Integrated age and weight validation and Firestore persistence in `ProfileViewModel` and `ProfileRepoImpl`.&#10;- Standardized navigation by renaming `BottomNavBar` to `SugarCareBottomNavBar` and removing the" />
     <option name="LAST_CHUNK_COMMIT_MESSAGE" value="--" />
   </component>
   <component name="play_dynamic_filters_status">
@@ -334,12 +422,12 @@
       <map>
         <entry key="com.sugarcare.app">
           <value>
-            <CheckInfo lastCheckTimestamp="1783064031143" />
+            <CheckInfo lastCheckTimestamp="1783675960036" />
           </value>
         </entry>
         <entry key="com.sugarcare.app.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1783064031143" />
+            <CheckInfo lastCheckTimestamp="1783675960034" />
           </value>
         </entry>
       </map>

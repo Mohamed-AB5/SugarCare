@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.androidTestImplementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -15,6 +17,7 @@ android {
         targetSdk     = 35
         versionCode   = 1
         versionName   = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner" // for junit & testing
     }
 
     buildFeatures { compose = true }
@@ -25,6 +28,15 @@ android {
 }
 
 dependencies {
+
+    // Gemini
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+
+    // Testing
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test:runner:1.6.2")
+
     // To Access FireBase Storage & coil -> retrieve image from storage
     implementation("com.google.firebase:firebase-storage")
     implementation("io.coil-kt:coil-compose:2.4.0")
@@ -70,6 +82,7 @@ dependencies {
 
     // Debug
     debugImplementation("androidx.compose.ui:ui-tooling")
+    testImplementation(kotlin("test"))
 
 
 }
@@ -77,3 +90,4 @@ dependencies {
 kotlin {
     jvmToolchain(21)
 }
+
