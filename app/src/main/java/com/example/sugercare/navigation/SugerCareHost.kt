@@ -38,7 +38,6 @@ sealed class Screen(val route: String) {
     object Welcome          : Screen("welcome")
     object SignIn           : Screen("sign_in")
     object SignUp           : Screen("sign_up")
-    object HealthInfo       : Screen("health_info")
     object Home             : Screen("home")
     object Logs             : Screen("logs")
     object MealPlan         : Screen("meal_plan")
@@ -88,7 +87,6 @@ fun SugarCareNavHost(
         startDestination = startDest
     ) {
         composable(Screen.Splash.route) {
-//            android.window.SplashScreen(navController)
             SplashScreen(navController)
         }
         composable(Screen.Welcome.route) {
@@ -125,7 +123,7 @@ fun SugarCareNavHost(
         composable(Screen.SignUp.route) {
             SignUpScreen(
                 onSignUpSuccess    = {
-                    navController.navigate(Screen.HealthInfo.route) {
+                    navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Welcome.route) { inclusive = true }
                     }
                 },
@@ -137,15 +135,6 @@ fun SugarCareNavHost(
             )
         }
 
-        composable(Screen.HealthInfo.route) {
-            HealthInfoScreen(
-                onSaved = {
-                    navController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.HealthInfo.route) { inclusive = true }
-                    }
-                }
-            )
-        }
 
         composable(Screen.Home.route) {
             HomeScreen(navController = navController,

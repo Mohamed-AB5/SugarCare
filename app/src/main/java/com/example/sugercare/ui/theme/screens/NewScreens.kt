@@ -1,4 +1,3 @@
-
 package com.example.sugercare.ui.theme.screens
 
 import android.widget.Toast
@@ -29,7 +28,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.sugarcare.app.navigation.Screen
 import com.example.sugercare.profileRepo.ProfileUiState
 import com.example.sugercare.utils.vibrate
 import com.example.sugercare.viewModels.AuthViewModel
@@ -42,6 +40,7 @@ import java.util.Calendar
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.rememberDatePickerState
+import com.sugarcare.app.navigation.Screen
 import kotlinx.coroutines.delay
 
 // ── Shared bottom nav ─────────────────────────────────────────
@@ -131,7 +130,7 @@ fun NotificationsScreen(navController: NavHostController) {
 }
 
 // ══════════════════════════════════════════════════════════════
-//  2. FORGOT PASSWORD — Step 1 (with real Firebase reset)
+//  2. FORGOT PASSWORD
 // ══════════════════════════════════════════════════════════════
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -231,8 +230,6 @@ fun ForgotPasswordScreen(
         }
     }
 }
-
-
 
 // ══════════════════════════════════════════════════════════════
 //  4. PROFILE SCREEN — full ViewModel + Dark Mode Switch
@@ -525,24 +522,7 @@ fun ProfileScreen(
                         onClick = { profileViewModel.saveProfile() },
                         enabled = !isSaving
                     )
-                    Spacer(Modifier.height(12.dp))
 
-                    // Switch Account
-                    Button(
-                        onClick = {
-                            navController.navigate(Screen.SignIn.route) {
-                                popUpTo(0) { inclusive = true }
-                            }
-                        },
-                        modifier  = Modifier.fillMaxWidth().height(56.dp),
-                        shape     = RoundedCornerShape(28.dp),
-                        colors    = ButtonDefaults.buttonColors(containerColor = GreenAccent),
-                        elevation = ButtonDefaults.buttonElevation(0.dp)
-                    ) {
-                        Icon(Icons.Filled.SwitchAccount, null)
-                        Spacer(Modifier.width(8.dp))
-                        Text("Switch Account", fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-                    }
                     Spacer(Modifier.height(12.dp))
 
                     // Log Out
@@ -660,17 +640,19 @@ fun DatePickerField(
 
 @Composable
 private fun newScreenFieldColors(): TextFieldColors {
-    val isDark         = LocalDarkTheme.current.value
-    // Always high contrast: light text on dark bg, dark text on light bg
-    val textColor      = if (isDark) Color(0xFFE0F2F1) else Color(0xFF1A2B2B)
-    val containerColor = if (isDark) Color(0xFF1A3333)  else Color.White
-    val borderColor    = if (isDark) TealPrimary        else TealLight
+    val isDark = LocalDarkTheme.current.value
+
+    // Matches the muted gray-teal input text tone used in the Glucose Tracker screen
+    val textColor      = if (isDark) Color(0xFF80CBC4)  else Color(0xFF1A2B29)
+    val labelColor     = if (isDark) Color(0xFF80CBC4)    else TextMedium
+    val containerColor = if (isDark) Color (0xFF80CBC4)else Color.White
+    val borderColor    = if (isDark) TealPrimary          else TealLight
 
     return OutlinedTextFieldDefaults.colors(
         focusedBorderColor        = TealPrimary,
         unfocusedBorderColor      = borderColor,
         focusedLabelColor         = TealPrimary,
-        unfocusedLabelColor       = if (isDark) TealLight.copy(0.8f) else TextMedium,
+        unfocusedLabelColor       = labelColor,
         focusedTextColor          = textColor,
         unfocusedTextColor        = textColor,
         disabledTextColor         = textColor.copy(0.7f),

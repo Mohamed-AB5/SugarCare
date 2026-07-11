@@ -138,9 +138,6 @@ fun SugarCareCard(
 }
 
 // ── ProfilePicture ────────────────────────────────────────────
-// Shows initials avatar from the user's name in ProfileViewModel.
-// When teammates' full implementation is merged, this will be
-// replaced by the real version that loads the actual photo.
 @Composable
 fun ProfilePicture(
     profileViewModel: ProfileViewModel,
