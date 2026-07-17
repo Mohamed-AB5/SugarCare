@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- FILE: app/src/main/res/drawable/ic_launcher_foreground.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Left heart — Teal -->
+    <path android:fillColor="#2E9B9B"
+        android:pathData="M54,88 C54,88 26,68 26,44 C26,31 35,24 45,24 C51,24 54,29 54,34 Z"/>
+
+    <!-- Right heart — Steel blue -->
+    <path android:fillColor="#7FB5C8"
+        android:pathData="M54,88 C54,88 82,68 82,44 C82,31 73,24 63,24 C57,24 54,29 54,34 Z"/>
+
+    <!-- Dots -->
+    <path android:fillColor="#5A8FA8" android:pathData="M77,40 A2.5,2.5 0 1,1 77,39.9 Z"/>
+    <path android:fillColor="#5A8FA8" android:pathData="M79,49 A2,2 0 1,1 79,48.9 Z"/>
+    <path android:fillColor="#5A8FA8" android:pathData="M77,57 A1.8,1.8 0 1,1 77,56.9 Z"/>
+
+    <!-- Leaf -->
+    <path android:fillColor="#5BAD6F"
+        android:pathData="M38,68 C30,50 33,30 43,22 C50,17 54,34 54,34 C44,44 38,56 42,68 Z"/>
+    <path android:fillColor="#7DC88A"
+        android:pathData="M43,22 C50,18 53,30 54,34 C47,42 41,52 41,62 C37,50 37,32 43,22 Z"/>
+
+    <!-- Drop -->
+    <path android:fillColor="#1F7A7A"
+        android:pathData="M62,20 C62,20 53,34 53,43 C53,50 57,56 63,56 C69,56 73,50 73,43 C73,34 66,20 62,20 Z"/>
+    <path android:fillColor="#5CBDBD"
+        android:pathData="M58,28 C56,34 55,39 57,43 C55,38 57,30 58,28 Z"/>
+
+    <!-- Arrow -->
+    <path android:strokeColor="#FFFFFF" android:strokeWidth="2"
+        android:fillColor="#00000000" android:pathData="M59,51 L67,37"/>
+    <path android:fillColor="#FFFFFF" android:pathData="M67,37 L62,40 L64,43 Z"/>
+</vector>
