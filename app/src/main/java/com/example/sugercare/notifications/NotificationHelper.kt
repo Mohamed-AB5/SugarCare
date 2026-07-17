@@ -7,7 +7,7 @@ import androidx.core.app.NotificationCompat
 import com.sugarcare.app.R
 import android.app.PendingIntent
 import android.content.Intent
-import com.sugarcare.app.MainActivity
+import com.example.sugercare.MainActivity
 /**
  * Handles notification channel creation and notification building.
  *

@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Assignment
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,7 +26,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sugercare.viewModels.MealViewModel
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.SugarCareBackground
-import com.sugarcare.app.ui.components.SugarCareBottomBar
 import com.sugarcare.app.ui.components.SugarCareCard
 import com.sugarcare.app.ui.theme.*
 import com.example.sugercare.ui.screens.MyMealsTab
@@ -49,6 +49,14 @@ fun MealPlanScreen(
         "My Meals"
     )
     var selectedTab by remember { mutableIntStateOf(0) }
+
+    val isDark = LocalDarkTheme.current.value
+    val bgColor = if (isDark) BackgroundDark else BackgroundLight
+    val cardColor = if (isDark) SurfaceDark else Color.White
+    val textColor = if (isDark) Color(0xFFE0F2F1) else TextDark
+    val subColor = if (isDark) Color(0xFF80CBC4) else TextMedium
+    val navColor = if (isDark) SurfaceDark else Color.White
+    val navText = if (isDark) Color(0xFF80CBC4) else TextMedium
 
     SugarCareBackground {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -104,15 +112,30 @@ fun MealPlanScreen(
             }
 
             // ── Bottom Nav ────────────────────────────────────
-            // MealPlan is not one of the four fixed nav items,
-            // so currentRoute = MealPlan.route → nothing is selected.
-            SugarCareBottomBar(
-                currentRoute = Screen.MealPlan.route,
-                onHome       = { navController.navigate(Screen.Home.route) },
-                onMeds       = { navController.navigate(Screen.Medications.route) },
-                onTrends     = { navController.navigate(Screen.WeeklyAnalytics.route) },
-                onProfile    = { navController.navigate(Screen.Profile.route) }
-            )
+            NavigationBar(containerColor = navColor, tonalElevation = 8.dp) {
+                listOf(
+                    Triple("Home", Icons.Filled.Home, Screen.Home.route),
+                    Triple("Logs", Icons.AutoMirrored.Filled.Assignment, Screen.Logs.route),
+                    Triple("Meals", Icons.Filled.Restaurant, Screen.MealPlan.route),
+                    Triple("Profile", Icons.Filled.Person, Screen.Profile.route)
+                ).forEach { (label, icon, route) ->
+                    NavigationBarItem(
+                        selected = route == Screen.MealPlan.route,
+                        onClick = {
+                            if (route != Screen.MealPlan.route) navController.navigate(route) {
+                                launchSingleTop = true
+                            }
+                        },
+                        icon = { Icon(icon, contentDescription = label) },
+                        label = { Text(label, fontSize = 11.sp) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = TealPrimary,
+                            unselectedIconColor = navText,
+                            indicatorColor = TealLight
+                        )
+                    )
+                }
+            }
         }
     }
 }

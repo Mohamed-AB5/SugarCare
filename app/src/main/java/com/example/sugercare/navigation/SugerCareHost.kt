@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.sugercare.MainActivity.Companion.openedFromNotification
 import com.example.sugercare.app.SugarTrackerScreen
 import com.example.sugercare.app.SugarViewModel
 import com.example.sugercare.ui.theme.screens.CounterScreen
@@ -20,7 +21,6 @@ import com.example.sugercare.ui.theme.screens.ChatScreen
 import com.example.sugercare.ui.theme.screens.EmergencyContactScreen
 import com.example.sugercare.ui.theme.screens.ForgotPasswordScreen
 import com.example.sugercare.ui.theme.screens.MealPlanScreen
-import com.example.sugercare.ui.theme.screens.MedicationsScreen
 import com.example.sugercare.ui.theme.screens.NotificationsScreen
 import com.example.sugercare.ui.theme.screens.ProfileScreen
 import com.example.sugercare.ui.theme.screens.SignInScreen
@@ -73,9 +73,9 @@ fun SugarCareNavHost(
     LaunchedEffect(authState.value, ) {
         Log.d("NAV_TEST", "LaunchedEffect fired")
 
-        if (com.sugarcare.app.MainActivity.openedFromNotification) {
+        if (openedFromNotification) {
             Log.d("NAV_TEST", "Opened from notification")
-            com.sugarcare.app.MainActivity.openedFromNotification = false
+            openedFromNotification = false
             return@LaunchedEffect
         }
         if (authState.value is AuthState.Authenticated && rememberMe.value) {
@@ -86,7 +86,7 @@ fun SugarCareNavHost(
 
     }
 
-
+    val startDest = Screen.Splash.route
 
     NavHost(
         navController = navController,

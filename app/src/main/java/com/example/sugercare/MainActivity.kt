@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.example.sugercare.app.SugarViewModel
 import com.example.sugercare.viewModels.AuthViewModel
 import com.example.sugercare.viewModels.ChatViewModel
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pendingNavigationRoute = resolveNotificationRoute(intent)
-        com.sugarcare.app.MainActivity.Companion.openedFromNotification = pendingNavigationRoute != null
+        openedFromNotification = pendingNavigationRoute != null
         // ── SHA Key Hash for Facebook Login ──────────────────
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -83,6 +84,7 @@ class MainActivity : ComponentActivity() {
             // ── Global dark mode state ────────────────────────
             val darkState = remember { mutableStateOf(false) }
 
+            val navController = rememberNavController()
             CompositionLocalProvider(LocalDarkTheme provides darkState) {
                 SugarCareTheme(darkTheme = darkState.value) {
                     Surface(modifier = Modifier.fillMaxSize()) {
@@ -118,7 +120,7 @@ class MainActivity : ComponentActivity() {
             "medications" -> Screen.Medications.route
             else -> null
         }
-    }S
+    }
 
     // ── Facebook Login result handler ─────────────────────────
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

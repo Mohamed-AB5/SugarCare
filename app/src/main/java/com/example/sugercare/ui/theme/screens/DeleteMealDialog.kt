@@ -8,6 +8,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.sugercare.ui.theme.*
+import com.sugarcare.app.ui.theme.SurfaceWhite
+import com.sugarcare.app.ui.theme.TealPrimary
+import com.sugarcare.app.ui.theme.TextDark
+import com.sugarcare.app.ui.theme.TextMedium
+
 /**
  * Confirmation dialog shown before deleting a meal.
  *

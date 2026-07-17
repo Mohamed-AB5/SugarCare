@@ -25,6 +25,15 @@ import com.example.sugercare.viewModels.MealSortOrder
 import com.example.sugercare.data.meal.MealEntity
 import com.sugarcare.app.ui.components.SugarCareCard
 import com.example.sugercare.ui.theme.*
+import com.sugarcare.app.ui.theme.BackgroundLight
+import com.sugarcare.app.ui.theme.GreenAccent
+import com.sugarcare.app.ui.theme.SurfaceWhite
+import com.sugarcare.app.ui.theme.TealDark
+import com.sugarcare.app.ui.theme.TealLight
+import com.sugarcare.app.ui.theme.TealPrimary
+import com.sugarcare.app.ui.theme.TextDark
+import com.sugarcare.app.ui.theme.TextLight
+import com.sugarcare.app.ui.theme.TextMedium
 import java.text.SimpleDateFormat
 import java.util.*
 

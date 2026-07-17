@@ -1,6 +1,7 @@
 package com.sugarcare.app.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -172,5 +174,19 @@ fun ProfilePicture(
                 )
             )
         }
+    }
+}
+
+
+@Composable
+fun GradientButton(text: String, onClick: () -> Unit, color1: Color, color2: Color) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .background(Brush.horizontalGradient(listOf(color1, color2)))
+            .clickable { onClick() }
+            .padding(vertical = 8.dp), contentAlignment = Alignment.Center) {
+        Text(text, fontSize = 12.sp, color = White, fontWeight = FontWeight.Bold)
     }
 }

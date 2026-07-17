@@ -35,7 +35,6 @@ fun WelcomeScreen(
             horizontalAlignment   = Alignment.CenterHorizontally
         ) {
             // ── Logo ──────────────────────────────────────────
-            // Replace R.drawable.ic_logo with your actual vector asset
             Image(
                 painter            = painterResource(id = R.drawable.ic_logo),
                 contentDescription = "SugarCare logo",
@@ -81,11 +80,11 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             // ── CTA buttons ───────────────────────────────────
-            PrimaryButton(text = "Sign In", onClick = onSignIn)
+            GradientButton(text = "Sign In", onClick = onSignIn,color1 = TealPrimary, color2 = TealPrimary2)
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            SecondaryButton(text = "Sign Up", onClick = onSignUp)
+            GradientButton(text = "Sign Up", onClick = onSignUp,color1 = GreenAccent, color2 = GreenAccent2)
         }
     }
 }
@@ -98,4 +97,6 @@ fun WelcomeScreenPrev()
         WelcomeScreen(onSignIn = {}, onSignUp = {})
     }
     }
+
+
 
