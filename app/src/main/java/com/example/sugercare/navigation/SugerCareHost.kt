@@ -71,6 +71,13 @@ fun SugarCareNavHost(
     Log.d("AUTH", "authState = ${authState.value}")
 
     LaunchedEffect(authState.value, ) {
+        Log.d("NAV_TEST", "LaunchedEffect fired")
+
+        if (com.sugarcare.app.MainActivity.openedFromNotification) {
+            Log.d("NAV_TEST", "Opened from notification")
+            com.sugarcare.app.MainActivity.openedFromNotification = false
+            return@LaunchedEffect
+        }
         if (authState.value is AuthState.Authenticated && rememberMe.value) {
             navController.navigate(Screen.Home.route) {
                 popUpTo(Screen.Welcome.route) { inclusive = true }
@@ -80,7 +87,6 @@ fun SugarCareNavHost(
     }
 
 
-    val startDest = Screen.Splash.route
 
     NavHost(
         navController = navController,

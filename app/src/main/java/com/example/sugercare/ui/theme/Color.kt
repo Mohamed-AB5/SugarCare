@@ -27,3 +27,5 @@ val BackgroundDark  = Color(0xFF0D1F1F)
 val SurfaceDark     = Color(0xFF1A2E2E)
 val TextDarkMode    = Color(0xFFE0F2F1)
 val TextMediumDark  = Color(0xFF80CBC4)
+
+

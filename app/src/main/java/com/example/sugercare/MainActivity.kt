@@ -20,6 +20,7 @@ import com.example.sugercare.viewModels.AuthViewModel
 import com.example.sugercare.viewModels.ChatViewModel
 import com.example.sugercare.viewModels.CounterViewModel
 import com.example.sugercare.viewModels.ProfileViewModel
+import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.navigation.SugarCareNavHost
 import com.sugarcare.app.ui.theme.LocalDarkTheme
 import com.sugarcare.app.ui.theme.SugarCareTheme
@@ -33,13 +34,17 @@ class MainActivity : ComponentActivity() {
     private val chatViewModel   : ChatViewModel    by viewModels()
     private val counterViewModel   : CounterViewModel    by viewModels()
     private val sugarViewModel   : SugarViewModel    by viewModels()
-
+    private var pendingNavigationRoute by mutableStateOf<String?>(null)
+    companion object {
+        var openedFromNotification = false
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        pendingNavigationRoute = resolveNotificationRoute(intent)
+        com.sugarcare.app.MainActivity.Companion.openedFromNotification = pendingNavigationRoute != null
         // ── SHA Key Hash for Facebook Login ──────────────────
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -88,11 +93,32 @@ class MainActivity : ComponentActivity() {
                             counterViewModel = counterViewModel,
                             sugarViewModel   = sugarViewModel
                         )
+                        LaunchedEffect(pendingNavigationRoute) {
+
+                            val route = pendingNavigationRoute ?: return@LaunchedEffect
+
+                            navController.navigate(route) {
+                                launchSingleTop = true
+                            }
+
+                            pendingNavigationRoute = null
+                        }
                     }
                 }
             }
         }
     }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        pendingNavigationRoute = resolveNotificationRoute(intent)
+    }
+
+    private fun resolveNotificationRoute(intent: Intent): String? {
+        return when (intent.getStringExtra("open_screen")) {
+            "medications" -> Screen.Medications.route
+            else -> null
+        }
+    }S
 
     // ── Facebook Login result handler ─────────────────────────
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

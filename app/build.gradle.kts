@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -57,14 +58,16 @@ dependencies {
     // Firebase & Google Credentials
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-auth")
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
     implementation("androidx.credentials:credentials:1.2.2")
     implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("co.yml:ycharts:2.1.0")
     implementation("com.google.firebase:firebase-firestore-ktx")
-//    implementation(libs.androidx.junit.ktx)
-//    androidTestImplementation(libs.junit.junit)
 
 
     val composeBom = platform("androidx.compose:compose-bom:2024.12.01")
@@ -87,6 +90,17 @@ dependencies {
     // Debug
     debugImplementation("androidx.compose.ui:ui-tooling")
     testImplementation(kotlin("test"))
+    // Unit Test
+    testImplementation(libs.junit)
+
+// Android Instrumented Test
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
 
 
 }
