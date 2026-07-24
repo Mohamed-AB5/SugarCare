@@ -20,12 +20,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.components.SugarCareCard
 import com.sugarcare.app.ui.theme.*
-import com.example.sugercare.app.SugarViewModel
+import com.example.sugercare.viewModels.SugarViewModel
 import com.example.sugercare.app.parseReadingNote
+import com.sugarcare.app.ui.components.GradientButton
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -47,7 +49,8 @@ fun WeeklyAnalyticsScreen(
     val readings = remember(dbReadings, isWeekly) {
         val now = System.currentTimeMillis()
         if (isWeekly) {
-            val weeklyReadings = dbReadings.filter { it.timestamp >= now - (7L * 24 * 60 * 60 * 1000) }
+            val weeklyReadings =
+                dbReadings.filter { it.timestamp >= now - (7L * 24 * 60 * 60 * 1000) }
             val groupedAverages = weeklyReadings.groupBy {
                 SimpleDateFormat("E", Locale.getDefault()).format(Date(it.timestamp))
             }.mapValues { entry ->
@@ -57,16 +60,25 @@ fun WeeklyAnalyticsScreen(
                 DayReading(day, groupedAverages[day] ?: 0)
             }
         } else {
-            val monthlyReadings = dbReadings.filter { it.timestamp >= now - (30L * 24 * 60 * 60 * 1000) }
-            val w1Readings = monthlyReadings.filter { it.timestamp >= now - (30L * 24 * 60 * 60 * 1000) && it.timestamp < now - (22L * 24 * 60 * 60 * 1000) }
-            val w2Readings = monthlyReadings.filter { it.timestamp >= now - (22L * 24 * 60 * 60 * 1000) && it.timestamp < now - (15L * 24 * 60 * 60 * 1000) }
-            val w3Readings = monthlyReadings.filter { it.timestamp >= now - (15L * 24 * 60 * 60 * 1000) && it.timestamp < now - (7L * 24 * 60 * 60 * 1000) }
-            val w4Readings = monthlyReadings.filter { it.timestamp >= now - (7L * 24 * 60 * 60 * 1000) }
+            val monthlyReadings =
+                dbReadings.filter { it.timestamp >= now - (30L * 24 * 60 * 60 * 1000) }
+            val w1Readings =
+                monthlyReadings.filter { it.timestamp >= now - (30L * 24 * 60 * 60 * 1000) && it.timestamp < now - (22L * 24 * 60 * 60 * 1000) }
+            val w2Readings =
+                monthlyReadings.filter { it.timestamp >= now - (22L * 24 * 60 * 60 * 1000) && it.timestamp < now - (15L * 24 * 60 * 60 * 1000) }
+            val w3Readings =
+                monthlyReadings.filter { it.timestamp >= now - (15L * 24 * 60 * 60 * 1000) && it.timestamp < now - (7L * 24 * 60 * 60 * 1000) }
+            val w4Readings =
+                monthlyReadings.filter { it.timestamp >= now - (7L * 24 * 60 * 60 * 1000) }
 
-            val w1Avg = if (w1Readings.isNotEmpty()) w1Readings.map { it.glucoseLevel }.average().toInt() else 0
-            val w2Avg = if (w2Readings.isNotEmpty()) w2Readings.map { it.glucoseLevel }.average().toInt() else 0
-            val w3Avg = if (w3Readings.isNotEmpty()) w3Readings.map { it.glucoseLevel }.average().toInt() else 0
-            val w4Avg = if (w4Readings.isNotEmpty()) w4Readings.map { it.glucoseLevel }.average().toInt() else 0
+            val w1Avg = if (w1Readings.isNotEmpty()) w1Readings.map { it.glucoseLevel }.average()
+                .toInt() else 0
+            val w2Avg = if (w2Readings.isNotEmpty()) w2Readings.map { it.glucoseLevel }.average()
+                .toInt() else 0
+            val w3Avg = if (w3Readings.isNotEmpty()) w3Readings.map { it.glucoseLevel }.average()
+                .toInt() else 0
+            val w4Avg = if (w4Readings.isNotEmpty()) w4Readings.map { it.glucoseLevel }.average()
+                .toInt() else 0
 
             listOf(
                 DayReading("Week 1", w1Avg),
@@ -101,8 +113,10 @@ fun WeeklyAnalyticsScreen(
     val navColor = if (isDark) SurfaceDark else Color.White
     val navText = if (isDark) Color(0xFF80CBC4) else TextMedium
 
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+
     SugarCareBackground {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 if (isWeekly) "Weekly Analytics" else "Monthly Analytics",
                 style = MaterialTheme.typography.headlineMedium,
@@ -273,7 +287,7 @@ fun WeeklyAnalyticsScreen(
             }
 
             Spacer(Modifier.weight(1f))
-
+/*
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -307,7 +321,18 @@ fun WeeklyAnalyticsScreen(
                         tint = White
                     )
                 }
-            }
+            }*/
+
+            GradientButton(
+                "Track Glucose",
+                { navController.navigate(Screen.Logs.route) },
+                color1 = TealPrimary,
+                color2 = TealPrimary2,
+                textSize = 18.sp,
+                modifier = Modifier
+                    .width(280.dp)
+                    .height(45.dp)
+            )
 
             Spacer(Modifier.height(8.dp))
 
@@ -319,14 +344,14 @@ fun WeeklyAnalyticsScreen(
                     Triple("Profile", Icons.Filled.Person, Screen.Profile.route)
                 ).forEach { (label, icon, route) ->
                     NavigationBarItem(
-                        selected = route == Screen.Logs.route,
+                        selected = route == currentRoute,
                         onClick = {
                             if (route != Screen.Logs.route) navController.navigate(route) {
                                 launchSingleTop = true
                             }
                         },
                         icon = { Icon(icon, contentDescription = label) },
-                        label = { Text(label, fontSize = 11.sp) },
+                        label = { Text(label, fontSize = 11.sp, color = textColor) },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = TealPrimary,
                             unselectedIconColor = navText,

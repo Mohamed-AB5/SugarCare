@@ -324,6 +324,7 @@ fun SignUpScreen(
                 }
 
             )
+
             Spacer(modifier = Modifier.height(12.dp))
 
             SugarCareTextField(

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.sugercare.viewModels.MealViewModel
 import com.sugarcare.app.navigation.Screen
@@ -57,6 +58,8 @@ fun MealPlanScreen(
     val subColor = if (isDark) Color(0xFF80CBC4) else TextMedium
     val navColor = if (isDark) SurfaceDark else Color.White
     val navText = if (isDark) Color(0xFF80CBC4) else TextMedium
+
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     SugarCareBackground {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -120,14 +123,14 @@ fun MealPlanScreen(
                     Triple("Profile", Icons.Filled.Person, Screen.Profile.route)
                 ).forEach { (label, icon, route) ->
                     NavigationBarItem(
-                        selected = route == Screen.MealPlan.route,
+                        selected = route == currentRoute,
                         onClick = {
                             if (route != Screen.MealPlan.route) navController.navigate(route) {
                                 launchSingleTop = true
                             }
                         },
                         icon = { Icon(icon, contentDescription = label) },
-                        label = { Text(label, fontSize = 11.sp) },
+                        label = { Text(label, fontSize = 11.sp, color = textColor) },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = TealPrimary,
                             unselectedIconColor = navText,

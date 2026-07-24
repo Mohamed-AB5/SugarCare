@@ -16,7 +16,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.sugercare.app.SugarViewModel
+import com.example.sugercare.viewModels.SugarViewModel
 import com.example.sugercare.viewModels.AuthViewModel
 import com.example.sugercare.viewModels.ChatViewModel
 import com.example.sugercare.viewModels.CounterViewModel
@@ -30,12 +30,13 @@ import java.security.NoSuchAlgorithmException
 
 class MainActivity : ComponentActivity() {
 
-    private val authViewModel   : AuthViewModel    by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
-    private val chatViewModel   : ChatViewModel    by viewModels()
-    private val counterViewModel   : CounterViewModel    by viewModels()
-    private val sugarViewModel   : SugarViewModel    by viewModels()
+    private val chatViewModel: ChatViewModel by viewModels()
+    private val counterViewModel: CounterViewModel by viewModels()
+    private val sugarViewModel: SugarViewModel by viewModels()
     private var pendingNavigationRoute by mutableStateOf<String?>(null)
+
     companion object {
         var openedFromNotification = false
     }
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         pendingNavigationRoute = resolveNotificationRoute(intent)
         openedFromNotification = pendingNavigationRoute != null
         // ── SHA Key Hash for Facebook Login ──────────────────
@@ -89,11 +91,11 @@ class MainActivity : ComponentActivity() {
                 SugarCareTheme(darkTheme = darkState.value) {
                     Surface(modifier = Modifier.fillMaxSize()) {
                         SugarCareNavHost(
-                            authViewModel    = authViewModel,
+                            authViewModel = authViewModel,
                             profileViewModel = profileViewModel,
-                            chatViewModel    = chatViewModel,
+                            chatViewModel = chatViewModel,
                             counterViewModel = counterViewModel,
-                            sugarViewModel   = sugarViewModel
+                            sugarViewModel = sugarViewModel
                         )
                         LaunchedEffect(pendingNavigationRoute) {
 
@@ -110,6 +112,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         pendingNavigationRoute = resolveNotificationRoute(intent)
