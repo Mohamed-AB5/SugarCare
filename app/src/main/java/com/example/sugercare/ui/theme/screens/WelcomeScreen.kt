@@ -31,30 +31,30 @@ fun WelcomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 40.dp),
-            verticalArrangement   = Arrangement.Center,
-            horizontalAlignment   = Alignment.CenterHorizontally
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // ── Logo ──────────────────────────────────────────
             Image(
-                painter            = painterResource(id = R.drawable.ic_logo),
+                painter = painterResource(id = R.drawable.ic_logo),
                 contentDescription = "SugarCare logo",
-                modifier           = Modifier.size(160.dp)
+                modifier = Modifier.size(160.dp)
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             // ── App name ──────────────────────────────────────
             Text(
-                text       = "Sugar",
-                color      = TealPrimary,
-                fontSize   = 40.sp,
+                text = "Sugar",
+                color = TealPrimary,
+                fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 lineHeight = 44.sp
             )
             Text(
-                text       = "Care",
-                color      = GreenAccent,
-                fontSize   = 40.sp,
+                text = "Care",
+                color = GreenAccent,
+                fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 lineHeight = 44.sp
             )
@@ -62,41 +62,54 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text      = "Welcome",
-                style     = MaterialTheme.typography.headlineMedium,
-                color     = TealPrimary,
+                text = "Welcome",
+                style = MaterialTheme.typography.headlineMedium,
+                color = TealPrimary,
                 textAlign = TextAlign.Center
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text      = "Already have an account? or New user?",
-                color     = TextMedium,
-                fontSize  = 14.sp,
+                text = "Already have an account? or New user?",
+                color = TextMedium,
+                fontSize = 14.sp,
                 textAlign = TextAlign.Center
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // ── CTA buttons ───────────────────────────────────
-            GradientButton(text = "Sign In", onClick = onSignIn,color1 = TealPrimary, color2 = TealPrimary2)
+            GradientButton(
+                text = "Sign In",
+                onClick = onSignIn,
+                color1 = TealPrimary,
+                color2 = TealPrimary2,
+                textSize = 18.sp,
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            GradientButton(text = "Sign Up", onClick = onSignUp,color1 = GreenAccent, color2 = GreenAccent2)
+            GradientButton(
+                text = "Sign Up",
+                onClick = onSignUp,
+                color1 = GreenAccent,
+                color2 = GreenAccent2,
+                textSize = 18.sp,
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+            )
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun WelcomeScreenPrev()
-{
-    SugarCareTheme{
+fun WelcomeScreenPrev() {
+    SugarCareTheme {
         WelcomeScreen(onSignIn = {}, onSignUp = {})
     }
-    }
+}
 
 
 

@@ -1,5 +1,6 @@
 package com.sugarcare.app.ui.components
 
+import android.icu.number.IntegerWidth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,7 +55,9 @@ fun PrimaryButton(
     Button(
         onClick   = onClick,
         enabled   = enabled,
-        modifier  = modifier.fillMaxWidth().height(56.dp),
+        modifier  = modifier
+            .fillMaxWidth()
+            .height(56.dp),
         shape     = RoundedCornerShape(28.dp),
         colors    = ButtonDefaults.buttonColors(
             containerColor         = TealPrimary,
@@ -77,7 +81,9 @@ fun SecondaryButton(
     Button(
         onClick   = onClick,
         enabled   = enabled,
-        modifier  = modifier.fillMaxWidth().height(56.dp),
+        modifier  = modifier
+            .fillMaxWidth()
+            .height(56.dp),
         shape     = RoundedCornerShape(28.dp),
         colors    = ButtonDefaults.buttonColors(
             containerColor         = GreenAccent,
@@ -179,14 +185,22 @@ fun ProfilePicture(
 
 
 @Composable
-fun GradientButton(text: String, onClick: () -> Unit, color1: Color, color2: Color) {
+fun GradientButton(
+    text: String,
+    onClick: () -> Unit,
+    color1: Color,
+    color2: Color,
+    modifier: Modifier = Modifier,
+    textSize: TextUnit = 12.sp,
+    horizontalPadding: Dp = 16.dp,
+    verticalPadding: Dp = 8.dp,
+) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
+        modifier = modifier
+            .clip(RoundedCornerShape(28.dp))
             .background(Brush.horizontalGradient(listOf(color1, color2)))
             .clickable { onClick() }
-            .padding(vertical = 8.dp), contentAlignment = Alignment.Center) {
-        Text(text, fontSize = 12.sp, color = White, fontWeight = FontWeight.Bold)
+            .padding(horizontal = horizontalPadding, vertical = verticalPadding), contentAlignment = Alignment.Center) {
+        Text(text, fontSize = textSize, color = White, fontWeight = FontWeight.Bold)
     }
 }

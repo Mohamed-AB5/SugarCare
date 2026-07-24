@@ -1,4 +1,5 @@
 package com.example.sugercare.ui.theme.screens
+
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,10 +31,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.sugercare.viewModels.CounterViewModel
 import com.example.sugercare.viewModels.ProfileViewModel
 import com.sugarcare.app.navigation.Screen
+import com.sugarcare.app.ui.components.GradientButton
 import com.sugarcare.app.ui.components.ProfilePicture   // ← now exists in SharedComponents
 import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.theme.*
@@ -69,6 +72,8 @@ fun HomeScreen(
     val subColor = if (isDark) Color(0xFF80CBC4) else TextMedium
     val navColor = if (isDark) SurfaceDark else Color.White
     val navText = if (isDark) Color(0xFF80CBC4) else TextMedium
+
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     SugarCareBackground {
         Scaffold(
@@ -121,19 +126,21 @@ fun HomeScreen(
                         Triple("Profile", Icons.Filled.Person, Screen.Profile.route)
                     ).forEach { (label, icon, route) ->
                         NavigationBarItem(
-                            selected = route == Screen.Home.route,
+                            selected = route == currentRoute,
                             onClick = {
                                 if (route != Screen.Home.route) navController.navigate(route) {
                                     launchSingleTop = true
                                 }
                             },
                             icon = { Icon(icon, contentDescription = label) },
-                            label = { Text(label, fontSize = 11.sp) },
+                            label = { Text(label, fontSize = 11.sp, color = textColor) },
                             colors = NavigationBarItemDefaults.colors(
                                 selectedIconColor = TealPrimary,
                                 unselectedIconColor = navText,
-                                indicatorColor = TealLight
-                            )
+                                indicatorColor = TealLight,
+                                selectedTextColor = navText,
+                                unselectedTextColor = textColor
+                                )
                         )
                     }
                 }
@@ -149,7 +156,6 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(paddingValues)
-
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
@@ -199,7 +205,12 @@ fun HomeScreen(
                                 Spacer(Modifier.height(8.dp))
                                 Text("Average: 12.20", fontSize = 12.sp, color = subColor)
                                 Spacer(Modifier.height(8.dp))
-                                GradientButton("Analyze Trends") { navController.navigate(Screen.WeeklyAnalytics.route) }
+                                GradientButton(
+                                    "Analyze Trends",
+                                    onClick = { navController.navigate(Screen.WeeklyAnalytics.route) },
+                                    color1 = GreenAccent,
+                                    color2 = GreenAccent3
+                                )
                             }
                         }
 
@@ -230,15 +241,23 @@ fun HomeScreen(
                                 )
 
                                 Spacer(Modifier.height(8.dp))
-                                GradientButton("Get AI Advice!") { navController.navigate(Screen.ChatScreen.route) }
+                                GradientButton(
+                                    "Get AI Advice!",
+                                    onClick = { navController.navigate(Screen.ChatScreen.route) },
+                                    color1 = GreenAccent,
+                                    color2 = GreenAccent3
+                                )
                             }
                         }
                     }
 
                     // Right : Column 2: Meal Plan | Medication Plan | Sugar Counter | Emergency Contact ▬▬▬▬
                     Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         // ──── Meal Plan mini card ────────
                         DashboardCard(
@@ -253,7 +272,7 @@ fun HomeScreen(
                             titleColor = textColor
                         ) { navController.navigate(Screen.MealPlan.route) }
 
-                        // ──── Medication Plan mini card (مصغّرة) ────────
+                        // ──── Medication Plan mini card ────────
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(20.dp),
@@ -278,7 +297,12 @@ fun HomeScreen(
                                     notifEnabled = it
                                 }
                                 Spacer(Modifier.height(4.dp))
-                                GradientButton("Set Notifications") { navController.navigate(Screen.Medications.route) }
+                                GradientButton(
+                                    text = "Set Notifications",
+                                    onClick = { navController.navigate(Screen.Medications.route) },
+                                    color1 = GreenAccent,
+                                    color2 = GreenAccent3
+                                )
                             }
                         }
 
@@ -328,7 +352,7 @@ fun HomeScreen(
                             }
                         }
 
-                        // ──── Emergency Contact mini card (بالطول) ────────
+                        // ──── Emergency Contact mini card  ────────
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(20.dp),
@@ -379,18 +403,7 @@ fun HomeScreen(
     }
 }
 
-@Composable
-private fun GradientButton(text: String, onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .background(Brush.horizontalGradient(listOf(GreenAccent, GreenAccent3)))
-            .clickable { onClick() }
-            .padding(vertical = 8.dp), contentAlignment = Alignment.Center) {
-        Text(text, fontSize = 12.sp, color = White, fontWeight = FontWeight.Bold)
-    }
-}
+// (private fun GradientButton) deleted to use the one @SharedCompnents
 
 @Composable
 private fun DashboardCard(
@@ -420,7 +433,16 @@ private fun DashboardCard(
             Spacer(Modifier.height(8.dp))
             Icon(icon, null, tint = iconTint, modifier = Modifier.size(44.dp))
             Spacer(Modifier.height(8.dp))
-            GradientButton(buttonText) { onButtonClick() }
+            GradientButton(
+                text = buttonText,
+                textSize =10.sp ,
+                onClick = { onButtonClick()},
+                modifier = Modifier
+                    .width(130.dp)
+                    .align(Alignment.CenterHorizontally),
+                color1= GreenAccent,
+                color2= GreenAccent3
+            )
         }
     }
 }

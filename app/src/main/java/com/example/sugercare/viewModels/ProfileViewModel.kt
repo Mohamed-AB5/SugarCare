@@ -155,7 +155,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         _editableProfile.value = _editableProfile.value.copy(gender = value)
     }
 
-    fun updateAge(value: String) {
+/*    fun updateAge(value: String) {
         return try {
             val age = value.toInt()
             _editableProfile.value = _editableProfile.value.copy(
@@ -163,7 +163,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                 dob = calculateDOBFromAge(age)
             )
         } catch (e: Exception) { }
-    }
+    }*/
     fun updateWeight(value: String) {
         _editableProfile.value = _editableProfile.value.copy(weight = value)
     }
@@ -186,11 +186,11 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                 errors["dob"] = "Use format DD/MM/YYYY"
         }
 
-        if(profile.age !in 1..150)
+      /*  if(profile.age !in 1..126)
         {
             errors["age"] = "Enter a valid age"
         }
-
+*/
         if(profile.weight.toInt() !in 1..300)
         {
             errors["weight"] = "Enter a valid weight"
@@ -228,7 +228,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     }
 
     // ── Calculate DOB from age ──────────────────────────────────
-    private fun calculateDOBFromAge(age: Int): String {
+ /*   private fun calculateDOBFromAge(age: Int): String {
 
         val today     = Calendar.getInstance()
         val birthYear = today.get(Calendar.YEAR) - age
@@ -239,7 +239,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         val formattedMonth = month.toString().padStart(2, '0')
 
         return "$formattedDay/$formattedMonth/$birthYear"
-    }
+    }*/
 
 
 //  ── Saving Profile Data  ────────────────────────────

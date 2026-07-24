@@ -8,14 +8,13 @@ import com.example.sugercare.ui.theme.screens.HomeScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sugercare.MainActivity.Companion.openedFromNotification
 import com.example.sugercare.app.SugarTrackerScreen
-import com.example.sugercare.app.SugarViewModel
+import com.example.sugercare.viewModels.SugarViewModel
 import com.example.sugercare.ui.theme.screens.CounterScreen
 import com.example.sugercare.ui.theme.screens.ChatScreen
 import com.example.sugercare.ui.theme.screens.EmergencyContactScreen

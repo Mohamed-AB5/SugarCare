@@ -1,8 +1,8 @@
 package com.example.sugercare.ui.theme.screens
 
+
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -40,19 +40,23 @@ import java.util.Calendar
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.rememberDatePickerState
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sugarcare.app.navigation.Screen
-import kotlinx.coroutines.delay
 
 // ── Shared bottom nav ─────────────────────────────────────────
 @Composable
 private fun BottomNav(navController: NavHostController, currentRoute: String) {
+    val isDark = LocalDarkTheme.current.value
+    val textColor = if (isDark) Color(0xFFE0F2F1) else TextDark
+    val navText = if (isDark) Color(0xFF80CBC4) else TextMedium
+
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 8.dp
     ) {
         listOf(
             Triple("Home",    Icons.Filled.Home,       Screen.Home.route),
-            Triple("Logs",    Icons.Filled.Favorite,   Screen.Logs.route),
+            Triple("Logs",    Icons.Filled.Assignment,   Screen.Logs.route),
             Triple("Meals",   Icons.Filled.Restaurant, Screen.MealPlan.route),
             Triple("Profile", Icons.Filled.Person,     Screen.Profile.route)
         ).forEach { (label, icon, route) ->
@@ -63,11 +67,11 @@ private fun BottomNav(navController: NavHostController, currentRoute: String) {
                         navController.navigate(route) { launchSingleTop = true }
                 },
                 icon   = { Icon(icon, contentDescription = label) },
-                label  = { Text(label, fontSize = 11.sp) },
+                label  = { Text(label, fontSize = 11.sp, color = textColor) },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor   = TealPrimary,
                     unselectedIconColor = MaterialTheme.colorScheme.onSurface.copy(0.5f),
-                    indicatorColor      = TealLight
+                    indicatorColor      = TealLight,
                 )
             )
         }
@@ -253,6 +257,12 @@ fun ProfileScreen(
     // ── Dark Mode Switch ──────────────────────────────────────
     val darkState = LocalDarkTheme.current
     val isDark    = darkState.value
+    val bgColor = if (isDark) BackgroundDark else BackgroundLight
+    val cardColor = if (isDark) SurfaceDark else Color.White
+    val textColor = if (isDark) Color(0xFFE0F2F1) else TextDark
+    val subColor = if (isDark) Color(0xFF80CBC4) else TextMedium
+    val navColor = if (isDark) SurfaceDark else Color.White
+    val navText = if (isDark) Color(0xFF80CBC4) else TextMedium
 
     LaunchedEffect(profileState.value) {
         if (profileState.value is ProfileUiState.Saved) {
@@ -288,7 +298,7 @@ fun ProfileScreen(
             TopAppBar(
                 title = {
                     Text("My Profile", fontWeight = FontWeight.Bold,
-                        color = if (LocalDarkTheme.current.value) Color(0xFFE0F2F1) else Color(0xFF1A2B2B))
+                        color = textColor)
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -297,11 +307,11 @@ fun ProfileScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background)
+                    containerColor = bgColor)
             )
         },
         bottomBar = { BottomNav(navController, Screen.Profile.route) },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = bgColor
     ) { padding ->
         Column(
             Modifier
@@ -320,7 +330,7 @@ fun ProfileScreen(
                 Modifier.fillMaxWidth(),
                 shape     = RoundedCornerShape(16.dp),
                 colors    = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface),
+                    containerColor = bgColor),
                 elevation = CardDefaults.cardElevation(0.dp)
             ) {
                 Row(
@@ -338,7 +348,7 @@ fun ProfileScreen(
                         Column {
                             Text("Dark Mode",
                                 fontWeight = FontWeight.SemiBold, fontSize = 15.sp,
-                                color = if (LocalDarkTheme.current.value) Color(0xFFE0F2F1) else Color(0xFF1A2B2B))
+                                color = textColor)
                             Text(if (isDark) "On" else "Off",
                                 fontSize = 12.sp,
                                 color = if (LocalDarkTheme.current.value) Color(0xFFE0F2F1).copy(0.6f) else Color(0xFF1A2B2B).copy(0.5f))
@@ -396,7 +406,8 @@ fun ProfileScreen(
                                 Text(it, color = Color.Red, fontSize = 12.sp)
                             }
                         },
-                        icon          = Icons.Filled.Person
+                        icon          = Icons.Filled.Person,
+                        color = textColor
                     )
                     Spacer(Modifier.height(12.dp))
 
@@ -415,7 +426,8 @@ fun ProfileScreen(
                             }
                         },
                         icon         = Icons.Filled.Phone,
-                        keyboardType = KeyboardType.Phone
+                        keyboardType = KeyboardType.Phone,
+                        color        = textColor
                     )
                     Spacer(Modifier.height(12.dp))
 
@@ -440,18 +452,20 @@ fun ProfileScreen(
                             modifier      = Modifier.weight(1f),
                             value         = editableProfile.value.age.toString(),
                             onValueChange = {
-                                profileViewModel.updateAge(it)
+//                                profileViewModel.updateAge(it)
                                 profileViewModel.clearFieldError("age")
                             },
                             label         = "Age",
-                            isError       = fieldErrors.value.containsKey("age"),
+                         /* remove edit age access ← ←
+                          isError       = fieldErrors.value.containsKey("age"),
                             supportingText = {
                                 fieldErrors.value["age"]?.let {
                                     Text(it, color = Color.Red, fontSize = 12.sp)
                                 }
-                            },
+                            },  */
                             icon         = Icons.Filled.HealthAndSafety,
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Number,
+                            color        = textColor
                         )
                         ProfileFieldItem(
                             modifier      = Modifier.weight(1.5f),
@@ -468,7 +482,8 @@ fun ProfileScreen(
                                 }
                             },
                             icon         = Icons.Filled.MonitorWeight,
-                            keyboardType = KeyboardType.Decimal
+                            keyboardType = KeyboardType.Decimal,
+                            color        = textColor
                         )
                     }
                     Spacer(Modifier.height(12.dp))
@@ -479,7 +494,7 @@ fun ProfileScreen(
                             value         = editableProfile.value.gender,
                             onValueChange = {},
                             readOnly      = true,
-                            label         = { Text("Gender") },
+                            label         = { Text("Gender",color =  textColor) },
                             leadingIcon   = { Icon(Icons.Filled.Wc, null, tint = TealPrimary) },
                             trailingIcon  = { ExposedDropdownMenuDefaults.TrailingIcon(showGender) },
                             modifier      = Modifier.fillMaxWidth()
@@ -495,7 +510,7 @@ fun ProfileScreen(
                                 DropdownMenuItem(
                                     text = {
                                         Text(opt,
-                                            color = if (LocalDarkTheme.current.value) Color(0xFFE0F2F1) else Color(0xFF1A2B2B),
+                                            color = textColor,
                                             fontSize = 15.sp,
                                             fontWeight = if (opt == editableProfile.value.gender)
                                                 FontWeight.SemiBold else FontWeight.Normal)
@@ -557,12 +572,13 @@ private fun ProfileFieldItem(
     isError       : Boolean = false,
     supportingText: @Composable (() -> Unit)? = null,
     icon          : ImageVector,
-    keyboardType  : KeyboardType = KeyboardType.Text
+    keyboardType  : KeyboardType = KeyboardType.Text,
+    color         : Color
 ) {
     OutlinedTextField(
         value          = value,
         onValueChange  = onValueChange,
-        label          = { Text(label) },
+        label          = { Text(label,color = color) },
         leadingIcon    = { Icon(icon, null, tint = TealPrimary) },
         isError        = isError,
         supportingText = supportingText,
@@ -583,6 +599,10 @@ fun DatePickerField(
     supportingText: @Composable (() -> Unit)? = null
 ) {
     var showPicker by remember { mutableStateOf(false) }
+    val darkState = LocalDarkTheme.current
+    val isDark    = darkState.value
+    val textColor = if (isDark) Color(0xFFE0F2F1) else TextDark
+
 
     if (showPicker) {
         val datePickerState = rememberDatePickerState()
@@ -623,7 +643,7 @@ fun DatePickerField(
         value          = selectedDate,
         onValueChange  = {},
         readOnly       = true,
-        label          = { Text("Date of Birth") },
+        label          = { Text("Date of Birth",color = textColor) },
         leadingIcon    = { Icon(Icons.Filled.CalendarToday, null, tint = TealPrimary) },
         trailingIcon   = {
             IconButton(onClick = { showPicker = true }) {

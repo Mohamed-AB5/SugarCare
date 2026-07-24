@@ -2,7 +2,7 @@ package com.example.sugercare.viewModels
 
 import androidx.lifecycle.ViewModel
 import com.sugarcare.app.ui.screens.DoctorMeal
-import com.sugarcare.app.ui.screens.LocalMealData
+import com.example.sugercare.data.meal.LocalMealData
 import com.sugarcare.app.ui.screens.MealLog
 import com.sugarcare.app.ui.screens.MealSuggestion
 import kotlinx.coroutines.flow.MutableStateFlow

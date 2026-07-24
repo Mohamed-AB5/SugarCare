@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sugarcare.app.navigation.Screen
 import com.example.sugercare.notifications.NotificationHelper
@@ -96,6 +97,16 @@ fun MedicationsScreen(navController: NavHostController) {
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { /* permission result — alarm schedules regardless */ }
+
+    val isDark = LocalDarkTheme.current.value
+    val bgColor = if (isDark) BackgroundDark else BackgroundLight
+    val cardColor = if (isDark) SurfaceDark else Color.White
+    val textColor = if (isDark) Color(0xFFE0F2F1) else TextDark
+    val subColor = if (isDark) Color(0xFF80CBC4) else TextMedium
+    val navColor = if (isDark) SurfaceDark else Color.White
+    val navText = if (isDark) Color(0xFF80CBC4) else TextMedium
+
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     LaunchedEffect(Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -198,10 +209,10 @@ fun MedicationsScreen(navController: NavHostController) {
                     Triple("Profile", Icons.Filled.Person,      Screen.Profile.route)
                 ).forEach { (label, icon, route) ->
                     NavigationBarItem(
-                        selected = route == Screen.Medications.route,
+                        selected = route == currentRoute,
                         onClick  = { navController.navigate(route) },
                         icon     = { Icon(icon, contentDescription = label) },
-                        label    = { Text(label, fontSize = 11.sp) },
+                        label    = { Text(label, fontSize = 11.sp, color = textColor) },
                         colors   = NavigationBarItemDefaults.colors(
                             selectedIconColor = TealPrimary,
                             indicatorColor    = TealLight
