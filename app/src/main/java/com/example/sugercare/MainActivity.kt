@@ -13,14 +13,19 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.sugercare.viewModels.SugarViewModel
-import com.example.sugercare.viewModels.AuthViewModel
-import com.example.sugercare.viewModels.ChatViewModel
-import com.example.sugercare.viewModels.CounterViewModel
-import com.example.sugercare.viewModels.ProfileViewModel
+import com.example.sugercare.core.features.auth.presentation.AuthViewModel
+import com.example.sugercare.core.features.chatBot.presentation.ChatViewModel
+import com.example.sugercare.core.features.counter.presentation.CounterViewModel
+import com.example.sugercare.core.features.glucoseLogs.presentation.GlucoseViewModel
+import com.example.sugercare.core.features.profile.presentation.ProfileViewModel
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.navigation.SugarCareNavHost
 import com.sugarcare.app.ui.theme.LocalDarkTheme
@@ -34,7 +39,7 @@ class MainActivity : ComponentActivity() {
     private val profileViewModel: ProfileViewModel by viewModels()
     private val chatViewModel: ChatViewModel by viewModels()
     private val counterViewModel: CounterViewModel by viewModels()
-    private val sugarViewModel: SugarViewModel by viewModels()
+    private val glucoseViewModel: GlucoseViewModel by viewModels()
     private var pendingNavigationRoute by mutableStateOf<String?>(null)
 
     companion object {
@@ -95,7 +100,7 @@ class MainActivity : ComponentActivity() {
                             profileViewModel = profileViewModel,
                             chatViewModel = chatViewModel,
                             counterViewModel = counterViewModel,
-                            sugarViewModel = sugarViewModel
+                            glucoseViewModel = glucoseViewModel
                         )
                         LaunchedEffect(pendingNavigationRoute) {
 
