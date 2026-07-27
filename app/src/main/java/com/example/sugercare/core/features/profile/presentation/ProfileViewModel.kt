@@ -3,6 +3,7 @@ package com.example.sugercare.core.features.profile.presentation
 import android.app.Application
 import android.icu.util.Calendar
 import android.util.Log
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sugercare.core.features.profile.model.AuthProvider
@@ -128,7 +129,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             phone = "",
             dob = "",
             age = 0,
-            weight = "",
+            weight = 0,
             gender = "",
             authProvider = provider,
             photoUrl = photoUrl ?: ""
@@ -165,7 +166,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         } catch (e: Exception) { }
     }*/
     fun updateWeight(value: String) {
-        _editableProfile.value = _editableProfile.value.copy(weight = value)
+        val weight = value.toInt()
+        _editableProfile.value = _editableProfile.value.copy(weight = weight)
     }
 
 
@@ -191,7 +193,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             errors["age"] = "Enter a valid age"
         }
 */
-        if(profile.weight.toInt() !in 1..300)
+        if(profile.weight !in 1..300)
         {
             errors["weight"] = "Enter a valid weight"
         }

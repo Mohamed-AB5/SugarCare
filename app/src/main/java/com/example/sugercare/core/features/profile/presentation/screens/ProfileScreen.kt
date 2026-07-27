@@ -316,14 +316,14 @@ fun ProfileScreen(
                                    fieldErrors.value["age"]?.let {
                                        Text(it, color = Color.Red, fontSize = 12.sp)
                                    }
-                               },  */
+                               },*/
                             icon         = Icons.Filled.HealthAndSafety,
                             keyboardType = KeyboardType.Number,
                             color        = textColor
                         )
                         ProfileFieldItem(
                             modifier      = Modifier.weight(1.5f),
-                            value         = editableProfile.value.weight,
+                            value         = editableProfile.value.weight.toString(),
                             onValueChange = {
                                 profileViewModel.updateWeight(it)
                                 profileViewModel.clearFieldError("weight")
@@ -418,7 +418,7 @@ fun ProfileScreen(
 
 // ── Helpers ───────────────────────────────────────────────────
 @Composable
-private fun ProfileFieldItem(
+private fun   ProfileFieldItem(
     modifier      : Modifier,
     value         : String,
     onValueChange : (String) -> Unit,

@@ -23,7 +23,7 @@ class ProfileRepoImpl : ProfileRepo {
                     phone = doc.getString("phone") ?: "",
                     dob = doc.getString("dob") ?: "",
                     age = doc.getLong("age")?.toInt() ?: 0,
-                    weight = doc.getString("weight") ?: "",
+                    weight = doc.getLong("weight")?.toInt() ?: 0,
                     gender = doc.getString("gender") ?: "",
                     email = doc.getString("email") ?: "",
                     authProvider = AuthProvider.valueOf(

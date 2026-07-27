@@ -8,7 +8,7 @@ data class UserProfile(
     val phone        : String = "",
     val dob          : String = "",
     val age          : Int    = 0,
-    val weight       : String = "",
+    val weight       : Int    = 0,
     val gender       : String = "",
     val email        : String = "",
     val authProvider : AuthProvider = AuthProvider.EMAIL,

@@ -1,4 +1,4 @@
-package com.example.sugercare.core.features.profile.presentation.screens
+package com.example.sugercare.core.features.auth.presentation
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -45,9 +45,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.sugercare.core.features.auth.presentation.AuthViewModel
-import com.example.sugercare.core.features.auth.presentation.ResetPassState
+import com.example.sugercare.core.features.profile.presentation.screens.newScreenFieldColors
+import com.sugarcare.app.ui.components.GradientButton
 import com.sugarcare.app.ui.theme.LocalDarkTheme
+import com.sugarcare.app.ui.theme.OrangeDrop
+import com.sugarcare.app.ui.theme.OrangeDrop2
 import com.sugarcare.app.ui.theme.TealLight
 import com.sugarcare.app.ui.theme.TealPrimary
 
@@ -89,43 +91,84 @@ fun ForgotPasswordScreen(
         containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         Column(
-            Modifier.fillMaxSize().padding(padding).padding(horizontal = 32.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 32.dp),
             Arrangement.Center, Alignment.CenterHorizontally
         ) {
-            Box(Modifier.size(88.dp).clip(CircleShape).background(TealLight),
-                contentAlignment = Alignment.Center) {
-                Icon(Icons.Filled.Lock, null,
-                    tint = TealPrimary, modifier = Modifier.size(44.dp))
+            Box(
+                Modifier
+                    .size(88.dp)
+                    .clip(CircleShape)
+                    .background(TealLight),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    Icons.Filled.Lock, null,
+                    tint = TealPrimary, modifier = Modifier.size(44.dp)
+                )
             }
             Spacer(Modifier.height(28.dp))
-            Text("Confirm it's you",
+            Text(
+                "Confirm it's you",
                 fontSize = 26.sp, fontWeight = FontWeight.Bold,
-                color = if (LocalDarkTheme.current.value) Color(0xFFE0F2F1) else Color(0xFF1A2B2B))
+                color = if (LocalDarkTheme.current.value) Color(0xFFE0F2F1) else Color(0xFF1A2B2B)
+            )
             Spacer(Modifier.height(8.dp))
             Text(
                 "Enter your registered email and\nwe'll send a verification code.",
                 fontSize = 14.sp,
-                color = if (LocalDarkTheme.current.value) Color(0xFFE0F2F1).copy(0.6f) else Color(0xFF4A6565),
+                color = if (LocalDarkTheme.current.value) Color(0xFFE0F2F1).copy(0.6f) else Color(
+                    0xFF4A6565
+                ),
                 textAlign = TextAlign.Center, lineHeight = 22.sp
             )
             Spacer(Modifier.height(36.dp))
 
             OutlinedTextField(
-                value         = email.value,
+                value = email.value,
                 onValueChange = { authViewModel.updateEmail(it) },
-                label         = { Text("Email address") },
-                leadingIcon   = { Icon(Icons.Filled.Email, null, tint = TealPrimary) },
-                modifier      = Modifier.fillMaxWidth(),
-                shape         = RoundedCornerShape(28.dp),
-                singleLine    = true,
+                label = { Text("Email address") },
+                leadingIcon = { Icon(Icons.Filled.Email, null, tint = TealPrimary) },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(28.dp),
+                singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                colors        = newScreenFieldColors()
+                colors = newScreenFieldColors()
             )
             Spacer(Modifier.height(28.dp))
 
-            Button(
+
+            GradientButton(
                 onClick = { authViewModel.sendPasswordReset(email.value) },
-                modifier  = Modifier.fillMaxWidth().height(56.dp),
+                text = "Send Reset Email",
+                textSize = 16.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                enabled = email.value.isNotBlank()
+                        && resetPassState.value !is ResetPassState.Loading,
+                color1 = OrangeDrop,
+                color2 = OrangeDrop2
+            )
+            {
+                if (resetPassState.value is ResetPassState.Loading) {
+                    CircularProgressIndicator(
+                        color = Color.White,
+                        modifier = Modifier.size(22.dp), strokeWidth = 2.dp
+                    )
+                }
+                else {
+                    Text("Send Reset Email", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                }
+            }
+
+/*            Button(
+                onClick = { authViewModel.sendPasswordReset(email.value) },
+                modifier  = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
                 shape     = RoundedCornerShape(28.dp),
                 enabled   = email.value.isNotBlank()
                         && resetPassState.value !is ResetPassState.Loading,
@@ -137,7 +180,7 @@ fun ForgotPasswordScreen(
                         modifier = Modifier.size(22.dp), strokeWidth = 2.dp)
                 else
                     Text("Send Reset Email", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            }
+            }*/
 
             if (resetPassState.value is ResetPassState.Error) {
                 Spacer(Modifier.height(8.dp))

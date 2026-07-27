@@ -3,11 +3,13 @@ package com.example.sugercare.core.features.auth.presentation
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sugercare.core.features.auth.AuthDataStore
@@ -310,8 +312,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 } else {
                     _authState.value = AuthState.Error("Unexpected credential type")
                 }
-            } catch (e: Exception) {
+            } catch (e: GetCredentialCancellationException) {
+                Log.d("AuthViewModel", "Google sign in cancelled by user")
                 _authState.value = AuthState.UnAuthenticated
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Google Sign In Failed", e)
+                _authState.value = AuthState.Error(
+                    e.message ?: "Google Sign In Failed"
+                )
             }
         }
 

@@ -26,7 +26,7 @@ import com.example.sugercare.core.features.glucoseLogs.presentation.GlucoseViewM
 import com.example.sugercare.core.features.home.HomeScreen
 import com.example.sugercare.core.features.meals.presentation.MealPlanScreen
 import com.example.sugercare.core.features.profile.presentation.ProfileViewModel
-import com.example.sugercare.core.features.profile.presentation.screens.ForgotPasswordScreen
+import com.example.sugercare.core.features.auth.presentation.ForgotPasswordScreen
 import com.example.sugercare.core.features.profile.presentation.screens.ProfileScreen
 import com.example.sugercare.core.mainComponents.notifications.presentation.NotificationsScreen
 import com.sugarcare.app.ui.screens.MedicationsScreen

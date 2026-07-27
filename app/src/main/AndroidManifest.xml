@@ -3,6 +3,7 @@
 
     <queries>
         <package android:name="com.google.android.gms" />
+        <package android:name="com.android.vending" />
 
         <intent>
             <action android:name="com.google.android.gms.auth.api.signin.ACTION_FOR_REVOKE_ACCESS" />
