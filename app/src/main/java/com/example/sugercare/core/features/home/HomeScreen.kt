@@ -31,7 +31,6 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -220,7 +219,7 @@ fun HomeScreen(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(20.dp),
                             colors = CardDefaults.cardColors(containerColor = cardColor),
-                            elevation = CardDefaults.cardElevation(4.dp)
+                            elevation = CardDefaults.cardElevation(0.dp)
                         ) {
                             Column(
                                 modifier = Modifier.padding(12.dp),
@@ -247,7 +246,7 @@ fun HomeScreen(
                                     onClick = { navController.navigate(Screen.WeeklyAnalytics.route) },
                                     color1 = GreenAccent,
                                     color2 = GreenAccent3
-                                ){}
+                                )
                             }
                         }
 
@@ -256,7 +255,7 @@ fun HomeScreen(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(20.dp),
                             colors = CardDefaults.cardColors(containerColor = cardColor),
-                            elevation = CardDefaults.cardElevation(4.dp)
+                            elevation = CardDefaults.cardElevation(0.dp)
                         ) {
                             Column(
                                 modifier = Modifier.padding(12.dp),
@@ -283,7 +282,7 @@ fun HomeScreen(
                                     onClick = { navController.navigate(Screen.ChatScreen.route) },
                                     color1 = GreenAccent,
                                     color2 = GreenAccent3
-                                ){}
+                                )
                             }
                         }
                     }
@@ -297,17 +296,17 @@ fun HomeScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         // ──── Meal Plan mini card ────────
-                            DashboardCard(
-                                modifier = Modifier.fillMaxWidth(),
-                                title = "My Meal Plan",
-                                subtitle = "",
-                                icon = Icons.Filled.Restaurant,
-                                iconTint = GreenAccent,
-                                buttonText = "Meal Suggestions",
-                                cardColor = cardColor,
-                                subColor = subColor,
-                                titleColor = textColor
-                            ) { navController.navigate(Screen.MealPlan.route) }
+                        DashboardCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            title = "My Meal Plan",
+                            subtitle = "",
+                            icon = Icons.Filled.Restaurant,
+                            iconTint = GreenAccent,
+                            buttonText = "Meal Suggestions",
+                            cardColor = cardColor,
+                            subColor = subColor,
+                            titleColor = textColor
+                        ) { navController.navigate(Screen.MealPlan.route) }
 
                         // ──── Medication Plan mini card ────────
                         Card(
@@ -339,7 +338,7 @@ fun HomeScreen(
                                     onClick = { navController.navigate(Screen.Medications.route) },
                                     color1 = GreenAccent,
                                     color2 = GreenAccent3
-                                ){}
+                                )
                             }
                         }
 
@@ -348,7 +347,7 @@ fun HomeScreen(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(20.dp),
                             colors = CardDefaults.cardColors(containerColor = cardColor),
-                            elevation = CardDefaults.cardElevation(4.dp)
+                            elevation = CardDefaults.cardElevation(0.dp)
                         ) {
                             Column(
                                 modifier = Modifier.padding(12.dp),
@@ -394,7 +393,7 @@ fun HomeScreen(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(20.dp),
                             colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEBEE)),
-                            elevation = CardDefaults.cardElevation(4.dp),
+                            elevation = CardDefaults.cardElevation(0.dp),
                             onClick = { navController.navigate(Screen.EmergencyContact.route) }
                         ) {
                             Column(
@@ -459,7 +458,7 @@ private fun DashboardCard(
         modifier = modifier,
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = cardColor),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(0.dp)
     ) {
         Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = titleColor)
@@ -479,7 +478,7 @@ private fun DashboardCard(
                     .align(Alignment.CenterHorizontally),
                 color1= GreenAccent,
                 color2= GreenAccent3
-            ){}
+            )
         }
     }
 }
