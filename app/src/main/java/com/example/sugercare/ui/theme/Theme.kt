@@ -29,6 +29,10 @@ val White            = Color(0xFFFFFFFF)
 val TextGray         = Color(0xFF9AA0A6)
 val FireIcon         = Color(0xFFFF6B35)
 
+val FireIcon2         = Color(0xFFF6920E)
+
+
+
 // ── Dark colors ───────────────────────────────────────────────
 val BackgroundDark  = Color(0xFF0D1F1F)
 val SurfaceDark     = Color(0xFF1A2E2E)

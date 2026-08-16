@@ -1,5 +1,6 @@
 package com.example.sugercare.core.features.profile.presentation.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -65,8 +66,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -75,19 +78,13 @@ import com.example.sugercare.core.features.auth.presentation.AuthViewModel
 import com.example.sugercare.core.features.profile.model.ProfileUiState
 import com.example.sugercare.core.features.profile.presentation.ProfileViewModel
 import com.example.sugercare.core.mainComponents.utils.vibrate
+import com.google.firebase.auth.FirebaseAuth
 import com.sugarcare.app.navigation.Screen
-import com.sugarcare.app.ui.components.PrimaryButton
+import com.sugarcare.app.ui.components.GradientButton
 import com.sugarcare.app.ui.components.ProfilePicture
-import com.sugarcare.app.ui.theme.BackgroundDark
-import com.sugarcare.app.ui.theme.BackgroundLight
-import com.sugarcare.app.ui.theme.LocalDarkTheme
-import com.sugarcare.app.ui.theme.SurfaceDark
-import com.sugarcare.app.ui.theme.TealDark
-import com.sugarcare.app.ui.theme.TealLight
-import com.sugarcare.app.ui.theme.TealPrimary
-import com.sugarcare.app.ui.theme.TextDark
-import com.sugarcare.app.ui.theme.TextMedium
+import com.sugarcare.app.ui.theme.*
 import java.util.Calendar
+import com.sugarcare.app.R
 
 // ══════════════════════════════════════════════════════════════
 //  4. PROFILE SCREEN — full ViewModel + Dark Mode Switch
@@ -118,10 +115,18 @@ fun ProfileScreen(
     val navColor = if (isDark) SurfaceDark else Color.White
     val navText = if (isDark) Color(0xFF80CBC4) else TextMedium
 
+    // Mohamed : TO allow Delete Accoumt
     LaunchedEffect(profileState.value) {
-        if (profileState.value is ProfileUiState.Saved) {
-            onSaveSuccess()
-            profileViewModel.resetState()
+        when (profileState.value) {
+            is ProfileUiState.SaveSuccess -> onSaveSuccess()
+            is ProfileUiState.AccountDeleted -> {
+                authViewModel.clearRememberMeDetails()
+                authViewModel.logout()
+                navController.navigate(Screen.Welcome.route) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
+            else -> {}
         }
     }
 
@@ -188,7 +193,8 @@ fun ProfileScreen(
                 elevation = CardDefaults.cardElevation(0.dp)
             ) {
                 Row(
-                    Modifier.fillMaxWidth()
+                    Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 20.dp, vertical = 14.dp),
                     Arrangement.SpaceBetween,
                     Alignment.CenterVertically
@@ -235,7 +241,8 @@ fun ProfileScreen(
                 }
                 is ProfileUiState.Success,
                 is ProfileUiState.Saving,
-                is ProfileUiState.Saved -> {
+                is ProfileUiState.AccountDeleted,
+                is ProfileUiState.SaveSuccess -> {
                     LaunchedEffect(fieldErrors.value) {
                         if (fieldErrors.value.isNotEmpty()) vibrate(context)
                     }
@@ -316,14 +323,14 @@ fun ProfileScreen(
                                    fieldErrors.value["age"]?.let {
                                        Text(it, color = Color.Red, fontSize = 12.sp)
                                    }
-                               },  */
+                               },*/
                             icon         = Icons.Filled.HealthAndSafety,
                             keyboardType = KeyboardType.Number,
                             color        = textColor
                         )
                         ProfileFieldItem(
                             modifier      = Modifier.weight(1.5f),
-                            value         = editableProfile.value.weight,
+                            value         = editableProfile.value.weight.toString(),
                             onValueChange = {
                                 profileViewModel.updateWeight(it)
                                 profileViewModel.clearFieldError("weight")
@@ -351,7 +358,8 @@ fun ProfileScreen(
                             label         = { Text("Gender",color =  textColor) },
                             leadingIcon   = { Icon(Icons.Filled.Wc, null, tint = TealPrimary) },
                             trailingIcon  = { ExposedDropdownMenuDefaults.TrailingIcon(showGender) },
-                            modifier      = Modifier.fillMaxWidth()
+                            modifier      = Modifier
+                                .fillMaxWidth()
                                 .menuAnchor(MenuAnchorType.PrimaryNotEditable),
                             shape         = RoundedCornerShape(14.dp),
                             colors        = newScreenFieldColors()
@@ -385,25 +393,116 @@ fun ProfileScreen(
 
                     Spacer(Modifier.height(28.dp))
 
-                    // Save button
-                    PrimaryButton(
+
+                    // Mohamed : Replaced with -> GradientButton  <- <-
+                  /*  PrimaryButton(
                         text    = if (isSaving) "Saving..." else "Save Changes",
                         onClick = { profileViewModel.saveProfile() },
                         enabled = !isSaving
-                    )
+                    )*/
+
+
+                    // Save button
+                    GradientButton(
+                        text = if (isSaving) "Saving..." else "Save Changes",
+                        onClick = { profileViewModel.saveProfile() },
+                        enabled = true,
+                        color1 = TealPrimary,
+                        color2 = TealPrimary2,
+                        textSize = 18.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_save) ,
+                            contentDescription = null,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+
+                    Spacer(Modifier.height(12.dp))
+
+                    // ------- Delete Account Process
+                    var showDeleteDialog by remember { mutableStateOf(false) }
+                    var deletePassword by remember { mutableStateOf("") }
+                     val auth = FirebaseAuth.getInstance()
+
+                    val isEmailProvider = auth.currentUser?.providerData
+                        ?.map { it.providerId }
+                        ?.contains("password") == true
+
+                    if (showDeleteDialog) {
+                        AlertDialog(
+                            onDismissRequest = { showDeleteDialog = false },
+                            title = { Text("Delete Account", fontWeight = FontWeight.Bold) },
+                            text = {
+                                Column {
+                                    Text("Are you sure you want to delete your account? This cannot be undone.")
+                                    if (isEmailProvider) {  // ✅ Only show for Email users
+                                        Spacer(Modifier.height(12.dp))
+                                        OutlinedTextField(
+                                            value = deletePassword,
+                                            onValueChange = { deletePassword = it },
+                                            label = { Text("Confirm Password") },
+                                            visualTransformation = PasswordVisualTransformation(),
+                                            singleLine = true
+                                        )
+                                    }
+                                }
+                            },
+                            confirmButton = {
+                                TextButton(onClick = {
+                                    profileViewModel.deleteAccount(
+                                        if (isEmailProvider) deletePassword else null  // ✅ Pass null for Google
+                                    )
+                                    showDeleteDialog = false
+                                }) {
+                                    Text("Delete", color = Color.Red, fontWeight = FontWeight.Bold)
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(onClick = {
+                                    showDeleteDialog = false
+                                    deletePassword = ""
+                                }) { Text("Cancel") }
+                            }
+                        )
+                    }
+
+                    GradientButton(
+                        text = "Delete Account!",
+                        onClick = { showDeleteDialog = true },  // ✅ Show dialog first
+                        enabled = true,
+                        color1 = FireIcon,
+                        color2 = FireIcon2,
+                        textSize = 18.sp,
+                        modifier = Modifier.fillMaxWidth().height(56.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_cross),
+                            contentDescription = null,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
 
                     Spacer(Modifier.height(12.dp))
 
                     // Log Out
                     OutlinedButton(
                         onClick  = { showLogout = true },
-                        modifier = Modifier.fillMaxWidth().height(56.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
                         shape    = RoundedCornerShape(28.dp),
                         border   = androidx.compose.foundation.BorderStroke(
                             1.5.dp, Color(0xFFE53935))
                     ) {
-                        Icon(Icons.AutoMirrored.Filled.Logout, null,
-                            tint = Color(0xFFE53935))
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_logout),
+                            contentDescription = null,
+                            modifier = Modifier.size(30.dp)
+                        )
                         Spacer(Modifier.width(8.dp))
                         Text("Log Out",
                             color = Color(0xFFE53935), fontWeight = FontWeight.SemiBold,
@@ -418,7 +517,7 @@ fun ProfileScreen(
 
 // ── Helpers ───────────────────────────────────────────────────
 @Composable
-private fun ProfileFieldItem(
+private fun   ProfileFieldItem(
     modifier      : Modifier,
     value         : String,
     onValueChange : (String) -> Unit,
@@ -506,8 +605,11 @@ fun DatePickerField(
         },
         isError        = isError,
         supportingText = supportingText,
-        modifier       = Modifier.fillMaxWidth().clickable { showPicker = true },
+        modifier       = Modifier
+            .fillMaxWidth()
+            .clickable { showPicker = true },
         shape          = RoundedCornerShape(14.dp),
         colors         = newScreenFieldColors()
     )
 }
+

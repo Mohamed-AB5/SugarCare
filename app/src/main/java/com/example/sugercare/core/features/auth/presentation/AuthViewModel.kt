@@ -1,16 +1,20 @@
 package com.example.sugercare.core.features.auth.presentation
 
 import android.app.Application
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sugercare.core.features.auth.AuthDataStore
+import com.example.sugercare.core.features.profile.model.ProfileUiState
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -18,11 +22,13 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.auth
 import com.sugarcare.app.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -310,8 +316,14 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
                 } else {
                     _authState.value = AuthState.Error("Unexpected credential type")
                 }
-            } catch (e: Exception) {
+            } catch (e: GetCredentialCancellationException) {
+                Log.d("AuthViewModel", "Google sign in cancelled by user")
                 _authState.value = AuthState.UnAuthenticated
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Google Sign In Failed", e)
+                _authState.value = AuthState.Error(
+                    e.message ?: "Google Sign In Failed"
+                )
             }
         }
 
@@ -405,6 +417,16 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
             clearRememberMeDetails()
         }
     }
+
+  /*  fun deleteAccount(){
+        viewModelScope.launch {
+            val user = auth.currentUser
+            if (user == null) {
+                _profileState.value = ProfileUiState.Error("No user logged in")
+                return@launch
+            }
+        }
+    }*/
         // ———— TO Clear Data after navigation between sign IN \ Up ————————————
     fun clearFields(){
         _email.value = ""

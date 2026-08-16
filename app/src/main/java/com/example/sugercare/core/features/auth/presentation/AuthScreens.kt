@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -51,11 +52,15 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sugarcare.app.R
+import com.sugarcare.app.navigation.Screen
+import com.sugarcare.app.ui.components.GradientButton
 import com.sugarcare.app.ui.components.PrimaryButton
 import com.sugarcare.app.ui.components.SecondaryButton
 import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.components.SugarCareTextField
 import com.sugarcare.app.ui.theme.GreenAccent
+import com.sugarcare.app.ui.theme.GreenAccent2
+import com.sugarcare.app.ui.theme.GreenAccent3
 import com.sugarcare.app.ui.theme.OrangeDrop
 import com.sugarcare.app.ui.theme.OrangeDrop2
 import com.sugarcare.app.ui.theme.TealDark
@@ -100,177 +105,191 @@ fun SignInScreen(
 
 
     SugarCareBackground {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 32.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Welcome back",
-                style = MaterialTheme.typography.headlineMedium,
-                color = TealDark,
-                fontWeight = FontWeight.Bold
-            )
 
-            Spacer(modifier = Modifier.height(32.dp))
+        SugarCareBackground {
 
-            SugarCareTextField(
-                value = email.value,
-                onValueChange = { authViewModel.updateEmail(it) },
-                label = "Email"
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(
+                        start = 32.dp,
+                        end = 32.dp,
+                        top = 40.dp,
+                        bottom = 24.dp
+                    ),
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = "Welcome back",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = TealDark,
+                    fontWeight = FontWeight.Bold
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
-            SugarCareTextField(
-                value = password.value,
-                onValueChange = { authViewModel.updatePassword(it) },
-                label = "Password",
-                isPassword = "password" !in visibleFields.value,
-                trailingIcon = {
-                    IconButton(onClick = { authViewModel.togglePasswordVisibility("password") }) {
-                        Icon(
-                            imageVector = if ("password" in visibleFields.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = null,
-                            tint = TealPrimary
+                SugarCareTextField(
+                    value = email.value,
+                    onValueChange = { authViewModel.updateEmail(it) },
+                    label = "Email"
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                SugarCareTextField(
+                    value = password.value,
+                    onValueChange = { authViewModel.updatePassword(it) },
+                    label = "Password",
+                    isPassword = "password" !in visibleFields.value,
+                    trailingIcon = {
+                        IconButton(onClick = { authViewModel.togglePasswordVisibility("password") }) {
+                            Icon(
+                                imageVector = if ("password" in visibleFields.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                contentDescription = null,
+                                tint = TealPrimary
+                            )
+                        }
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text(
+                    "Forgot password?",
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .clickable { onForgotPassword() },
+                    color = TealPrimary,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(
+                        checked = rememberMe.value,
+                        onCheckedChange = { authViewModel.toggleRememberMe() },
+                        colors = CheckboxDefaults.colors(checkedColor = TealPrimary)
+                    )
+                    Text("Remember Me", color = TextMedium)
+                }
+
+                // ─── Loading or Error feedback ────────────────────────────
+
+                when (authState.value) {
+                    is AuthState.Loading -> {
+                        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
+                        }
+                    }
+
+                    is AuthState.Error -> {
+                        Text(
+                            text = (authState.value as AuthState.Error).message,
+                            fontSize = 12.sp,
+                            color = Color.Red,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
                     }
+
+                    is AuthState.UnAuthenticated -> {}
+                    is AuthState.Authenticated -> {}
                 }
-            )
 
-            Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                "Forgot password?",
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .clickable { onForgotPassword() },
-                color = TealPrimary,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold
-            )
 
-            Spacer(Modifier.height(12.dp))
+                Box(contentAlignment = Alignment.Center) {
+                    GradientButton(
+                        modifier = Modifier.width(295.dp).height(55.dp),
+                        text= "Sign In",
+                        textSize = 18.sp,
+                        onClick = { authViewModel.validateSignIn(email.value, password.value) },
+                        color1 = TealPrimary,
+                        color2 = TealPrimary2,
+                        enabled = email.value.isNotBlank()
+                                && password.value.isNotBlank()
+                    ){}
+                }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = rememberMe.value,
-                    onCheckedChange = { authViewModel.toggleRememberMe() },
-                    colors = CheckboxDefaults.colors(checkedColor = TealPrimary)
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // ─── or divider ───────────
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 )
-                Text("Remember Me", color = TextMedium)
-            }
+                {
 
-            // ─── Loading or Error feedback ────────────────────────────
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        thickness = 2.dp,
+                        color = TealLight
+                    )
 
-            when (authState.value) {
-                is AuthState.Loading -> {
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
-                }
-
-                is AuthState.Error -> {
                     Text(
-                        text = (authState.value as AuthState.Error).message,
-                        fontSize = 12.sp,
-                        color = Color.Red,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        text = "or",
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        fontSize = 17.sp,
+                        color = TextLight
+
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        thickness = 2.dp,
+                        color = TealLight
                     )
                 }
 
-                is AuthState.UnAuthenticated -> {}
-                is AuthState.Authenticated -> {}
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(5.dp))
 
 
 
-            PrimaryButton(
-                text = "Sign in",
-                onClick = {
-                    authViewModel.validateSignIn(email.value, password.value)
-                },
-                enabled = email.value.isNotBlank() && password.value.isNotBlank()
-            )
-            Spacer(modifier = Modifier.height(20.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    SocialButton(
+                        icon = painterResource(R.drawable.ic_google),
+                        color = OrangeDrop,
+                        brush = Brush.verticalGradient(
+                            listOf(Color(0xFFEED4C8), OrangeDrop2)
+                        ),
+                        onClick = {
+                            authViewModel.signInWithGoogle(context)
+                        })
+                    SocialButton(
+                        icon = painterResource(R.drawable.ic_facebook),
+                        color = TealPrimary,
+                        brush = Brush.verticalGradient(listOf(Color(0xFFC6F1F1), TealPrimary2)),
+                        onClick = {
+                            authViewModel.signInWithFacebook(activity)
+                        })
 
-            // ─── or divider ───────────
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            )
-            {
+                }
 
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f),
-                    thickness = 2.dp,
-                    color = TealLight
-                )
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "or",
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    fontSize = 17.sp,
-                    color = TextLight
-
+                    text = buildAnnotatedString {
+                        append("No account?  ")
+                        withStyle(SpanStyle(color = TealPrimary, fontWeight = FontWeight.SemiBold)) {
+                            append("Create one")
+                        }
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .clickable { (onNavigateToSignUp()) },
+                    fontSize = 14.sp
                 )
-                HorizontalDivider(
-                    modifier = Modifier.weight(1f),
-                    thickness = 2.dp,
-                    color = TealLight
-                )
-            }
 
-            Spacer(modifier = Modifier.height(5.dp))
-
-
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                SocialButton(
-                    icon = painterResource(R.drawable.ic_google),
-                    color = OrangeDrop,
-                    brush = Brush.verticalGradient(
-                        listOf(Color(0xFFEED4C8), OrangeDrop2)
-                    ),
-                    onClick = {
-                        authViewModel.signInWithGoogle(context)
-                    })
-                SocialButton(
-                    icon = painterResource(R.drawable.ic_facebook),
-                    color = TealPrimary,
-                    brush = Brush.verticalGradient(listOf(Color(0xFFC6F1F1), TealPrimary2)),
-                    onClick = {
-                        authViewModel.signInWithFacebook(activity)
-                    })
 
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = buildAnnotatedString {
-                    append("No account?  ")
-                    withStyle(SpanStyle(color = TealPrimary, fontWeight = FontWeight.SemiBold)) {
-                        append("Create one")
-                    }
-                },
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .clickable { (onNavigateToSignUp()) },
-                fontSize = 14.sp
-            )
-
-
         }
     }
 }
@@ -309,8 +328,13 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 32.dp),
-            verticalArrangement = Arrangement.Center
+                .padding(
+                start = 32.dp,
+                end = 32.dp,
+                top = 40.dp,
+                bottom = 24.dp
+            ),
+            verticalArrangement = Arrangement.Center,
         ) {
             Text(
                 text = "Get Started",
@@ -421,19 +445,21 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
 
-            SecondaryButton(
-                text = "Sign Up",
-                onClick = {
-                    authViewModel.clearFields()
-                    authViewModel.signUp(email.value, password.value)
-                },
-                enabled = email.value.isNotBlank()
-                        && password.value.isNotBlank()
-                        && confirmPassword.value.isNotBlank()
-                        && acceptedPolicy
-                        && fullName.value.isNotBlank()
-            )
-
+           Box(contentAlignment = Alignment.Center) {
+                GradientButton(
+                    modifier = Modifier.width(295.dp).height(55.dp),
+                    text =  "Sign Up",
+                    textSize = 18.sp,
+                    onClick = { authViewModel.validateSignIn(email.value, password.value) },
+                    color1 = GreenAccent,
+                    color2 = GreenAccent2,
+                    enabled = email.value.isNotBlank()
+                            && password.value.isNotBlank()
+                            && confirmPassword.value.isNotBlank()
+                            && acceptedPolicy
+                            && fullName.value.isNotBlank()
+                ){}
+            }
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
@@ -484,7 +510,7 @@ fun SignUpScreen(
 private fun SocialButton(
     icon: Painter,
     color: Color, // androidx.compose.ui.graphics removed -> for cleaner route
-    brush: Brush,
+    brush: Brush ,
     onClick: () -> Unit
 ) {
     Surface(

@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +22,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.sugercare.core.features.counter.presentation.CounterViewModel
+import com.example.sugercare.core.features.profile.presentation.ProfileViewModel
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.theme.*
 
@@ -39,7 +40,9 @@ private val CardGreen   = Color(0xFFDFF5E8)   // challenge
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(    navController: NavHostController,
+                   profileViewModel: ProfileViewModel,
+                   counterViewModel: CounterViewModel) {
 
     val isDark  = LocalDarkTheme.current.value
     val bgColor = if (isDark) BackgroundDark else Color(0xFFF5FAFA)
@@ -172,7 +175,7 @@ fun HomeScreen(navController: NavHostController) {
                 icon        = Icons.Filled.EmojiEvents,
                 cardColor   = CardTeal,
                 accentColor = TealPrimary,
-                onClick     = { /* navigate to challenge */ }
+                onClick     = { navController.navigate(Screen.CounterScreen.route) }
             )
 
             Spacer(Modifier.height(12.dp))

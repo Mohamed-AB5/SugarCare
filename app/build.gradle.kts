@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace    = "com.sugarcare.app"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.sugarcare.app"

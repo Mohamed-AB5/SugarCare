@@ -420,7 +420,7 @@ fun SugarTrackerScreen(
                                 tint = Color.White
                             )
 
-                            Spacer(Modifier.width(8.dp))
+                            Spacer(Modifier.size(8.dp))
 
                             Text(
                                 text = "Add Reading",

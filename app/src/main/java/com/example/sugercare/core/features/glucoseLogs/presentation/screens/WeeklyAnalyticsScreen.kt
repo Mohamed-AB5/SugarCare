@@ -366,7 +366,7 @@ fun WeeklyAnalyticsScreen(
                 modifier = Modifier
                     .width(280.dp)
                     .height(45.dp)
-            )
+            ){}
 
             Spacer(Modifier.height(8.dp))
 

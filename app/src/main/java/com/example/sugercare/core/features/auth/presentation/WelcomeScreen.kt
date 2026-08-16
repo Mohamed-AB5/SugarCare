@@ -100,7 +100,7 @@ fun WelcomeScreen(
                 color2 = TealPrimary2,
                 textSize = 18.sp,
                 modifier = Modifier.fillMaxWidth().height(56.dp)
-            )
+            ){}
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -111,7 +111,7 @@ fun WelcomeScreen(
                 color2 = GreenAccent2,
                 textSize = 18.sp,
                 modifier = Modifier.fillMaxWidth().height(56.dp)
-            )
+            ){}
         }
     }
 }
