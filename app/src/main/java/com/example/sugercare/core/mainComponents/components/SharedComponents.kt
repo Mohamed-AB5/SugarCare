@@ -3,15 +3,19 @@ package com.sugarcare.app.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -116,6 +120,80 @@ fun SecondaryButton(
     }
 }
 
+
+
+@Composable
+fun GradientButton(
+    text: String,
+    onClick: () -> Unit,
+    color1: Color,
+    color2: Color,
+    modifier: Modifier = Modifier,
+    textSize: TextUnit = 12.sp,
+    horizontalPadding: Dp = 16.dp,
+    verticalPadding: Dp = 8.dp,
+    enabled: Boolean = true,
+    content: (@Composable BoxScope.() -> Unit)? = null
+) {
+    val backgroundBrush = if (enabled) {
+        Brush.horizontalGradient(listOf(color1, color2))
+    } else {
+        Brush.horizontalGradient(
+            listOf(
+                Color.Gray.copy(alpha = 0.6f),
+                Color.Gray.copy(alpha = 0.9f)
+            )
+        )
+    }
+
+//    Mohamed : To pass an icon to the button behind the text
+  /*  Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(28.dp))
+            .background(backgroundBrush)
+            .clickable(
+                enabled = enabled,
+                onClick = onClick
+            )
+            .padding(horizontal = horizontalPadding, vertical = verticalPadding),
+        contentAlignment = Alignment.Center
+    )
+    {
+        Text(
+            text,
+            fontSize = textSize,
+            color = if (enabled) White else White.copy(alpha = 0.7f),
+            fontWeight = FontWeight.Bold
+        )
+        content()
+    }*/
+
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(28.dp))
+            .background(backgroundBrush)
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(horizontal = horizontalPadding, vertical = verticalPadding),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            if (content != null) {
+                Box { content() }
+                Spacer(Modifier.width(8.dp))
+            }
+            Text(
+                text,
+                fontSize = textSize,
+                color = if (enabled) White else White.copy(alpha = 0.7f),
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+
+}
 // ── TextField ─────────────────────────────────────────────────
 @Composable
 fun SugarCareTextField(
@@ -211,49 +289,3 @@ fun ProfilePicture(profileViewModel: ProfileViewModel, fontSize: TextUnit = 36.s
 
 }
 
-            @Composable
-            fun GradientButton(
-                text: String,
-                onClick: () -> Unit,
-                color1: Color,
-                color2: Color,
-                modifier: Modifier = Modifier,
-                textSize: TextUnit = 12.sp,
-                horizontalPadding: Dp = 16.dp,
-                verticalPadding: Dp = 8.dp,
-                enabled: Boolean = true,
-                content: @Composable BoxScope.() -> Unit
-            ) {
-                val backgroundBrush = if (enabled) {
-                    Brush.horizontalGradient(listOf(color1, color2))
-                } else {
-                    Brush.horizontalGradient(
-                        listOf(
-                            Color.Gray.copy(alpha = 0.6f),
-                            Color.Gray.copy(alpha = 0.9f)
-                        )
-                    )
-                }
-
-                Box(
-                    modifier = modifier
-                        .clip(RoundedCornerShape(28.dp))
-                        .background(backgroundBrush)
-                        .clickable(
-                            enabled = enabled,
-                            onClick = onClick
-                        )
-                        .padding(horizontal = horizontalPadding, vertical = verticalPadding),
-                    contentAlignment = Alignment.Center
-                    )
-                {
-                    Text(
-                        text,
-                        fontSize = textSize,
-                        color = if (enabled) White else White.copy(alpha = 0.7f),
-                        fontWeight = FontWeight.Bold
-                    )
-                    content()
-                }
-
-            }
