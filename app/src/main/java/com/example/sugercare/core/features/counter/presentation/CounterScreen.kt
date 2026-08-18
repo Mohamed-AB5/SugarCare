@@ -65,9 +65,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sugercare.core.features.counter.model.HistoryEntry
 import com.sugarcare.app.R
+import com.sugarcare.app.ui.components.GradientButton
 import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.theme.BackgroundLight
 import com.sugarcare.app.ui.theme.FireIcon
+import com.sugarcare.app.ui.theme.OrangeDrop
 import com.sugarcare.app.ui.theme.OrangeDrop2
 import com.sugarcare.app.ui.theme.TealLight
 import com.sugarcare.app.ui.theme.TealPrimary
@@ -222,30 +224,38 @@ fun CounterScreen(
                 Spacer(Modifier.height(32.dp))
                 // —— Start & Reset buttons ——————
                 if (!state.value.isRunning) {
-                    Button(
+                    GradientButton(
+                        text = "Start Counter",
+                        textSize = 14.sp,
                         onClick = { viewModel.startCounter() },
-                        colors = ButtonDefaults.buttonColors(containerColor = TealPrimary2),
-                        shape = RoundedCornerShape(24.dp),
+                        color1 = TealPrimary2,
+                        color2 = TealPrimary,
                         modifier = Modifier
                             .fillMaxWidth(0.7f)
                             .height(50.dp)
                     ) {
-                        Icon(Icons.Filled.PlayArrow, contentDescription = null, tint = Color.White)
-                        Spacer(Modifier.width(8.dp))
-                        Text("Start Counter", color = Color.White, fontWeight = FontWeight.Bold)
+                        Image(
+                            painter = painterResource(R.drawable.ic_play),
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                 } else {
-                    Button(
+                    GradientButton(
+                        text = "Reset Counter",
+                        textSize = 14.sp,
                         onClick = { viewModel.resetCounter() },
-                        colors = ButtonDefaults.buttonColors(containerColor = OrangeDrop2),
-                        shape = RoundedCornerShape(24.dp),
+                        color1 = OrangeDrop2,
+                        color2 = OrangeDrop,
                         modifier = Modifier
                             .fillMaxWidth(0.7f)
                             .height(50.dp)
                     ) {
-                        Icon(Icons.Filled.Refresh, contentDescription = null, tint = Color.White)
-                        Spacer(Modifier.width(8.dp))
-                        Text("Reset Counter", color = Color.White, fontWeight = FontWeight.Bold)
+                        Image(
+                            painter = painterResource(R.drawable.ic_reload),
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                 }
             }

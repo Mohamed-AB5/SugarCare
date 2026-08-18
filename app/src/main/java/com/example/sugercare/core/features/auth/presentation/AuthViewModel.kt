@@ -14,6 +14,7 @@ import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sugercare.core.features.auth.AuthDataStore
+import com.example.sugercare.core.features.counter.presentation.CounterViewModel
 import com.example.sugercare.core.features.profile.model.ProfileUiState
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -418,15 +419,6 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-  /*  fun deleteAccount(){
-        viewModelScope.launch {
-            val user = auth.currentUser
-            if (user == null) {
-                _profileState.value = ProfileUiState.Error("No user logged in")
-                return@launch
-            }
-        }
-    }*/
         // ———— TO Clear Data after navigation between sign IN \ Up ————————————
     fun clearFields(){
         _email.value = ""

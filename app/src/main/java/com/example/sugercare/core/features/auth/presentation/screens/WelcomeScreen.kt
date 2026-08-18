@@ -107,8 +107,8 @@ fun WelcomeScreen(
             GradientButton(
                 text = "Sign Up",
                 onClick = onSignUp,
-                color1 = GreenAccent,
-                color2 = GreenAccent2,
+                color1 = GreenAccent2,
+                color2 = GreenAccent,
                 textSize = 18.sp,
                 modifier = Modifier.fillMaxWidth().height(56.dp)
             ){}

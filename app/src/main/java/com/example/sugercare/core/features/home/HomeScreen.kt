@@ -46,6 +46,7 @@ fun HomeScreen(    navController: NavHostController,
 
     val isDark  = LocalDarkTheme.current.value
     val bgColor = if (isDark) BackgroundDark else Color(0xFFF5FAFA)
+    val state = counterViewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -77,7 +78,8 @@ fun HomeScreen(    navController: NavHostController,
                     ) {
                         Text("🎁", fontSize = 14.sp)
                         Spacer(Modifier.width(4.dp))
-                        Text("3 Days",
+                        Text(
+                            "${ state.value.bestStreak }",
                             fontSize   = 13.sp,
                             fontWeight = FontWeight.Bold,
                             color      = OrangeDrop)
@@ -171,7 +173,7 @@ fun HomeScreen(    navController: NavHostController,
             // ── ROW CARD: 90-Day Challenge ────────────────────
             RowCard(
                 title       = "90-Day Challenge",
-                value       = "Day 23 of 90 · keep going!",
+                value       = "${state.value.bestStreak} Highset Streak Ever🐦‍🔥",
                 icon        = Icons.Filled.EmojiEvents,
                 cardColor   = CardTeal,
                 accentColor = TealPrimary,
@@ -226,7 +228,9 @@ private fun HeroCard(
     onClick    : () -> Unit
 ) {
     Card(
-        modifier  = Modifier.fillMaxWidth().height(160.dp),
+        modifier  = Modifier
+            .fillMaxWidth()
+            .height(160.dp),
         shape     = RoundedCornerShape(24.dp),
         colors    = CardDefaults.cardColors(containerColor = cardColor),
         elevation = CardDefaults.cardElevation(0.dp)

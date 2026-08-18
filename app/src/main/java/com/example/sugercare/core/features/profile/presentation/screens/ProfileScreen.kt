@@ -75,6 +75,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.sugercare.core.features.auth.presentation.AuthViewModel
+import com.example.sugercare.core.features.counter.presentation.CounterViewModel
 import com.example.sugercare.core.features.profile.model.ProfileUiState
 import com.example.sugercare.core.features.profile.presentation.ProfileViewModel
 import com.example.sugercare.core.mainComponents.utils.vibrate
@@ -95,6 +96,7 @@ fun ProfileScreen(
     navController   : NavHostController,
     authViewModel   : AuthViewModel,
     profileViewModel: ProfileViewModel,
+    counterViewModel: CounterViewModel,
     onSaveSuccess   : () -> Unit
 ) {
     val context         = LocalContext.current
@@ -140,6 +142,7 @@ fun ProfileScreen(
                 TextButton(onClick = {
                     authViewModel.logout()
                     profileViewModel.clearData()
+                    counterViewModel.clearState()
                     showLogout = false
                     navController.navigate(Screen.SignIn.route) {
                         popUpTo(0) { inclusive = true }
