@@ -1,4 +1,4 @@
-package com.example.sugercare.core.features.auth.presentation
+package com.example.sugercare.core.features.auth.presentation.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -19,8 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -45,6 +43,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.sugercare.core.features.auth.presentation.AuthViewModel
+import com.example.sugercare.core.features.auth.presentation.ResetPassState
 import com.example.sugercare.core.features.profile.presentation.screens.newScreenFieldColors
 import com.sugarcare.app.ui.components.GradientButton
 import com.sugarcare.app.ui.theme.LocalDarkTheme

@@ -20,8 +20,8 @@ import com.example.sugercare.app.SugarTrackerScreen
 import com.example.sugercare.core.features.auth.AuthDataStore
 import com.example.sugercare.core.features.auth.presentation.AuthState
 import com.example.sugercare.core.features.auth.presentation.AuthViewModel
-import com.example.sugercare.core.features.auth.presentation.SignInScreen
-import com.example.sugercare.core.features.auth.presentation.SignUpScreen
+import com.example.sugercare.core.features.auth.presentation.screens.SignInScreen
+import com.example.sugercare.core.features.auth.presentation.screens.SignUpScreen
 import com.example.sugercare.core.features.chatBot.presentation.ChatScreen
 import com.example.sugercare.core.features.chatBot.presentation.ChatViewModel
 import com.example.sugercare.core.features.counter.presentation.CounterScreen
@@ -31,7 +31,7 @@ import com.example.sugercare.core.features.glucoseLogs.presentation.GlucoseViewM
 import com.example.sugercare.core.features.home.HomeScreen
 import com.example.sugercare.core.features.meals.presentation.MealPlanScreen
 import com.example.sugercare.core.features.profile.presentation.ProfileViewModel
-import com.example.sugercare.core.features.auth.presentation.ForgotPasswordScreen
+import com.example.sugercare.core.features.auth.presentation.screens.ForgotPasswordScreen
 import com.example.sugercare.core.features.profile.presentation.ProfileViewModelFactory
 import com.example.sugercare.core.features.profile.presentation.screens.ProfileScreen
 import com.example.sugercare.core.mainComponents.notifications.presentation.NotificationsScreen
@@ -39,7 +39,6 @@ import com.sugarcare.app.ui.screens.MedicationsScreen
 import com.sugarcare.app.ui.screens.SplashScreen
 import com.sugarcare.app.ui.screens.WeeklyAnalyticsScreen
 import com.sugarcare.app.ui.screens.WelcomeScreen
-import okhttp3.internal.platform.android.AndroidSocketAdapter.Companion.factory
 
 
 sealed class Screen(val route: String) {
@@ -191,6 +190,7 @@ fun SugarCareNavHost(
                 navController    = navController,
                 authViewModel    = authViewModel,
                 profileViewModel = profileViewModel,
+                counterViewModel = counterViewModel,
                 onSaveSuccess = {}
             )
         }

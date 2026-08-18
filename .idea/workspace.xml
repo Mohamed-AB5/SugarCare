@@ -30,6 +30,16 @@
           <theme>@style/Theme.SugerCare1</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_play.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_reload.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_save.xml">
         <config>
           <theme>@style/Theme.SugerCare1</theme>
@@ -41,34 +51,27 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4027dcf1-e93a-42bd-80e5-6a54a10c35fb" name="Changes" comment="Refactor Auth and Profile UI components and update user data models&#10;&#10;- **Auth &amp; Navigation**:&#10;    - Relocated `ForgotPasswordScreen` to the auth package&#10;    - Replaced `PrimaryButton` and `SecondaryButton` with a more flexible `GradientButton` across `AuthScreens`, `WelcomeScreen`, and `WeeklyAnalyticsScreen`.&#10;    - Updated `AuthViewModel` to explicitly handle `GetCredentialCancellationException` and provide better error logging for Google Sign-In.&#10;    - Added `com.android.vending` to the `&lt;queries&gt;` block in `AndroidManifest.xml`.&#10;&#10;- **Profile &amp; Data Handling**:&#10;    - Changed `weight` field type from `String` to `Int` in `UserProfile` model, repository, and `ProfileViewModel`.&#10;    - Enhanced `ProfilePicture` component to support remote image loading via `AsyncImage` (Coil) and improved placeholder initials styling.&#10;    - Refined `ProfileScreen` layout to handle integer-based weight input.&#10;&#10;- **UI Improvements**:&#10;    - Added 4.dp elevation to `DashboardCard` and other card components in `HomeScreen` for better visual hierarchy.&#10;    - Wrapped Auth screens in a nested `SugarCareBackground` and refined padding/spacing for consistent layouts.&#10;    - Updated `GradientButton` in `SharedComponents.kt` to support an `enabled` state and trailing content lambdas.&#10;&#10;- **Build Configuration**:&#10;    - Upgraded Gradle wrapper to 9.5.0 and Android Gradle Plugin (AGP) to 9.3.1.&#10;    - Adjusted `compileSdk` from 36 to 35 in `app/build.gradle.kts`.&#10;    - Updated `libs.versions.toml` to clean up unused dependencies and update KSP.&#10;    - Removed unnecessary `@RequiresApi` annotation from `MainActivity`.">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/profile/presentation/ProfileViewModelFactory.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_cross.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_logout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_save.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/checksums/checksums.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/checksums/sha1-checksums.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/gc.properties" beforeDir="false" />
+    <list default="true" id="4027dcf1-e93a-42bd-80e5-6a54a10c35fb" name="Changes" comment="Add Delete Account in ProfileScreen.kt&#10;&#10;- **Profile &amp; Account Deletion**:&#10;    - Implemented secure account deletion in `ProfileViewModel` and `ProfileScreen` with support for email/password re-authentication.&#10;    - Created `ProfileViewModelFactory` for initializing `ProfileViewModel` with proper context and lifecycle state.&#10;    - Refactored `ProfileUiState` to support `SaveSuccess` and `AccountDeleted` states.&#10;&#10;- **UI &amp; Shared Components**:&#10;    - Updated `GradientButton` in `SharedComponents.kt` to support optional trailing/leading content (such as icons) next to button text using a Row-based layout.&#10;    - Added new vector drawables: `ic_save`, `ic_cross`, and `ic_logout`.&#10;    - Integrated these new icons into the action buttons on the `ProfileScreen` (Save Changes, Delete Account, Log Out).&#10;    - Added `FireIcon2` color definition to `Theme.kt`.&#10;&#10;- **Navigation**:&#10;    - Updated `SugerCareHost` to instantiate `ProfileViewModel` using the newly introduced factory.">
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_play.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_reload.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/AuthScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/AuthScreens.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/AuthViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/AuthViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/ForgotPasswordScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/ForgotPasswordScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/SplashScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/SplashScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/WelcomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/WelcomeScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/CounterDataStore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/CounterDataStore.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/model/HistoryAction.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/presentation/CounterScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/presentation/CounterScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/presentation/CounterViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/presentation/CounterViewModel.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/home/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/home/HomeScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/profile/model/ProfileUiState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/profile/model/ProfileUiState.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/profile/presentation/ProfileViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/profile/presentation/ProfileViewModel.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/profile/presentation/screens/ProfileScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/profile/presentation/screens/ProfileScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/mainComponents/components/SharedComponents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/mainComponents/components/SharedComponents.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/mainComponents/navigation/SugerCareHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/mainComponents/navigation/SugerCareHost.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/Theme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/ui/theme/Theme.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,8 +115,8 @@
         <option value="Kotlin Object" />
         <option value="Kotlin Enum" />
         <option value="Kotlin Data Class" />
-        <option value="Kotlin Class" />
         <option value="Kotlin File" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -204,11 +207,11 @@
       <recent name="counterD:\DEPI-R4\FInal Project\SugerCare1\SugerCare1\app\src\main\java\com\example\sugercare\core\mainComponents\features" />
     </key>
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="com.example.sugercare.core.features.auth.presentation.screens" />
       <recent name="com.example.sugercare.core.features.auth.presentation" />
       <recent name="com.example.sugercare.core.features.emergency" />
       <recent name="com.example.sugercare.core.features.home" />
       <recent name="com.example.sugercare.core.features.medications" />
-      <recent name="com.example.sugercare.core.features.glucoseLogs.model" />
     </key>
   </component>
   <component name="RunManager" selected="Android App.app">
@@ -719,7 +722,15 @@
       <option name="project" value="LOCAL" />
       <updated>1785181363738</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Add Delete Account in ProfileScreen.kt&#10;&#10;- **Profile &amp; Account Deletion**:&#10;    - Implemented secure account deletion in `ProfileViewModel` and `ProfileScreen` with support for email/password re-authentication.&#10;    - Created `ProfileViewModelFactory` for initializing `ProfileViewModel` with proper context and lifecycle state.&#10;    - Refactored `ProfileUiState` to support `SaveSuccess` and `AccountDeleted` states.&#10;&#10;- **UI &amp; Shared Components**:&#10;    - Updated `GradientButton` in `SharedComponents.kt` to support optional trailing/leading content (such as icons) next to button text using a Row-based layout.&#10;    - Added new vector drawables: `ic_save`, `ic_cross`, and `ic_logout`.&#10;    - Integrated these new icons into the action buttons on the `ProfileScreen` (Save Changes, Delete Account, Log Out).&#10;    - Added `FireIcon2` color definition to `Theme.kt`.&#10;&#10;- **Navigation**:&#10;    - Updated `SugerCareHost` to instantiate `ProfileViewModel` using the newly introduced factory.">
+      <option name="closed" value="true" />
+      <created>1786900187123</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1786900187123</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -746,7 +757,8 @@
     <MESSAGE value="Refactor UI components, improve navigation highlighting @ 'Home &amp; profile', and perform project cleanup.&#10;&#10;- replaced `MealDialog`, `MyMealsTab`, `LocalMealData`, and legacy `Tracker(LogsScreen)`  logic.&#10;- Updated `HomeScreen`, `MealPlanScreen`, and `MedicationsScreen` to use `currentBackStackEntryAsState` for accurate bottom navigation selection.&#10;- Enhanced the reusable `GradientButton` in `SharedComponents.kt` with support for custom dimensions and text sizes.&#10;- Disabled age editing and automatic date-of-birth calculation in `ProfileViewModel` and associated UI fields.&#10;- Integrated `enableEdgeToEdge` in `MainActivity` and refined dark mode color consistency across screens." />
     <MESSAGE value="Refactor project architecture into a feature-based package structure.&#10;&#10;- Reorganized project modules into `core.features` (auth, chatbot, counter, emergency, glucoseLogs, meals, medications, profile) and `core.mainComponents` (navigation, notifications, utils)." />
     <MESSAGE value="Refactor Auth and Profile UI components and update user data models&#10;&#10;- **Auth &amp; Navigation**:&#10;    - Relocated `ForgotPasswordScreen` to the auth package&#10;    - Replaced `PrimaryButton` and `SecondaryButton` with a more flexible `GradientButton` across `AuthScreens`, `WelcomeScreen`, and `WeeklyAnalyticsScreen`.&#10;    - Updated `AuthViewModel` to explicitly handle `GetCredentialCancellationException` and provide better error logging for Google Sign-In.&#10;    - Added `com.android.vending` to the `&lt;queries&gt;` block in `AndroidManifest.xml`.&#10;&#10;- **Profile &amp; Data Handling**:&#10;    - Changed `weight` field type from `String` to `Int` in `UserProfile` model, repository, and `ProfileViewModel`.&#10;    - Enhanced `ProfilePicture` component to support remote image loading via `AsyncImage` (Coil) and improved placeholder initials styling.&#10;    - Refined `ProfileScreen` layout to handle integer-based weight input.&#10;&#10;- **UI Improvements**:&#10;    - Added 4.dp elevation to `DashboardCard` and other card components in `HomeScreen` for better visual hierarchy.&#10;    - Wrapped Auth screens in a nested `SugarCareBackground` and refined padding/spacing for consistent layouts.&#10;    - Updated `GradientButton` in `SharedComponents.kt` to support an `enabled` state and trailing content lambdas.&#10;&#10;- **Build Configuration**:&#10;    - Upgraded Gradle wrapper to 9.5.0 and Android Gradle Plugin (AGP) to 9.3.1.&#10;    - Adjusted `compileSdk` from 36 to 35 in `app/build.gradle.kts`.&#10;    - Updated `libs.versions.toml` to clean up unused dependencies and update KSP.&#10;    - Removed unnecessary `@RequiresApi` annotation from `MainActivity`." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor Auth and Profile UI components and update user data models&#10;&#10;- **Auth &amp; Navigation**:&#10;    - Relocated `ForgotPasswordScreen` to the auth package&#10;    - Replaced `PrimaryButton` and `SecondaryButton` with a more flexible `GradientButton` across `AuthScreens`, `WelcomeScreen`, and `WeeklyAnalyticsScreen`.&#10;    - Updated `AuthViewModel` to explicitly handle `GetCredentialCancellationException` and provide better error logging for Google Sign-In.&#10;    - Added `com.android.vending` to the `&lt;queries&gt;` block in `AndroidManifest.xml`.&#10;&#10;- **Profile &amp; Data Handling**:&#10;    - Changed `weight` field type from `String` to `Int` in `UserProfile` model, repository, and `ProfileViewModel`.&#10;    - Enhanced `ProfilePicture` component to support remote image loading via `AsyncImage` (Coil) and improved placeholder initials styling.&#10;    - Refined `ProfileScreen` layout to handle integer-based weight input.&#10;&#10;- **UI Improvements**:&#10;    - Added 4.dp elevation to `DashboardCard` and other card components in `HomeScreen` for better visual hierarchy.&#10;    - Wrapped Auth screens in a nested `SugarCareBackground` and refined padding/spacing for consistent layouts.&#10;    - Updated `GradientButton` in `SharedComponents.kt` to support an `enabled` state and trailing content lambdas.&#10;&#10;- **Build Configuration**:&#10;    - Upgraded Gradle wrapper to 9.5.0 and Android Gradle Plugin (AGP) to 9.3.1.&#10;    - Adjusted `compileSdk` from 36 to 35 in `app/build.gradle.kts`.&#10;    - Updated `libs.versions.toml` to clean up unused dependencies and update KSP.&#10;    - Removed unnecessary `@RequiresApi` annotation from `MainActivity`." />
+    <MESSAGE value="Add Delete Account in ProfileScreen.kt&#10;&#10;- **Profile &amp; Account Deletion**:&#10;    - Implemented secure account deletion in `ProfileViewModel` and `ProfileScreen` with support for email/password re-authentication.&#10;    - Created `ProfileViewModelFactory` for initializing `ProfileViewModel` with proper context and lifecycle state.&#10;    - Refactored `ProfileUiState` to support `SaveSuccess` and `AccountDeleted` states.&#10;&#10;- **UI &amp; Shared Components**:&#10;    - Updated `GradientButton` in `SharedComponents.kt` to support optional trailing/leading content (such as icons) next to button text using a Row-based layout.&#10;    - Added new vector drawables: `ic_save`, `ic_cross`, and `ic_logout`.&#10;    - Integrated these new icons into the action buttons on the `ProfileScreen` (Save Changes, Delete Account, Log Out).&#10;    - Added `FireIcon2` color definition to `Theme.kt`.&#10;&#10;- **Navigation**:&#10;    - Updated `SugerCareHost` to instantiate `ProfileViewModel` using the newly introduced factory." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add Delete Account in ProfileScreen.kt&#10;&#10;- **Profile &amp; Account Deletion**:&#10;    - Implemented secure account deletion in `ProfileViewModel` and `ProfileScreen` with support for email/password re-authentication.&#10;    - Created `ProfileViewModelFactory` for initializing `ProfileViewModel` with proper context and lifecycle state.&#10;    - Refactored `ProfileUiState` to support `SaveSuccess` and `AccountDeleted` states.&#10;&#10;- **UI &amp; Shared Components**:&#10;    - Updated `GradientButton` in `SharedComponents.kt` to support optional trailing/leading content (such as icons) next to button text using a Row-based layout.&#10;    - Added new vector drawables: `ic_save`, `ic_cross`, and `ic_logout`.&#10;    - Integrated these new icons into the action buttons on the `ProfileScreen` (Save Changes, Delete Account, Log Out).&#10;    - Added `FireIcon2` color definition to `Theme.kt`.&#10;&#10;- **Navigation**:&#10;    - Updated `SugerCareHost` to instantiate `ProfileViewModel` using the newly introduced factory." />
     <option name="LAST_CHUNK_COMMIT_MESSAGE" value="--" />
   </component>
   <component name="play_dynamic_filters_status">
@@ -754,12 +766,12 @@
       <map>
         <entry key="com.sugarcare.app">
           <value>
-            <CheckInfo lastCheckTimestamp="1786886325539" />
+            <CheckInfo lastCheckTimestamp="1787051951829" />
           </value>
         </entry>
         <entry key="com.sugarcare.app.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1786886325542" />
+            <CheckInfo lastCheckTimestamp="1787051951830" />
           </value>
         </entry>
       </map>

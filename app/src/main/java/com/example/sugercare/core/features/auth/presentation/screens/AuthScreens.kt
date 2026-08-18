@@ -1,4 +1,4 @@
-package com.example.sugercare.core.features.auth.presentation
+package com.example.sugercare.core.features.auth.presentation.screens
 
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -49,18 +49,18 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.size.Size
+import com.example.sugercare.core.features.auth.presentation.AuthState
+import com.example.sugercare.core.features.auth.presentation.AuthViewModel
 import com.sugarcare.app.R
-import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.GradientButton
-import com.sugarcare.app.ui.components.PrimaryButton
-import com.sugarcare.app.ui.components.SecondaryButton
 import com.sugarcare.app.ui.components.SugarCareBackground
 import com.sugarcare.app.ui.components.SugarCareTextField
 import com.sugarcare.app.ui.theme.GreenAccent
 import com.sugarcare.app.ui.theme.GreenAccent2
-import com.sugarcare.app.ui.theme.GreenAccent3
 import com.sugarcare.app.ui.theme.OrangeDrop
 import com.sugarcare.app.ui.theme.OrangeDrop2
 import com.sugarcare.app.ui.theme.TealDark
@@ -451,8 +451,8 @@ fun SignUpScreen(
                     text =  "Sign Up",
                     textSize = 18.sp,
                     onClick = { authViewModel.validateSignIn(email.value, password.value) },
-                    color1 = GreenAccent,
-                    color2 = GreenAccent2,
+                    color1 = GreenAccent2,
+                    color2 = GreenAccent,
                     enabled = email.value.isNotBlank()
                             && password.value.isNotBlank()
                             && confirmPassword.value.isNotBlank()
@@ -494,6 +494,7 @@ fun SignUpScreen(
                 SocialButton(
                     icon = painterResource(R.drawable.ic_facebook),
                     color = TealPrimary,
+                    size = 80.dp,
                     brush = Brush.verticalGradient(listOf(Color(0xFFC6F1F1), TealPrimary2)),
                     onClick = {
                         authViewModel.signInWithFacebook(activity)
@@ -510,7 +511,8 @@ fun SignUpScreen(
 private fun SocialButton(
     icon: Painter,
     color: Color, // androidx.compose.ui.graphics removed -> for cleaner route
-    brush: Brush ,
+    brush: Brush,
+    size : Dp = 52.dp,
     onClick: () -> Unit
 ) {
     Surface(
@@ -520,7 +522,7 @@ private fun SocialButton(
     ) {
         Box(
             modifier = Modifier
-                .size(52.dp)
+                .size(size)
                 .clip(CircleShape)
                 .background(brush = brush)
                 .clickable { onClick() },

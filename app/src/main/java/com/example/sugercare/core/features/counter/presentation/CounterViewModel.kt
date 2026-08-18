@@ -1,14 +1,19 @@
 package com.example.sugercare.core.features.counter.presentation
 
 import android.app.Application
+import android.util.Log
+import androidx.compose.ui.text.style.TextDecoration.Companion.combine
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sugercare.core.features.counter.CounterDataStore
 import com.example.sugercare.core.features.counter.model.CountdownState
 import com.example.sugercare.core.features.counter.model.HistoryEntry
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,30 +29,44 @@ class CounterViewModel(application: Application) : AndroidViewModel(application)
     private val _uiState = MutableStateFlow(CountdownState())
     val uiState: StateFlow<CountdownState> = _uiState.asStateFlow()
 
+    val auth = FirebaseAuth.getInstance()
+
+    private val uid: String
+        get() = auth.currentUser?.uid ?: "guest"
+
     init {
         loadState()
     }
 
     private fun loadState() {
         viewModelScope.launch {
-            val startDate = prefsRepo.startDateFlow.first()
-            val totalDays = prefsRepo.totalDaysFlow.first()
-            val isRunning = prefsRepo.isRunningFlow.first()
-            val bestStreak = prefsRepo.bestStreakFlow.first()
-            val historyJson = prefsRepo.historyJsonFlow.first()
+            try {
+                combine(
+                    prefsRepo.startDateFlow(uid),
+                    prefsRepo.totalDaysFlow(uid),
+                    prefsRepo.isRunningFlow(uid),
+                    prefsRepo.bestStreakFlow(uid),
+                    prefsRepo.historyFlow(uid)
+                ) { values ->
+                    val startDate = values[0] as Long
+                    val totalDays = values[1] as Int
+                    val isRunning = values[2] as Boolean
+                    val bestStreak = values[3] as Int
+                    val historyJson = values[4] as String
 
-            val history = try {
-                Json.decodeFromString<List<HistoryEntry>>(historyJson)
+                    val history = try {
+                        Json.decodeFromString<List<HistoryEntry>>(historyJson)
+                    } catch (e: Exception) {
+                        emptyList()
+                    }
+
+                    CountdownState(startDate, totalDays, isRunning, bestStreak, history)
+                }.first().also { _uiState.value = it }
+
             } catch (e: Exception) {
-                emptyList()
+                Log.e("COUNTER", "loadState failed: ${e.message}")
             }
-
-            _uiState.value = CountdownState(startDate, totalDays, isRunning, bestStreak, history)
         }
-    }
-
-    private fun persistHistory(history: List<HistoryEntry>) {
-        viewModelScope.launch { prefsRepo.saveHistory(Json.encodeToString(history)) }
     }
 
     fun startCounter() {
@@ -66,9 +85,9 @@ class CounterViewModel(application: Application) : AndroidViewModel(application)
         }
 
         viewModelScope.launch {
-            prefsRepo.saveStartDate(now)
-            prefsRepo.saveIsRunning(true)
-            persistHistory(newHistory)
+            prefsRepo.saveStartDate(uid,now)
+            prefsRepo.saveIsRunning(uid,true)
+            prefsRepo.saveHistory(uid, Json.encodeToString(newHistory))
         }
     }
 
@@ -91,10 +110,10 @@ class CounterViewModel(application: Application) : AndroidViewModel(application)
         )
 
         viewModelScope.launch {
-            prefsRepo.saveStartDate(now)
-            prefsRepo.saveIsRunning(false)
-            prefsRepo.saveBestStreak(newBest)
-            persistHistory(newHistory)
+            prefsRepo.saveStartDate(uid, now)
+            prefsRepo.saveIsRunning(uid, false)
+            prefsRepo.saveBestStreak(uid, newBest)
+            prefsRepo.saveHistory(uid, Json.encodeToString(newHistory))
         }
     }
 
@@ -112,8 +131,9 @@ class CounterViewModel(application: Application) : AndroidViewModel(application)
             _uiState.value.copy(startDate = newDate, history = newHistory)
 
         viewModelScope.launch {
-            prefsRepo.saveStartDate(newDate)
-            persistHistory(newHistory)
+            prefsRepo.saveStartDate(uid, newDate)
+            prefsRepo.saveStartDate(uid, newDate)
+            prefsRepo.saveHistory(uid, Json.encodeToString(newHistory))
         }
     }
 
@@ -124,7 +144,11 @@ class CounterViewModel(application: Application) : AndroidViewModel(application)
                 .toInt()
         if (elapsedDays > _uiState.value.bestStreak) {
             _uiState.value = _uiState.value.copy(bestStreak = elapsedDays)
-            viewModelScope.launch { prefsRepo.saveBestStreak(elapsedDays) }
+            viewModelScope.launch { prefsRepo.saveBestStreak(uid,elapsedDays) }
         }
     }
+    fun clearState() {
+        _uiState.value = CountdownState()
+    }
 }
+
