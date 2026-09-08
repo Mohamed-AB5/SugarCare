@@ -201,7 +201,10 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
 
-                Box(contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
                     GradientButton(
                         modifier = Modifier.width(295.dp).height(55.dp),
                         text= "Sign In",
@@ -445,7 +448,10 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
 
-           Box(contentAlignment = Alignment.Center) {
+           Box(
+               modifier = Modifier.fillMaxWidth(),
+               contentAlignment = Alignment.Center
+           ) {
                 GradientButton(
                     modifier = Modifier.width(295.dp).height(55.dp),
                     text =  "Sign Up",
@@ -494,7 +500,6 @@ fun SignUpScreen(
                 SocialButton(
                     icon = painterResource(R.drawable.ic_facebook),
                     color = TealPrimary,
-                    size = 80.dp,
                     brush = Brush.verticalGradient(listOf(Color(0xFFC6F1F1), TealPrimary2)),
                     onClick = {
                         authViewModel.signInWithFacebook(activity)

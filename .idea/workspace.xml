@@ -51,27 +51,13 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4027dcf1-e93a-42bd-80e5-6a54a10c35fb" name="Changes" comment="Add Delete Account in ProfileScreen.kt&#10;&#10;- **Profile &amp; Account Deletion**:&#10;    - Implemented secure account deletion in `ProfileViewModel` and `ProfileScreen` with support for email/password re-authentication.&#10;    - Created `ProfileViewModelFactory` for initializing `ProfileViewModel` with proper context and lifecycle state.&#10;    - Refactored `ProfileUiState` to support `SaveSuccess` and `AccountDeleted` states.&#10;&#10;- **UI &amp; Shared Components**:&#10;    - Updated `GradientButton` in `SharedComponents.kt` to support optional trailing/leading content (such as icons) next to button text using a Row-based layout.&#10;    - Added new vector drawables: `ic_save`, `ic_cross`, and `ic_logout`.&#10;    - Integrated these new icons into the action buttons on the `ProfileScreen` (Save Changes, Delete Account, Log Out).&#10;    - Added `FireIcon2` color definition to `Theme.kt`.&#10;&#10;- **Navigation**:&#10;    - Updated `SugerCareHost` to instantiate `ProfileViewModel` using the newly introduced factory.">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_play.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_reload.xml" afterDir="false" />
+    <list default="true" id="4027dcf1-e93a-42bd-80e5-6a54a10c35fb" name="Changes" comment="Refactor Counter State to be linked with User Id  &#10;&#10;- **Counter Feature**:&#10;    - Updated `CounterDataStore` to persist configuration and progress keys dynamically using the Firebase user UID.&#10;    - Updated `CounterViewModel` to retrieve and save data based on current user session and added `clearState()` to reset UI on logout.&#10;    - Replaced standard button layouts in `CounterScreen` with `GradientButton` containing new vector assets (`ic_play`, `ic_reload`).&#10;    - Removed unused `HistoryAction` enum.&#10;&#10;- **Auth Screens &amp; Navigation**:&#10;    - Relocated `AuthScreens`, `ForgotPasswordScreen`, `WelcomeScreen`, and `SplashScreen` into a nested `screens` subpackage.&#10;    - Swapped signup button gradient colors across auth screens for improved visual consistency.&#10;    - Updated `SugerCareHost` navigation mapping to handle relocated packages and inject `CounterViewModel` into the profile destination.&#10;&#10;- **Home &amp; Profile Integration**:&#10;    - Bound `bestStreak` from `CounterViewModel` to the `HomeScreen` header badge and challenge cards instead of hardcoded placeholders.&#10;    - Cleared Counter state in `ProfileScreen` upon user logout.">
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/AuthScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/AuthScreens.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/AuthViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/AuthViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/ForgotPasswordScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/ForgotPasswordScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/SplashScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/SplashScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/WelcomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/WelcomeScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/CounterDataStore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/CounterDataStore.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/model/HistoryAction.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/presentation/CounterScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/presentation/CounterScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/presentation/CounterViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/counter/presentation/CounterViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/AuthScreens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/AuthScreens.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/home/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/home/HomeScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/profile/presentation/screens/ProfileScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/profile/presentation/screens/ProfileScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/mainComponents/navigation/SugerCareHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/mainComponents/navigation/SugerCareHost.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,6 +85,11 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="SugerCare1" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="SugerCare1" type="f1a62948:ProjectNode" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
               </path>
             </expand>
             <select />
@@ -132,6 +123,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -556,8 +552,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.SugerCare1 [testDebugUnitTest]" />
         <item itemvalue="Gradle.SugerCare1 [signingReport]" />
         <item itemvalue="Gradle.SugerCare1 [:app:testDebugUnitTest]" />
+        <item itemvalue="Gradle.SugerCare1 [signingReport]" />
         <item itemvalue="Gradle.SugerCare1 [testDebugUnitTest]" />
       </list>
     </recent_temporary>

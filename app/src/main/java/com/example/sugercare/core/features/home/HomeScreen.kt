@@ -102,7 +102,7 @@ fun HomeScreen(    navController: NavHostController,
             // ── HERO: Glucose Logs ────────────────────────────
             HeroCard(
                 title       = "Glucose Logs",
-                value       = "— —",
+                value       = "180",
                 unit        = "mg/dL",
                 buttonText  = "Record",
                 icon        = Icons.Filled.Favorite,
@@ -150,15 +150,6 @@ fun HomeScreen(    navController: NavHostController,
                 onClick     = { navController.navigate(Screen.MealPlan.route) }
             )
 
-            // ── ROW CARD: AI ChatBot ──────────────────────────
-            RowCard(
-                title       = "AI Sugar Chat",
-                value       = "Ask me anything",
-                icon        = Icons.AutoMirrored.Filled.Chat,
-                cardColor   = CardGreen,
-                accentColor = Color(0xFF1F7A4A),
-                onClick     = { navController.navigate(Screen.ChatScreen.route) }
-            )
 
             // ── ROW CARD: Emergency ───────────────────────────
             RowCard(
@@ -169,6 +160,17 @@ fun HomeScreen(    navController: NavHostController,
                 accentColor = Color(0xFFE53935),
                 onClick     = { navController.navigate(Screen.EmergencyContact.route) }
             )
+            // Mohamed Abdo : replaced with emergency to be faster to access
+            // ── ROW CARD: AI ChatBot ──────────────────────────
+            RowCard(
+                title       = "AI Sugar Chat",
+                value       = "Ask me anything",
+                icon        = Icons.AutoMirrored.Filled.Chat,
+                cardColor   = CardGreen,
+                accentColor = Color(0xFF1F7A4A),
+                onClick     = { navController.navigate(Screen.ChatScreen.route) }
+            )
+
 
             // ── ROW CARD: 90-Day Challenge ────────────────────
             RowCard(
