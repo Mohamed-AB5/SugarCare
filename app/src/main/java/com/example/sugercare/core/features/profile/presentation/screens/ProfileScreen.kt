@@ -79,6 +79,9 @@ import com.example.sugercare.core.features.counter.presentation.CounterViewModel
 import com.example.sugercare.core.features.profile.model.ProfileUiState
 import com.example.sugercare.core.features.profile.presentation.ProfileViewModel
 import com.example.sugercare.core.mainComponents.utils.vibrate
+import com.example.sugercare.core.mainComponents.theme.ThemeDataStore
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import com.google.firebase.auth.FirebaseAuth
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.GradientButton
@@ -108,8 +111,10 @@ fun ProfileScreen(
     val genderOptions   = listOf("Male", "Female")
 
     // ── Dark Mode Switch ──────────────────────────────────────
-    val darkState = LocalDarkTheme.current
-    val isDark    = darkState.value
+    val darkState      = LocalDarkTheme.current
+    val isDark         = darkState.value
+    val themeDataStore = remember { ThemeDataStore(context) }
+    val scope          = rememberCoroutineScope()
     val bgColor = if (isDark) BackgroundDark else BackgroundLight
     val cardColor = if (isDark) SurfaceDark else Color.White
     val textColor = if (isDark) Color(0xFFE0F2F1) else TextDark
@@ -219,7 +224,12 @@ fun ProfileScreen(
                     }
                     Switch(
                         checked         = isDark,
-                        onCheckedChange = { darkState.value = it },
+                        onCheckedChange = { enabled ->
+                            darkState.value = enabled          // update UI instantly
+                            scope.launch {
+                                themeDataStore.setDarkMode(enabled) // persist across restarts
+                            }
+                        },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor  = Color.White,
                             checkedTrackColor  = TealPrimary,
@@ -615,4 +625,3 @@ fun DatePickerField(
         colors         = newScreenFieldColors()
     )
 }
-
