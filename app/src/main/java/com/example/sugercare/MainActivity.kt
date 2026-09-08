@@ -10,11 +10,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +26,7 @@ import com.example.sugercare.core.features.chatBot.presentation.ChatViewModel
 import com.example.sugercare.core.features.counter.presentation.CounterViewModel
 import com.example.sugercare.core.features.glucoseLogs.presentation.GlucoseViewModel
 import com.example.sugercare.core.features.profile.presentation.ProfileViewModel
+import com.example.sugercare.core.mainComponents.theme.ThemeDataStore
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.navigation.SugarCareNavHost
 import com.sugarcare.app.ui.theme.LocalDarkTheme
@@ -86,9 +87,21 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
 
+        // ── Persisted dark mode (survives app restarts) ───────
+        val themeDataStore = ThemeDataStore(this)
+
         setContent {
             // ── Global dark mode state ────────────────────────
             val darkState = remember { mutableStateOf(false) }
+
+            // Load the saved value from DataStore as soon as it's
+            // available, then keep darkState in sync with it.
+            val savedDarkMode by themeDataStore.isDarkModeFlow
+                .collectAsState(initial = null)
+
+            LaunchedEffect(savedDarkMode) {
+                savedDarkMode?.let { darkState.value = it }
+            }
 
             val navController = rememberNavController()
             CompositionLocalProvider(LocalDarkTheme provides darkState) {
