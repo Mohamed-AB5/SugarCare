@@ -27,17 +27,20 @@ import com.example.sugercare.core.features.profile.presentation.ProfileViewModel
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.theme.*
 
-// ── Brand colors ──────────────────────────────────────────────
-private val CardTeal    = Color(0xFFB2DFDB)   // hero bg
-private val CardBlue    = Color(0xFFDCEEFB)   // analytics
-private val CardPurple  = Color(0xFFEDE0FF)   // medications
-private val CardOrange  = Color(0xFFFFE8D4)   // chatbot / meals
-private val CardRed     = Color(0xFFFFE5E5)   // emergency
-private val CardGreen   = Color(0xFFDFF5E8)   // challenge
-/**
- * Home Screen – main dashboard with Glucose Logs, Meal Plan,
- * Weekly Analytics, and Medication Plan quick tiles.
- */
+
+private val CardTeal      = Color(0xFFB2DFDB)  
+private val CardTealDark  = Color(0xFF1F4040)
+private val CardBlue      = Color(0xFFDCEEFB) 
+private val CardBlueDark  = Color(0xFF16324A)
+private val CardPurple    = Color(0xFFEDE0FF)   
+private val CardPurpleDark= Color(0xFF352050)
+private val CardOrange    = Color(0xFFFFE8D4)   
+private val CardOrangeDark= Color(0xFF4A331C)
+private val CardRed       = Color(0xFFFFE5E5)  
+private val CardRedDark   = Color(0xFF4A2020)
+private val CardGreen     = Color(0xFFDFF5E8)   
+private val CardGreenDark = Color(0xFF1C3D2A)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(    navController: NavHostController,
@@ -54,7 +57,6 @@ fun HomeScreen(    navController: NavHostController,
             .background(bgColor)
     ) {
 
-        // ── Top bar ───────────────────────────────────────────
         TopAppBar(
             title = {
                 Column {
@@ -65,12 +67,12 @@ fun HomeScreen(    navController: NavHostController,
                 }
             },
             actions = {
-                // Challenge streak badge
+                
                 Surface(
                     shape = RoundedCornerShape(20.dp),
-                    color = Color.White,
+                    color = if (isDark) SurfaceDark else Color.White,
                     tonalElevation = 0.dp,
-                    shadowElevation = 2.dp
+                    shadowElevation = if (isDark) 0.dp else 2.dp
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
@@ -99,19 +101,18 @@ fun HomeScreen(    navController: NavHostController,
         ) {
             Spacer(Modifier.height(4.dp))
 
-            // ── HERO: Glucose Logs ────────────────────────────
             HeroCard(
                 title       = "Glucose Logs",
                 value       = "— —",
                 unit        = "mg/dL",
                 buttonText  = "Record",
                 icon        = Icons.Filled.Favorite,
-                cardColor   = CardTeal,
+                cardColor   = if (isDark) CardTealDark else CardTeal,
                 accentColor = TealPrimary,
                 onClick     = { navController.navigate(Screen.Logs.route) }
             )
 
-            // ── ROW: Analytics | Medications ─────────────────
+
             Row(
                 modifier              = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(14.dp)
@@ -122,8 +123,8 @@ fun HomeScreen(    navController: NavHostController,
                     value       = "122",
                     unit        = "mg/dL avg",
                     icon        = Icons.Filled.BarChart,
-                    cardColor   = CardBlue,
-                    accentColor = Color(0xFF1870A0),
+                    cardColor   = if (isDark) CardBlueDark else CardBlue,
+                    accentColor = if (isDark) Color(0xFF6FB6E8) else Color(0xFF1870A0),
                     buttonText  = "Analyze",
                     onClick     = { navController.navigate(Screen.WeeklyAnalytics.route) }
                 )
@@ -133,49 +134,49 @@ fun HomeScreen(    navController: NavHostController,
                     value       = "3",
                     unit        = "active",
                     icon        = Icons.Filled.Medication,
-                    cardColor   = CardPurple,
-                    accentColor = Color(0xFF6030A0),
+                    cardColor   = if (isDark) CardPurpleDark else CardPurple,
+                    accentColor = if (isDark) Color(0xFFC4A0F0) else Color(0xFF6030A0),
                     buttonText  = "Manage",
                     onClick     = { navController.navigate(Screen.Medications.route) }
                 )
             }
 
-            // ── ROW CARD: Meal Plan ───────────────────────────
+           
             RowCard(
                 title       = "Meal Plan",
                 value       = "3 meals today",
                 icon        = Icons.Filled.Restaurant,
-                cardColor   = CardOrange,
+                cardColor   = if (isDark) CardOrangeDark else CardOrange,
                 accentColor = OrangeDrop,
                 onClick     = { navController.navigate(Screen.MealPlan.route) }
             )
 
-            // ── ROW CARD: AI ChatBot ──────────────────────────
+           
             RowCard(
                 title       = "AI Sugar Chat",
                 value       = "Ask me anything",
                 icon        = Icons.AutoMirrored.Filled.Chat,
-                cardColor   = CardGreen,
-                accentColor = Color(0xFF1F7A4A),
+                cardColor   = if (isDark) CardGreenDark else CardGreen,
+                accentColor = if (isDark) Color(0xFF6FCF97) else Color(0xFF1F7A4A),
                 onClick     = { navController.navigate(Screen.ChatScreen.route) }
             )
 
-            // ── ROW CARD: Emergency ───────────────────────────
+           
             RowCard(
                 title       = "Emergency Contacts",
                 value       = "Tap to call immediately",
                 icon        = Icons.Filled.Emergency,
-                cardColor   = CardRed,
-                accentColor = Color(0xFFE53935),
+                cardColor   = if (isDark) CardRedDark else CardRed,
+                accentColor = if (isDark) Color(0xFFFF6B6B) else Color(0xFFE53935),
                 onClick     = { navController.navigate(Screen.EmergencyContact.route) }
             )
 
-            // ── ROW CARD: 90-Day Challenge ────────────────────
+   
             RowCard(
                 title       = "90-Day Challenge",
-                value       = "${state.value.bestStreak} Highset Streak Ever🐦‍🔥",
+                value       = "${state.value.bestStreak} Highset Streak Ever",
                 icon        = Icons.Filled.EmojiEvents,
-                cardColor   = CardTeal,
+                cardColor   = if (isDark) CardTealDark else CardTeal,
                 accentColor = TealPrimary,
                 onClick     = { navController.navigate(Screen.CounterScreen.route) }
             )
@@ -183,7 +184,7 @@ fun HomeScreen(    navController: NavHostController,
             Spacer(Modifier.height(12.dp))
         }
 
-        // ── Bottom Nav ────────────────────────────────────────
+      
         NavigationBar(
             containerColor = if (isDark) SurfaceDark else Color.White,
             tonalElevation = 0.dp
@@ -213,9 +214,6 @@ fun HomeScreen(    navController: NavHostController,
     }
 }
 
-// ═════════════════════════════════════════════════════════════
-//  HERO CARD  — like "Blood Sugar" in the reference
-// ═════════════════════════════════════════════════════════════
 @Composable
 private fun HeroCard(
     title      : String,
@@ -227,6 +225,11 @@ private fun HeroCard(
     accentColor: Color,
     onClick    : () -> Unit
 ) {
+    
+    val isDark = LocalDarkTheme.current.value
+    val valueColor = if (isDark) Color(0xFFF1F5F5) else Color(0xFF1A2B2B)
+    val unitColor  = if (isDark) Color(0xFFB8CCCC) else Color(0xFF4A6565)
+
     Card(
         modifier  = Modifier
             .fillMaxWidth()
@@ -237,7 +240,7 @@ private fun HeroCard(
     ) {
         Box(Modifier.fillMaxSize()) {
 
-            // Background large icon (decorative)
+            
             Icon(
                 imageVector        = icon,
                 contentDescription = null,
@@ -255,7 +258,7 @@ private fun HeroCard(
                 verticalAlignment     = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Left content
+              
                 Column {
                     Text(title,
                         fontWeight = FontWeight.Bold,
@@ -266,11 +269,11 @@ private fun HeroCard(
                         Text(value,
                             fontWeight = FontWeight.ExtraBold,
                             fontSize   = 30.sp,
-                            color      = Color(0xFF1A2B2B))
+                            color      = valueColor)
                         Spacer(Modifier.width(6.dp))
                         Text(unit,
                             fontSize = 14.sp,
-                            color    = Color(0xFF4A6565),
+                            color    = unitColor,
                             modifier = Modifier.padding(bottom = 4.dp))
                     }
                     Spacer(Modifier.height(14.dp))
@@ -287,7 +290,7 @@ private fun HeroCard(
                     }
                 }
 
-                // Right icon circle
+              
                 Box(
                     modifier         = Modifier
                         .size(72.dp)
@@ -304,9 +307,6 @@ private fun HeroCard(
     }
 }
 
-// ═════════════════════════════════════════════════════════════
-//  SMALL CARD  — like "Heart Rate" / "Blood Pressure"
-// ═════════════════════════════════════════════════════════════
 @Composable
 private fun SmallCard(
     modifier   : Modifier,
@@ -319,6 +319,10 @@ private fun SmallCard(
     buttonText : String,
     onClick    : () -> Unit
 ) {
+    val isDark = LocalDarkTheme.current.value
+    val valueColor = if (isDark) Color(0xFFF1F5F5) else Color(0xFF1A2B2B)
+    val unitColor  = if (isDark) Color(0xFFB8CCCC) else Color(0xFF4A6565)
+
     Card(
         modifier  = modifier,
         shape     = RoundedCornerShape(24.dp),
@@ -326,7 +330,7 @@ private fun SmallCard(
         elevation = CardDefaults.cardElevation(0.dp)
     ) {
         Box(Modifier.fillMaxWidth()) {
-            // Decorative icon top-right
+         
             Icon(
                 imageVector        = icon,
                 contentDescription = null,
@@ -354,10 +358,10 @@ private fun SmallCard(
                 Text(value,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize   = 28.sp,
-                    color      = Color(0xFF1A2B2B))
+                    color      = valueColor)
                 Text(unit,
                     fontSize = 11.sp,
-                    color    = Color(0xFF4A6565))
+                    color    = unitColor)
                 Spacer(Modifier.height(14.dp))
                 Button(
                     onClick        = onClick,
@@ -376,9 +380,7 @@ private fun SmallCard(
     }
 }
 
-// ═════════════════════════════════════════════════════════════
-//  ROW CARD  — like "Drinking Water" / "Step Count"
-// ═════════════════════════════════════════════════════════════
+
 @Composable
 private fun RowCard(
     title      : String,
@@ -388,6 +390,10 @@ private fun RowCard(
     accentColor: Color,
     onClick    : () -> Unit
 ) {
+    
+    val isDark = LocalDarkTheme.current.value
+    val titleColor = if (isDark) Color(0xFFF1F5F5) else Color(0xFF1A2B2B)
+
     Card(
         modifier  = Modifier.fillMaxWidth(),
         shape     = RoundedCornerShape(20.dp),
@@ -401,7 +407,7 @@ private fun RowCard(
                 .padding(horizontal = 18.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Icon box
+            
             Box(
                 modifier         = Modifier
                     .size(56.dp)
@@ -420,7 +426,7 @@ private fun RowCard(
                 Text(title,
                     fontWeight = FontWeight.Bold,
                     fontSize   = 15.sp,
-                    color      = Color(0xFF1A2B2B))
+                    color      = titleColor)
                 Spacer(Modifier.height(2.dp))
                 Text(value,
                     fontSize   = 13.sp,
@@ -430,7 +436,7 @@ private fun RowCard(
                     overflow   = TextOverflow.Ellipsis)
             }
 
-            // Chevron >>
+           
             Text(">>",
                 fontSize   = 14.sp,
                 fontWeight = FontWeight.Bold,
