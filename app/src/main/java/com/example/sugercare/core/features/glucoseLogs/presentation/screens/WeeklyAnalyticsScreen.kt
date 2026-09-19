@@ -79,7 +79,6 @@ fun WeeklyAnalyticsScreen(
 
     val dayNames = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 
-    // Group readings and calculate averages dynamically based on mode
     val readings = remember(dbReadings, isWeekly) {
         val now = System.currentTimeMillis()
         if (isWeekly) {
@@ -173,7 +172,9 @@ fun WeeklyAnalyticsScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 8.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(TealLight.copy(alpha = 0.3f))
+                    // ✅ was TealLight at 30% opacity — nearly invisible as a
+                    //    track against a dark page background
+                    .background(if (isDark) SurfaceDark else TealLight.copy(alpha = 0.3f))
                     .padding(4.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
@@ -188,7 +189,9 @@ fun WeeklyAnalyticsScreen(
                 ) {
                     Text(
                         "Weekly",
-                        color = if (isWeekly) Color.White else TealDark,
+                        // ✅ was always TealDark when inactive — barely readable
+                        //    in dark mode; now lightens for dark theme
+                        color = if (isWeekly) Color.White else if (isDark) textColor else TealDark,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     )
@@ -204,7 +207,8 @@ fun WeeklyAnalyticsScreen(
                 ) {
                     Text(
                         "Monthly",
-                        color = if (!isWeekly) Color.White else TealDark,
+                     
+                        color = if (!isWeekly) Color.White else if (isDark) textColor else TealDark,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     )
@@ -234,7 +238,8 @@ fun WeeklyAnalyticsScreen(
                         horizontalAlignment = Alignment.End
                     ) {
                         listOf(250, 200, 150, 100, 50).forEach { label ->
-                            Text(label.toString(), fontSize = 10.sp, color = TextLight)
+                           
+                            Text(label.toString(), fontSize = 10.sp, color = subColor)
                         }
                     }
                     readings.forEach { reading ->
@@ -264,7 +269,8 @@ fun WeeklyAnalyticsScreen(
                         .padding(start = 36.dp, top = 4.dp),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    readings.forEach { Text(it.day, fontSize = 11.sp, color = TextMedium) }
+               
+                    readings.forEach { Text(it.day, fontSize = 11.sp, color = subColor) }
                 }
             }
 
