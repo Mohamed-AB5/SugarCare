@@ -5,8 +5,10 @@ import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.sugarcare.app.ui.theme.LocalDarkTheme
+import com.sugarcare.app.ui.theme.SurfaceDark
 import com.sugarcare.app.ui.theme.TealLight
 import com.sugarcare.app.ui.theme.TealPrimary
+import com.sugarcare.app.ui.theme.TextDarkMode
 import com.sugarcare.app.ui.theme.TextMedium
 
 //  Mohamed : it was in NewScreens
@@ -14,10 +16,9 @@ import com.sugarcare.app.ui.theme.TextMedium
 fun newScreenFieldColors(): TextFieldColors {
     val isDark = LocalDarkTheme.current.value
 
-    // Matches the muted gray-teal input text tone used in the Glucose Tracker screen
-    val textColor      = if (isDark) Color(0xFF80CBC4)  else Color(0xFF1A2B29)
+    val textColor      = if (isDark) TextDarkMode        else Color(0xFF1A2B29)
     val labelColor     = if (isDark) Color(0xFF80CBC4)    else TextMedium
-    val containerColor = if (isDark) Color (0xFF80CBC4)else Color.White
+    val containerColor = if (isDark) SurfaceDark          else Color.White
     val borderColor    = if (isDark) TealPrimary          else TealLight
 
     return OutlinedTextFieldDefaults.colors(
