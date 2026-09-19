@@ -79,9 +79,6 @@ import com.example.sugercare.core.features.counter.presentation.CounterViewModel
 import com.example.sugercare.core.features.profile.model.ProfileUiState
 import com.example.sugercare.core.features.profile.presentation.ProfileViewModel
 import com.example.sugercare.core.mainComponents.utils.vibrate
-import com.example.sugercare.core.mainComponents.theme.ThemeDataStore
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.launch
 import com.google.firebase.auth.FirebaseAuth
 import com.sugarcare.app.navigation.Screen
 import com.sugarcare.app.ui.components.GradientButton
@@ -90,9 +87,7 @@ import com.sugarcare.app.ui.theme.*
 import java.util.Calendar
 import com.sugarcare.app.R
 
-// ══════════════════════════════════════════════════════════════
-//  4. PROFILE SCREEN — full ViewModel + Dark Mode Switch
-// ══════════════════════════════════════════════════════════════
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
@@ -111,10 +106,8 @@ fun ProfileScreen(
     val genderOptions   = listOf("Male", "Female")
 
     // ── Dark Mode Switch ──────────────────────────────────────
-    val darkState      = LocalDarkTheme.current
-    val isDark         = darkState.value
-    val themeDataStore = remember { ThemeDataStore(context) }
-    val scope          = rememberCoroutineScope()
+    val darkState = LocalDarkTheme.current
+    val isDark    = darkState.value
     val bgColor = if (isDark) BackgroundDark else BackgroundLight
     val cardColor = if (isDark) SurfaceDark else Color.White
     val textColor = if (isDark) Color(0xFFE0F2F1) else TextDark
@@ -188,16 +181,16 @@ fun ProfileScreen(
                 .padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Profile picture
+            
             ProfilePicture(profileViewModel)
             Spacer(Modifier.height(20.dp))
 
-            // ── Dark Mode Switch ──────────────────────────────
+            
             Card(
                 Modifier.fillMaxWidth(),
                 shape     = RoundedCornerShape(16.dp),
                 colors    = CardDefaults.cardColors(
-                    containerColor = bgColor),
+                    containerColor = cardColor),
                 elevation = CardDefaults.cardElevation(0.dp)
             ) {
                 Row(
@@ -224,12 +217,7 @@ fun ProfileScreen(
                     }
                     Switch(
                         checked         = isDark,
-                        onCheckedChange = { enabled ->
-                            darkState.value = enabled          // update UI instantly
-                            scope.launch {
-                                themeDataStore.setDarkMode(enabled) // persist across restarts
-                            }
-                        },
+                        onCheckedChange = { darkState.value = it },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor  = Color.White,
                             checkedTrackColor  = TealPrimary,
@@ -362,7 +350,7 @@ fun ProfileScreen(
                     }
                     Spacer(Modifier.height(12.dp))
 
-                    // Gender dropdown
+                    
                     ExposedDropdownMenuBox(showGender, { showGender = it }) {
                         OutlinedTextField(
                             value         = editableProfile.value.gender,
@@ -415,7 +403,7 @@ fun ProfileScreen(
                     )*/
 
 
-                    // Save button
+                   
                     GradientButton(
                         text = if (isSaving) "Saving..." else "Save Changes",
                         onClick = { profileViewModel.saveProfile() },
@@ -436,7 +424,7 @@ fun ProfileScreen(
 
                     Spacer(Modifier.height(12.dp))
 
-                    // ------- Delete Account Process
+                    
                     var showDeleteDialog by remember { mutableStateOf(false) }
                     var deletePassword by remember { mutableStateOf("") }
                      val auth = FirebaseAuth.getInstance()
@@ -452,7 +440,7 @@ fun ProfileScreen(
                             text = {
                                 Column {
                                     Text("Are you sure you want to delete your account? This cannot be undone.")
-                                    if (isEmailProvider) {  // ✅ Only show for Email users
+                                    if (isEmailProvider) {  
                                         Spacer(Modifier.height(12.dp))
                                         OutlinedTextField(
                                             value = deletePassword,
@@ -467,7 +455,7 @@ fun ProfileScreen(
                             confirmButton = {
                                 TextButton(onClick = {
                                     profileViewModel.deleteAccount(
-                                        if (isEmailProvider) deletePassword else null  // ✅ Pass null for Google
+                                        if (isEmailProvider) deletePassword else null  
                                     )
                                     showDeleteDialog = false
                                 }) {
@@ -485,7 +473,7 @@ fun ProfileScreen(
 
                     GradientButton(
                         text = "Delete Account!",
-                        onClick = { showDeleteDialog = true },  // ✅ Show dialog first
+                        onClick = { showDeleteDialog = true },  
                         enabled = true,
                         color1 = FireIcon,
                         color2 = FireIcon2,
@@ -501,7 +489,7 @@ fun ProfileScreen(
 
                     Spacer(Modifier.height(12.dp))
 
-                    // Log Out
+                  
                     OutlinedButton(
                         onClick  = { showLogout = true },
                         modifier = Modifier
@@ -528,7 +516,7 @@ fun ProfileScreen(
     }
 }
 
-// ── Helpers ───────────────────────────────────────────────────
+
 @Composable
 private fun   ProfileFieldItem(
     modifier      : Modifier,
