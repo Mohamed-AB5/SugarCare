@@ -81,9 +81,7 @@ import com.sugarcare.app.ui.theme.TextDark
 import com.sugarcare.app.ui.theme.TextLight
 import com.sugarcare.app.ui.theme.TextMedium
 
-// ─────────────────────────────────────────────────────────────
-//  MealPlanScreen — 2 tabs: Doctor Plan | Suggestions
-// ─────────────────────────────────────────────────────────────
+
 
 @Composable
 fun MealPlanScreen(
@@ -110,27 +108,28 @@ fun MealPlanScreen(
     SugarCareBackground {
         Column(modifier = Modifier.fillMaxSize()) {
 
-            // ── Header ────────────────────────────────────────
+            
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(BackgroundLight)
+                    .background(bgColor)
                     .padding(start = 24.dp, end = 24.dp, top = 48.dp, bottom = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text       = "Your Personalized\nMeal Plan",
                     style      = MaterialTheme.typography.headlineMedium,
-                    color      = TealDark,
+                    
+                    color      = if (isDark) Color(0xFF80CBC4) else TealDark,
                     fontWeight = FontWeight.Bold,
                     textAlign  = TextAlign.Center
                 )
             }
 
-            // ── Tab Row ───────────────────────────────────────
+          
             TabRow(
                 selectedTabIndex = selectedTab,
-                containerColor   = BackgroundLight,
+                containerColor   = bgColor,
                 contentColor     = TealPrimary
             ) {
                 tabs.forEachIndexed { index, title ->
@@ -149,7 +148,7 @@ fun MealPlanScreen(
                 }
             }
 
-            // ── Tab Content ───────────────────────────────────
+           
             Box(modifier = Modifier.weight(1f)) {
                 when (selectedTab) {
                     0 -> DoctorPlanTab(mealViewModel)
@@ -160,7 +159,7 @@ fun MealPlanScreen(
                 }
             }
 
-            // ── Bottom Nav ────────────────────────────────────
+            
             NavigationBar(containerColor = navColor, tonalElevation = 8.dp) {
                 listOf(
                     Triple("Home", Icons.Filled.Home, Screen.Home.route),
@@ -189,13 +188,13 @@ fun MealPlanScreen(
     }
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Tab 1 — Doctor Plan
-// ─────────────────────────────────────────────────────────────
+
 
 @Composable
 private fun DoctorPlanTab(mealViewModel: MealViewModel) {
     val doctorMeals by mealViewModel.doctorMeals.collectAsState()
+
+    val isDark = LocalDarkTheme.current.value
 
     Column(
         modifier = Modifier
@@ -204,7 +203,7 @@ private fun DoctorPlanTab(mealViewModel: MealViewModel) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // General info card
+  
         SugarCareCard {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
@@ -217,16 +216,18 @@ private fun DoctorPlanTab(mealViewModel: MealViewModel) {
                 Text(
                     text     = "Diet type: Low Carb  •  Prepared by your doctor",
                     fontSize = 13.sp,
-                    color    = TextMedium
+                  
+                    color    = if (isDark) Color(0xFF80CBC4) else TextMedium
                 )
             }
         }
 
+       
         Text(
             text       = "Today's Meal Plan",
             style      = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            color      = TextDark
+            color      = if (isDark) Color(0xFFE0F2F1) else TextDark
         )
 
         doctorMeals.forEach { meal ->
@@ -239,8 +240,13 @@ private fun DoctorPlanTab(mealViewModel: MealViewModel) {
 
 @Composable
 private fun DoctorMealCard(meal: DoctorMeal) {
+   
+    val isDark    = LocalDarkTheme.current.value
+    val textColor = if (isDark) Color(0xFFE0F2F1) else TextDark
+    val subColor  = if (isDark) Color(0xFF80CBC4) else TextMedium
+
     SugarCareCard {
-        // Meal type chip + time row
+  
         Row(
             modifier              = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -262,27 +268,27 @@ private fun DoctorMealCard(meal: DoctorMeal) {
                 Icon(
                     Icons.Filled.Schedule,
                     contentDescription = null,
-                    tint     = TextMedium,
+                    tint     = subColor,
                     modifier = Modifier.size(14.dp)
                 )
                 Spacer(Modifier.width(4.dp))
-                Text(text = meal.time, fontSize = 13.sp, color = TextMedium)
+                Text(text = meal.time, fontSize = 13.sp, color = subColor)
             }
         }
 
         Spacer(Modifier.height(8.dp))
 
-        // Meal name
+      
         Text(
             text       = meal.name,
             fontWeight = FontWeight.Bold,
             fontSize   = 16.sp,
-            color      = TextDark
+            color      = textColor
         )
 
         Spacer(Modifier.height(6.dp))
 
-        // Calories — only shown when available
+        
         meal.calories?.let { cal ->
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
@@ -302,12 +308,11 @@ private fun DoctorMealCard(meal: DoctorMeal) {
             Spacer(Modifier.height(6.dp))
         }
 
-        // Suggested foods
         Text(
             text       = "Suggested foods:",
             fontSize   = 13.sp,
             fontWeight = FontWeight.SemiBold,
-            color      = TextDark
+            color      = textColor
         )
         meal.suggestedFoods.forEach { food ->
             Row(
@@ -321,16 +326,15 @@ private fun DoctorMealCard(meal: DoctorMeal) {
                     modifier = Modifier.size(8.dp)
                 )
                 Spacer(Modifier.width(6.dp))
-                Text(text = food, fontSize = 13.sp, color = TextMedium)
+                Text(text = food, fontSize = 13.sp, color = subColor)
             }
         }
 
-        // Doctor notes
         if (meal.doctorNotes.isNotBlank()) {
             Spacer(Modifier.height(8.dp))
             Surface(
                 shape = RoundedCornerShape(8.dp),
-                color = TealLight.copy(alpha = 0.3f)
+                color = if (isDark) TealPrimary.copy(alpha = 0.18f) else TealLight.copy(alpha = 0.3f)
             ) {
                 Row(
                     modifier          = Modifier.padding(8.dp),
@@ -339,14 +343,14 @@ private fun DoctorMealCard(meal: DoctorMeal) {
                     Icon(
                         Icons.Filled.StickyNote2,
                         contentDescription = null,
-                        tint     = TealDark,
+                        tint     = if (isDark) Color(0xFF80CBC4) else TealDark,
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(Modifier.width(6.dp))
                     Text(
                         text     = meal.doctorNotes,
                         fontSize = 12.sp,
-                        color    = TealDark
+                        color    = if (isDark) Color(0xFF80CBC4) else TealDark
                     )
                 }
             }
@@ -354,18 +358,16 @@ private fun DoctorMealCard(meal: DoctorMeal) {
     }
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Tab 2 — Meal Suggestions
-// ─────────────────────────────────────────────────────────────
 
 @Composable
 private fun SuggestionsTab(mealViewModel: MealViewModel) {
     val suggestions      by mealViewModel.filteredSuggestions.collectAsState()
     val selectedCategory by mealViewModel.selectedCategory.collectAsState()
+    val isDark = LocalDarkTheme.current.value
 
     Column(modifier = Modifier.fillMaxSize()) {
 
-        // ── Category filter chips ─────────────────────────────
+        
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -374,6 +376,7 @@ private fun SuggestionsTab(mealViewModel: MealViewModel) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             mealViewModel.categories.forEach { category ->
+         
                 FilterChip(
                     selected = selectedCategory == category,
                     onClick  = { mealViewModel.filterByCategory(category) },
@@ -381,8 +384,8 @@ private fun SuggestionsTab(mealViewModel: MealViewModel) {
                     colors   = FilterChipDefaults.filterChipColors(
                         selectedContainerColor = TealPrimary,
                         selectedLabelColor     = Color.White,
-                        containerColor         = BackgroundLight,
-                        labelColor             = TextMedium
+                        containerColor         = if (isDark) SurfaceDark else BackgroundLight,
+                        labelColor             = if (isDark) Color(0xFF80CBC4) else TextMedium
                     ),
                     border = FilterChipDefaults.filterChipBorder(
                         enabled             = true,
@@ -394,7 +397,6 @@ private fun SuggestionsTab(mealViewModel: MealViewModel) {
             }
         }
 
-        // ── Suggestion cards ──────────────────────────────────
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -412,8 +414,13 @@ private fun SuggestionsTab(mealViewModel: MealViewModel) {
 
 @Composable
 private fun SuggestionCard(suggestion: MealSuggestion) {
+    
+    val isDark    = LocalDarkTheme.current.value
+    val textColor = if (isDark) Color(0xFFE0F2F1) else TextDark
+    val subColor  = if (isDark) Color(0xFF80CBC4) else TextMedium
+
     SugarCareCard {
-        // Name + category chip
+    
         Row(
             modifier              = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -423,7 +430,7 @@ private fun SuggestionCard(suggestion: MealSuggestion) {
                 text       = suggestion.name,
                 fontWeight = FontWeight.Bold,
                 fontSize   = 15.sp,
-                color      = TextDark,
+                color      = textColor,
                 modifier   = Modifier.weight(1f)
             )
             Spacer(Modifier.width(8.dp))
@@ -443,7 +450,7 @@ private fun SuggestionCard(suggestion: MealSuggestion) {
 
         Spacer(Modifier.height(8.dp))
 
-        // Nutrition row
+    
         Row(
             modifier              = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -470,32 +477,31 @@ private fun SuggestionCard(suggestion: MealSuggestion) {
                 icon  = Icons.Filled.WaterDrop,
                 value = "${suggestion.sugarGrams}g",
                 unit  = "sugar",
-                tint  = TextMedium
+                tint  = subColor
             )
         }
 
         Spacer(Modifier.height(8.dp))
 
-        // Ingredients
+     
         Text(
             text       = "Ingredients:",
             fontSize   = 13.sp,
             fontWeight = FontWeight.SemiBold,
-            color      = TextDark
+            color      = textColor
         )
         Text(
             text     = suggestion.ingredients.joinToString(" • "),
             fontSize = 12.sp,
-            color    = TextMedium,
+            color    = subColor,
             modifier = Modifier.padding(top = 2.dp)
         )
 
         Spacer(Modifier.height(6.dp))
 
-        // Benefits
         Surface(
             shape = RoundedCornerShape(8.dp),
-            color = TealLight.copy(alpha = 0.3f)
+            color = if (isDark) TealPrimary.copy(alpha = 0.18f) else TealLight.copy(alpha = 0.3f)
         ) {
             Row(
                 modifier          = Modifier.padding(8.dp),
@@ -504,23 +510,21 @@ private fun SuggestionCard(suggestion: MealSuggestion) {
                 Icon(
                     Icons.Filled.VerifiedUser,
                     contentDescription = null,
-                    tint     = TealDark,
+                    tint     = if (isDark) Color(0xFF80CBC4) else TealDark,
                     modifier = Modifier.size(14.dp)
                 )
                 Spacer(Modifier.width(6.dp))
                 Text(
                     text     = suggestion.benefits,
                     fontSize = 12.sp,
-                    color    = TealDark
+                    color    = if (isDark) Color(0xFF80CBC4) else TealDark
                 )
             }
         }
     }
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Shared small composable
-// ─────────────────────────────────────────────────────────────
+
 
 @Composable
 private fun NutritionChip(
@@ -532,13 +536,12 @@ private fun NutritionChip(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(16.dp))
         Text(text = value, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = tint)
-        Text(text = unit,  fontSize = 10.sp, color = TextLight)
+        
+        val isDark = LocalDarkTheme.current.value
+        Text(text = unit,  fontSize = 10.sp, color = if (isDark) Color(0xFF80CBC4) else TextLight)
     }
 }
 
-// ─────────────────────────────────────────────────────────────
-//  Preview
-// ─────────────────────────────────────────────────────────────
 
 @Preview(showBackground = true)
 @Composable
