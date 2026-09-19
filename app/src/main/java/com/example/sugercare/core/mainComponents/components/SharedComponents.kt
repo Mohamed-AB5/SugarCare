@@ -50,13 +50,13 @@ import com.sugarcare.app.ui.theme.BackgroundDark
 import com.sugarcare.app.ui.theme.BackgroundLight
 import com.sugarcare.app.ui.theme.GreenAccent
 import com.sugarcare.app.ui.theme.LocalDarkTheme
+import com.sugarcare.app.ui.theme.SurfaceDark
 import com.sugarcare.app.ui.theme.SurfaceWhite
 import com.sugarcare.app.ui.theme.TealDark
 import com.sugarcare.app.ui.theme.TealLight
 import com.sugarcare.app.ui.theme.TealPrimary
 import com.sugarcare.app.ui.theme.White
 
-// ── Background ────────────────────────────────────────────────
 @Composable
 fun SugarCareBackground(content: @Composable BoxScope.() -> Unit) {
     val isDark = LocalDarkTheme.current.value
@@ -68,7 +68,7 @@ fun SugarCareBackground(content: @Composable BoxScope.() -> Unit) {
     )
 }
 
-// ── Primary Button ────────────────────────────────────────────
+
 @Composable
 fun PrimaryButton(
     text: String,
@@ -94,13 +94,12 @@ fun PrimaryButton(
     }
 }
 
-// ── Secondary Button ──────────────────────────────────────────
 @Composable
 fun SecondaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true        // ← added
+    enabled: Boolean = true        
 ) {
     Button(
         onClick = onClick,
@@ -194,7 +193,6 @@ fun GradientButton(
     }
 
 }
-// ── TextField ─────────────────────────────────────────────────
 @Composable
 fun SugarCareTextField(
     value: String,
@@ -228,17 +226,21 @@ fun SugarCareTextField(
     )
 }
 
-// ── Card ──────────────────────────────────────────────────────
+
 @Composable
 fun SugarCareCard(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
+  
+    val isDark = LocalDarkTheme.current.value
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isDark) SurfaceDark else SurfaceWhite
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isDark) 0.dp else 2.dp),
         content = { Column(modifier = Modifier.padding(16.dp), content = content) }
     )
 }
@@ -249,7 +251,6 @@ fun ProfilePicture(profileViewModel: ProfileViewModel, fontSize: TextUnit = 36.s
     val editableProfile by profileViewModel.editableProfile.collectAsState()
     val name = editableProfile.fullName.trim()
 
-// Build initials (up to 2 letters)
     val initials = name.split(" ")
         .filter { it.isNotEmpty() }
         .take(2)
@@ -288,4 +289,3 @@ fun ProfilePicture(profileViewModel: ProfileViewModel, fontSize: TextUnit = 36.s
             }
 
 }
-
