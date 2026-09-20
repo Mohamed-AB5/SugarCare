@@ -184,7 +184,7 @@ fun HomeScreen(    navController: NavHostController,
             Spacer(Modifier.height(12.dp))
         }
 
-      
+        val textColor = if (isDark) Color(0xFFE0F2F1) else TextDark
         NavigationBar(
             containerColor = if (isDark) SurfaceDark else Color.White,
             tonalElevation = 0.dp
@@ -202,7 +202,7 @@ fun HomeScreen(    navController: NavHostController,
                             navController.navigate(route) { launchSingleTop = true }
                     },
                     icon   = { Icon(icon, contentDescription = label) },
-                    label  = { Text(label, fontSize = 11.sp) },
+                    label  = { Text(label, fontSize = 11.sp,  color = textColor) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor   = TealPrimary,
                         unselectedIconColor = if (isDark) Color(0xFF80CBC4) else TextMedium,

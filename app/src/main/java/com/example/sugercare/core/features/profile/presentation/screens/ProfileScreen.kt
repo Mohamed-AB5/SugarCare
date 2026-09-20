@@ -42,6 +42,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedButton
@@ -67,6 +68,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -255,41 +257,41 @@ fun ProfileScreen(
                     Spacer(Modifier.height(12.dp))
 
                     ProfileFieldItem(
-                        modifier      = Modifier.fillMaxWidth(),
-                        value         = editableProfile.value.fullName,
+                        modifier = Modifier.fillMaxWidth(),
+                        value = editableProfile.value.fullName,
                         onValueChange = {
                             profileViewModel.updateFullName(it)
                             profileViewModel.clearFieldError("fullName")
                         },
-                        label         = "Full Name",
-                        isError       = fieldErrors.value.containsKey("fullName"),
+                        label = { Text("Full Name",color = textColor) },
+                        isError = fieldErrors.value.containsKey("fullName"),
                         supportingText = {
                             fieldErrors.value["fullName"]?.let {
                                 Text(it, color = Color.Red, fontSize = 12.sp)
                             }
                         },
-                        icon          = Icons.Filled.Person,
+                        icon = Icons.Filled.Person,
                         color = textColor
                     )
                     Spacer(Modifier.height(12.dp))
 
                     ProfileFieldItem(
-                        modifier      = Modifier.fillMaxWidth(),
-                        value         = editableProfile.value.phone,
+                        modifier = Modifier.fillMaxWidth(),
+                        value = editableProfile.value.phone,
                         onValueChange = {
                             profileViewModel.updatePhoneNumber(it)
                             profileViewModel.clearFieldError("phone")
                         },
-                        label         = "Phone Number",
-                        isError       = fieldErrors.value.containsKey("phone"),
+                        label = { Text("Phone Number",color = textColor) },
+                        isError = fieldErrors.value.containsKey("phone"),
                         supportingText = {
                             fieldErrors.value["phone"]?.let {
                                 Text(it, color = Color.Red, fontSize = 12.sp)
                             }
                         },
-                        icon         = Icons.Filled.Phone,
+                        icon = Icons.Filled.Phone,
                         keyboardType = KeyboardType.Phone,
-                        color        = textColor
+                        color = textColor
                     )
                     Spacer(Modifier.height(12.dp))
 
@@ -311,13 +313,13 @@ fun ProfileScreen(
                     Row(Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         ProfileFieldItem(
-                            modifier      = Modifier.weight(1f),
-                            value         = editableProfile.value.age.toString(),
+                            modifier = Modifier.weight(1f),
+                            value = editableProfile.value.age.toString(),
                             onValueChange = {
 //                                profileViewModel.updateAge(it)
                                 profileViewModel.clearFieldError("age")
                             },
-                            label         = "Age",
+                            label = { Text("Age",color = textColor) },
                             /* remove edit age access ← ←
                              isError       = fieldErrors.value.containsKey("age"),
                                supportingText = {
@@ -325,27 +327,31 @@ fun ProfileScreen(
                                        Text(it, color = Color.Red, fontSize = 12.sp)
                                    }
                                },*/
-                            icon         = Icons.Filled.HealthAndSafety,
+                            icon = Icons.Filled.HealthAndSafety,
                             keyboardType = KeyboardType.Number,
-                            color        = textColor
+                            color = textColor,
+                            readOnly = true
                         )
                         ProfileFieldItem(
-                            modifier      = Modifier.weight(1.5f),
-                            value         = editableProfile.value.weight.toString(),
+                            modifier = Modifier.weight(1.5f),
+                            value = editableProfile.value.weight.toString(),
                             onValueChange = {
                                 profileViewModel.updateWeight(it)
-                                profileViewModel.clearFieldError("weight")
+                                val weightValue = editableProfile.value.weight.toDouble()
+                                if (weightValue == null || weightValue <= 0) {
+                                    profileViewModel.clearFieldError("weight")
+                                }
                             },
-                            label         = "Weight (kg)",
-                            isError       = fieldErrors.value.containsKey("weight"),
+                            label = { Text("Weight (Kg)",color = textColor) },
+                            isError = fieldErrors.value.containsKey("weight"),
                             supportingText = {
                                 fieldErrors.value["weight"]?.let {
                                     Text(it, color = Color.Red, fontSize = 12.sp)
                                 }
                             },
-                            icon         = Icons.Filled.MonitorWeight,
-                            keyboardType = KeyboardType.Decimal,
-                            color        = textColor
+                            icon = Icons.Filled.MonitorWeight,
+                            keyboardType = KeyboardType.Number,
+                            color = textColor
                         )
                     }
                     Spacer(Modifier.height(12.dp))
@@ -478,7 +484,9 @@ fun ProfileScreen(
                         color1 = FireIcon,
                         color2 = FireIcon2,
                         textSize = 18.sp,
-                        modifier = Modifier.fillMaxWidth().height(56.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_cross),
@@ -519,20 +527,21 @@ fun ProfileScreen(
 
 @Composable
 private fun   ProfileFieldItem(
-    modifier      : Modifier,
-    value         : String,
-    onValueChange : (String) -> Unit,
-    label         : String,
-    isError       : Boolean = false,
+    modifier: Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: @Composable () -> Unit,
+    isError: Boolean = false,
     supportingText: @Composable (() -> Unit)? = null,
-    icon          : ImageVector,
-    keyboardType  : KeyboardType = KeyboardType.Text,
-    color         : Color
+    icon: ImageVector,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    color : Color,
+    readOnly : Boolean = false
 ) {
     OutlinedTextField(
         value          = value,
         onValueChange  = onValueChange,
-        label          = { Text(label,color = color) },
+        label          = label,
         leadingIcon    = { Icon(icon, null, tint = TealPrimary) },
         isError        = isError,
         supportingText = supportingText,
@@ -540,7 +549,8 @@ private fun   ProfileFieldItem(
         shape          = RoundedCornerShape(14.dp),
         singleLine     = true,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        colors         = newScreenFieldColors()
+        colors         = newScreenFieldColors(),
+        readOnly       = readOnly
     )
 }
 

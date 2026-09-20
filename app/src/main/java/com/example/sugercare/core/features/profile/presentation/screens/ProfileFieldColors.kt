@@ -26,8 +26,8 @@ fun newScreenFieldColors(): TextFieldColors {
         unfocusedBorderColor      = borderColor,
         focusedLabelColor         = TealPrimary,
         unfocusedLabelColor       = labelColor,
-        focusedTextColor          = textColor,
-        unfocusedTextColor        = textColor,
+        focusedTextColor          = Color.Blue,
+        unfocusedTextColor        = Color.Blue,
         disabledTextColor         = textColor.copy(0.7f),
         cursorColor               = TealPrimary,
         focusedContainerColor     = containerColor,
@@ -37,6 +37,6 @@ fun newScreenFieldColors(): TextFieldColors {
         focusedLeadingIconColor   = TealPrimary,
         unfocusedLeadingIconColor = TealPrimary,
         focusedTrailingIconColor  = TealPrimary,
-        unfocusedTrailingIconColor = TealPrimary
+        unfocusedTrailingIconColor = TealPrimary,
     )
 }

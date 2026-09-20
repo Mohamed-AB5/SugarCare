@@ -172,7 +172,10 @@ class ProfileViewModel(application: Application) :
             } catch (e: Exception) { }
         }*/
     fun updateWeight(value: String) {
-        val weight = value.toInt()
+        /*val weight = value.toInt()  (removed to solve
+         the crash when edit the field)*/
+
+        val weight = value.toIntOrNull() ?: if (value.isEmpty()) 0 else return
         _editableProfile.value = _editableProfile.value.copy(weight = weight)
     }
 
