@@ -169,6 +169,7 @@ fun GradientButton(
 
     Box(
         modifier = modifier
+            .width(350.dp)
             .clip(RoundedCornerShape(28.dp))
             .background(backgroundBrush)
             .clickable(enabled = enabled, onClick = onClick)

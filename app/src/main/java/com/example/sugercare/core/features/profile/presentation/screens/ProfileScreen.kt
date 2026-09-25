@@ -263,7 +263,7 @@ fun ProfileScreen(
                             profileViewModel.updateFullName(it)
                             profileViewModel.clearFieldError("fullName")
                         },
-                        label = { Text("Full Name",color = textColor) },
+                        label = { Text("Full Name", color = textColor) },
                         isError = fieldErrors.value.containsKey("fullName"),
                         supportingText = {
                             fieldErrors.value["fullName"]?.let {
@@ -418,8 +418,9 @@ fun ProfileScreen(
                         color2 = TealPrimary2,
                         textSize = 18.sp,
                         modifier = Modifier
-                            .fillMaxWidth()
+                     /*       .fillMaxWidth() Mohamed : removed to allow reduce the width !!! */
                             .height(56.dp)
+
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_save) ,
@@ -485,7 +486,7 @@ fun ProfileScreen(
                         color2 = FireIcon2,
                         textSize = 18.sp,
                         modifier = Modifier
-                            .fillMaxWidth()
+                           /* .fillMaxWidth()*/
                             .height(56.dp)
                     ) {
                         Image(
@@ -617,7 +618,7 @@ fun DatePickerField(
         isError        = isError,
         supportingText = supportingText,
         modifier       = Modifier
-            .fillMaxWidth()
+        /*    .fillMaxWidth()*/
             .clickable { showPicker = true },
         shape          = RoundedCornerShape(14.dp),
         colors         = newScreenFieldColors()
