@@ -30,6 +30,21 @@
           <theme>@style/Theme.SugerCare1</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_background.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_foreground.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_logo.xml">
+        <config>
+          <theme>@style/Theme.SugerCare1</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_play.xml">
         <config>
           <theme>@style/Theme.SugerCare1</theme>
@@ -53,11 +68,19 @@
   <component name="ChangeListManager">
     <list default="true" id="4027dcf1-e93a-42bd-80e5-6a54a10c35fb" name="Changes" comment="Refactor Profile input fields and fix weight-edit crash&#10;&#10;- **Home Screen**:&#10;    - Updated navigation bar item labels to dynamically apply text color based on the theme state.&#10;&#10;- **Profile Feature**:&#10;    - **ProfileViewModel**: Fixed a potential crash in `updateWeight` by safely parsing inputs with `toIntOrNull()` and handling empty strings.&#10;    - **ProfileScreen**:&#10;        - Refactored `ProfileFieldItem` to accept a composable `label` instead of a static `String` to allow custom text styling.&#10;        - Added `readOnly` support to `ProfileFieldItem` and set the &quot;Age&quot; field to read-only.&#10;        - Updated the &quot;Weight&quot; field to use `KeyboardType.Number` and introduced safety validation checks on value changes.&#10;        - Replaced text color definitions in `ProfileFieldColors.kt` with `Color.Blue` for focused and unfocused states.">
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/WelcomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/auth/presentation/screens/WelcomeScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/home/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/home/HomeScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/profile/presentation/screens/ProfileScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/features/profile/presentation/screens/ProfileScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/mainComponents/components/SharedComponents.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/sugercare/core/mainComponents/components/SharedComponents.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_foreground.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_foreground.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_logo.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_logo.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +90,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[LocalEmulator::path=C:\Users\MO\.android\avd\Pixel_8.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[PhysicalDevice::serial=6LPFQCHQG6UG7XWO]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -724,7 +747,15 @@
       <option name="project" value="LOCAL" />
       <updated>1789931213408</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Refactor Profile input fields and fix weight-edit crash&#10;&#10;- **Home Screen**:&#10;    - Updated navigation bar item labels to dynamically apply text color based on the theme state.&#10;&#10;- **Profile Feature**:&#10;    - **ProfileViewModel**: Fixed a potential crash in `updateWeight` by safely parsing inputs with `toIntOrNull()` and handling empty strings.&#10;    - **ProfileScreen**:&#10;        - Refactored `ProfileFieldItem` to accept a composable `label` instead of a static `String` to allow custom text styling.&#10;        - Added `readOnly` support to `ProfileFieldItem` and set the &quot;Age&quot; field to read-only.&#10;        - Updated the &quot;Weight&quot; field to use `KeyboardType.Number` and introduced safety validation checks on value changes.&#10;        - Replaced text color definitions in `ProfileFieldColors.kt` with `Color.Blue` for focused and unfocused states.">
+      <option name="closed" value="true" />
+      <created>1790349588558</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1790349588558</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -761,12 +792,12 @@
       <map>
         <entry key="com.sugarcare.app">
           <value>
-            <CheckInfo lastCheckTimestamp="1787051951829" />
+            <CheckInfo lastCheckTimestamp="1790625284585" />
           </value>
         </entry>
         <entry key="com.sugarcare.app.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1787051951830" />
+            <CheckInfo lastCheckTimestamp="1790625284566" />
           </value>
         </entry>
       </map>

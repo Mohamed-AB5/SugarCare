@@ -50,6 +50,7 @@ fun HomeScreen(    navController: NavHostController,
     val isDark  = LocalDarkTheme.current.value
     val bgColor = if (isDark) BackgroundDark else Color(0xFFF5FAFA)
     val state = counterViewModel.uiState.collectAsState()
+    val editableProfile = profileViewModel.editableProfile.collectAsState()
 
     Column(
         modifier = Modifier
@@ -60,7 +61,7 @@ fun HomeScreen(    navController: NavHostController,
         TopAppBar(
             title = {
                 Column {
-                    Text("Today's Health Tasks",
+                    Text("Be Better ❤️‍🩹 ${editableProfile.value.fullName}",
                         fontWeight = FontWeight.ExtraBold,
                         fontSize   = 20.sp,
                         color      = if (isDark) TextDarkMode else Color(0xFF1A2B2B))
@@ -254,7 +255,7 @@ private fun HeroCard(
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 22.dp, vertical = 18.dp),
+                    .padding(horizontal = 22.dp, vertical = 1.dp),
                 verticalAlignment     = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {

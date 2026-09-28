@@ -478,31 +478,11 @@ fun ProfileScreen(
                         )
                     }
 
-                    GradientButton(
-                        text = "Delete Account!",
-                        onClick = { showDeleteDialog = true },  
-                        enabled = true,
-                        color1 = FireIcon,
-                        color2 = FireIcon2,
-                        textSize = 18.sp,
-                        modifier = Modifier
-                           /* .fillMaxWidth()*/
-                            .height(56.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_cross),
-                            contentDescription = null,
-                            modifier = Modifier.size(30.dp)
-                        )
-                    }
 
-                    Spacer(Modifier.height(12.dp))
-
-                  
                     OutlinedButton(
                         onClick  = { showLogout = true },
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .width(260.dp)
                             .height(56.dp),
                         shape    = RoundedCornerShape(28.dp),
                         border   = androidx.compose.foundation.BorderStroke(
@@ -518,6 +498,27 @@ fun ProfileScreen(
                             color = Color(0xFFE53935), fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp)
                     }
+
+                    Spacer(Modifier.height(12.dp))
+
+                    GradientButton(
+                        text = "Delete Account!",
+                        onClick = { showDeleteDialog = true },
+                        enabled = true,
+                        color1 = FireIcon,
+                        color2 = FireIcon2,
+                        textSize = 18.sp,
+                        modifier = Modifier
+                            /* .fillMaxWidth()*/
+                            .height(56.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_cross),
+                            contentDescription = null,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+
                     Spacer(Modifier.height(16.dp))
                 }
             }
