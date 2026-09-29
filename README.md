@@ -59,7 +59,7 @@ com.example.sugercare
 ├── Authentication/       # AuthManager — Google, Facebook, Email logic
 ├── crud/                 # Tracker.kt + SugarViewModel (Glucose CRUD)
 └── utils/                # VibrationUtils
-
+```
 ---
 
 ## 🛠️ Tech Stack
@@ -91,18 +91,6 @@ cd SugarCare && git checkout Authentication-branch
 2. Enable Authentication: Email/Password, Google, Facebook
 3. Enable Cloud Firestore · Add SHA-1 fingerprint
 
-**Firestore Rules:**
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{userId}/{document=**} {
-      allow read, write: if request.auth != null
-                         && request.auth.uid == userId;
-    }
-  }
-}
-```
 
 ### 3. Run
 ```
